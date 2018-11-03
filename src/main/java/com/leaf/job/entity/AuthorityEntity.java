@@ -17,6 +17,7 @@ public class AuthorityEntity extends CommonEntity{
 	private String code;
 	private String description;
 	private String authCode;
+	private String url;
 	private StatusEntity statusEntity;
 	
 	@Id
@@ -54,6 +55,15 @@ public class AuthorityEntity extends CommonEntity{
 	
 	public void setAuthCode(String authCode) {
 		this.authCode = authCode;
+	}
+
+	@Column(name = "url", length = 80, nullable = true)
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

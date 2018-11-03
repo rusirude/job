@@ -34,7 +34,7 @@ public class CommonEntity {
         this.createdOn = createdOn;
     }
 
-    @Column(name = "updated_by", nullable = true, length = 25)
+    @Column(name = "updated_by", nullable = false, length = 25)
     public String getUpdatedBy() {
         return updatedBy;
     }
@@ -44,7 +44,7 @@ public class CommonEntity {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_on", nullable = true)
+    @Column(name = "updated_on", nullable = false)
     public Date getUpdatedOn() {
         return updatedOn;
     }
