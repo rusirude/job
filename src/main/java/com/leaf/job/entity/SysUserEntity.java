@@ -9,8 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="user")
-public class UserEntity {
+@Table(name="sys_user")
+public class SysUserEntity extends CommonEntity{
 	private String username;
 	private String password;
 	private String name;

@@ -1,33 +1,30 @@
 package com.leaf.job.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name = "status_category")
-public class StatusCategoryEntity {
+@Table(name = "sys_role")
+public class SysRoleEntity extends CommonEntity{
+	
 	private Long id;
-	private String code;
-	private String description;
-	
-	private Set<StatusEntity> statusEntities = new HashSet<>();
-	
-	@Id
+    private String code;
+    private String description;
+    private StatusEntity statusEntity;
+    
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}
-	
+    
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -49,17 +46,16 @@ public class StatusCategoryEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	@OneToMany(mappedBy = "statusCategoryEntity", fetch = FetchType.LAZY)
-	public Set<StatusEntity> getStatusEntities() {
-		return statusEntities;
-	}
-
-	public void setStatusEntities(Set<StatusEntity> statusEntities) {
-		this.statusEntities = statusEntities;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name =  "status" , nullable = false)
+	public StatusEntity getStatusEntity() {
+		return statusEntity;
 	}
 	
-	
-	
-	
+	public void setStatusEntity(StatusEntity statusEntity) {
+		this.statusEntity = statusEntity;
+	} 
+    
+    
 }

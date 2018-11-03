@@ -1,5 +1,6 @@
 package com.leaf.job.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -23,8 +24,9 @@ public class StatusEntity {
 	private StatusCategoryEntity statusCategoryEntity;
 	
 	
-	private Set<UserEntity> userEntities;
-	private Set<AuthorityEntity> authorityEntities;
+	private Set<SysUserEntity> sysUserEntities = new HashSet<>();
+	private Set<SysRoleEntity> sysRoleEntities = new HashSet<>();
+	private Set<AuthorityEntity> authorityEntities = new HashSet<>();
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,12 +67,21 @@ public class StatusEntity {
 	}
 
 	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
-	public Set<UserEntity> getUserEntities() {
-		return userEntities;
+	public Set<SysUserEntity> getSysUserEntities() {
+		return sysUserEntities;
 	}
 
-	public void setUserEntities(Set<UserEntity> userEntities) {
-		this.userEntities = userEntities;
+	public void setSysUserEntities(Set<SysUserEntity> sysUserEntities) {
+		this.sysUserEntities = sysUserEntities;
+	}
+	
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<SysRoleEntity> getSysRoleEntities() {
+		return sysRoleEntities;
+	}
+
+	public void setSysRoleEntities(Set<SysRoleEntity> sysRoleEntities) {
+		this.sysRoleEntities = sysRoleEntities;
 	}
 
 	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)

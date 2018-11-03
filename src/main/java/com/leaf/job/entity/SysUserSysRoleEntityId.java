@@ -1,0 +1,50 @@
+package com.leaf.job.entity;
+
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class SysUserSysRoleEntityId {
+	
+    private String sysUser;
+    private Long sysRole;
+
+    @Column(name = "sys_user", nullable = false)
+    public String getSysUser() {
+        return sysUser;
+    }
+
+    public void setSysUser(String sysUser) {
+        this.sysUser = sysUser;
+    }
+
+    @Column(name = "sys_role", nullable = false)
+    public Long getSysRole() {
+        return sysRole;
+    }
+
+    public void setSysRole(Long sysRole) {
+        this.sysRole = sysRole;
+    }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(sysRole, sysUser);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SysUserSysRoleEntityId other = (SysUserSysRoleEntityId) obj;
+		return Objects.equals(sysRole, other.sysRole) && Objects.equals(sysUser, other.sysUser);
+	}
+    
+    
+}
