@@ -113,6 +113,18 @@ CREATE TABLE `job`.`sys_role_authoriry` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 
+    
+INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
+
+INSERT INTO `job`.`sys_role` (`code`, `description`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'System', '1', 'SYSTEM', 'SYSTEM');
+
+INSERT INTO `job`.`sys_user` (`username`, `password`, `name`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'SYSTEM', 'SYSEM', '1', 'SYSTEM', 'SYSTEM');
+
+INSERT INTO `job`.`authority` (`code`, `description`, `auth_code`, `url`, `status`, `created_by`, `updated_by`) VALUES ('USER', 'User Management', 'ROLE_USER', 'viewUser', '1', 'SYSTEM', 'SYSTEM');
+
+
+
+
 
     
     

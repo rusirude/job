@@ -1,14 +1,17 @@
 package com.leaf.job.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class SysUserSysRoleEntityId {
+public class SysUserSysRoleEntityId implements Serializable{
 	
-    private String sysUser;
+
+	private static final long serialVersionUID = 9098235365146468593L;
+	private String sysUser;
     private Long sysRole;
 
     @Column(name = "sys_user", nullable = false)
