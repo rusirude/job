@@ -1,11 +1,15 @@
 package com.leaf.job.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +19,8 @@ public class SysUserEntity extends CommonEntity{
 	private String password;
 	private String name;
 	private StatusEntity statusEntity;
+	
+	private Set<SysUserSysRoleEntity> sysUserSysRoleEntities = new HashSet<>();
 	
 	@Id
 	@Column(name  = "username", length = 25 , nullable = false , unique = true)
@@ -53,6 +59,17 @@ public class SysUserEntity extends CommonEntity{
 	public void setStatusEntity(StatusEntity statusEntity) {
 		this.statusEntity = statusEntity;
 	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysUserEntity")
+	public Set<SysUserSysRoleEntity> getSysUserSysRoleEntities() {
+		return sysUserSysRoleEntities;
+	}
+
+	public void setSysUserSysRoleEntities(Set<SysUserSysRoleEntity> sysUserSysRoleEntities) {
+		this.sysUserSysRoleEntities = sysUserSysRoleEntities;
+	}
+	
+	
 	
 	
 	

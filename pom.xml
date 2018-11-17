@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>job</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Job Ticket Management System</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -39,10 +39,10 @@
 		</dependency>
 
 		
-<!-- 		<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>			
-		</dependency> -->
+		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

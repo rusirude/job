@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.leaf.job.dao.SysRoleDAO;
+import com.leaf.job.entity.StatusEntity_;
 import com.leaf.job.entity.SysRoleEntity;
+import com.leaf.job.entity.SysRoleEntity_;
 import com.leaf.job.enums.DeleteStatusEnum;
 
 @Repository
@@ -37,8 +39,8 @@ public class SysRoleDAOImpl implements SysRoleDAO {
         criteriaQuery.select(root);
         criteriaQuery.where(
                 criteriaBuilder.and(
-                      //criteriaBuilder.equal(root.get(SysRole_.code), code),
-                      //  criteriaBuilder.notEqual(root.get(SysRole_.status).get(Status_.code), DeleteStatusEnum.DELETE.getCode())
+                      criteriaBuilder.equal(root.get(SysRoleEntity_.code), code),
+                      criteriaBuilder.notEqual(root.get(SysRoleEntity_.statusEntity).get(StatusEntity_.code), DeleteStatusEnum.DELETE.getCode())
                 )
         );
 

@@ -6,7 +6,9 @@ var application = (function () {
 	function init() {
 		let innerContainer = $("#appInnerContainer");
 		let page = [];
-		let pagePointer = -1;
+		let pagePointer = -1;		
+		
+		
 		let loanPage = (pageUrl) => {
 			if(pageUrl){
 				innerContainer.load(pageUrl,function(){
