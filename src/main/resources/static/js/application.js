@@ -9,26 +9,45 @@ var application = (function () {
 		let pagePointer = -1;		
 		
 		
-		let loanPage = (pageUrl) => {
+		let setNextPointer = (pageUrl)=>{
+			page[++pagePointer] = pageUrl;
+		};
+		
+		let loadPage = (pageUrl,callBack) => {
 			if(pageUrl){
 				innerContainer.load(pageUrl,function(){
-					alert("ok");
+					if(callBack){
+						callBack();
+					}
 				});
 			}			
 		};
 		
-		let setNextPointer = (pageUrl)=>{
-			page[++pagePointer] = pageUrl;
+		let goToNextPage = (pageUrl)=>{
+			
+			let _f = ()=>{setNextPointer(pageUrl)};
+			loadPage(pageUrl,_f);
 		};
- 
-
+		
+		let resetWithLink = (pageUrl)=>{
+			page = [];
+			pagePointer = -1;
+			goToNextPage(pageUrl);
+			
+		};
  
 	    return {	 
 	      
 	      next: function (url) {
 	    	  
-	    	  loanPage(url);
+	    	  goToNextPage(url);
 	      }, 
+	      
+	      reset: function (url){
+	    	  if(url){
+	    		  resetWithLink(url);
+	    	  }
+	      }
 	
 	 
 	    };

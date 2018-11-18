@@ -99,16 +99,16 @@ CREATE TABLE `job`.`sys_user_sys_role` (
 
 CREATE TABLE `job`.`sys_role_authoriry` (
   `sys_role` INT NOT NULL,
-  `authoriry` INT NOT NULL,
-  PRIMARY KEY (`sys_role`, `authoriry`),
-  INDEX `fk_sys_role_authoriry_authority_idx` (`authoriry` ASC),
-  CONSTRAINT `fk_sys_role_authoriry_sys_role`
+  `authority` INT NOT NULL,
+  PRIMARY KEY (`sys_role`, `authority`),
+  INDEX `fk_sys_role_authoriry_authority_idx` (`authority` ASC),
+  CONSTRAINT `fk_sys_role_authority_sys_role`
     FOREIGN KEY (`sys_role`)
     REFERENCES `job`.`sys_role` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_sys_role_authoriry_authority`
-    FOREIGN KEY (`authoriry`)
+  CONSTRAINT `fk_sys_role_authority_authority`
+    FOREIGN KEY (`authority`)
     REFERENCES `job`.`authority` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);

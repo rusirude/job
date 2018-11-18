@@ -12,21 +12,38 @@
 	
 		<div class="navbar-fixed">
 			<nav class="deep-purple darken-2">
-			<div class="nav-wrapper">
-				<a href="#!" class="brand-logo">Logo</a>
-				<ul class="right hide-on-med-and-down">
-					
-				</ul>
-			</div>
-			</nav>
-		</div>
+				<div class="nav-wrapper">
+					<a href="#!" class="brand-logo">Logo</a>				
+					<ul class="right hide-on-med-and-down">
+						<li></li>
+						<li><a href="Javascript:app.reset('/dashBoard/')">Home</a></li>
+						<li><a href="logout">Logout</a></li>					
+					</ul>
+				</div>
+			</nav>		
+		</div>	
+		<ul id="slide-out" class="sidenav">
+    		<li>
+    			<div class="user-view">
+      				<div class="background">
+        				<img src="/images/cover.jpeg"/>
+      				</div>
+      				<a href="#user"><img class="circle" src="/images/yuna.jpg"/></a>
+      				<a href="#name"><span class="white-text name">John Doe</span></a>
+      				<a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+    			</div>
+   			</li>
+    		<li><a href="Javascript:loadPage('/userRole/')">User Role</a></li>
+  		</ul>		
+		<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		<div id="appInnerContainer">
 			<div class="row">
-		 		<h1>Welcome home</h1>
-		 		<a href="logout">Logout</a>
+		 		<h1>Welcome home</h1>	 		
 			</div>  
    		</div>  	
-		<script src="/js/config/materialize.min.js"></script>
-		<script src="/js/login.js"></script>
+		<script src="/js/config/materialize.min.js"></script>	
+		<script src="/js/application.js"></script>
+		<script src="/js/init.js"></script>	
+		<script src="/js/menu.js"></script>	
 	</body>
 </html>
