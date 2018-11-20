@@ -3,6 +3,8 @@ package com.leaf.job.service;
 import java.util.HashMap;
 
 import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dto.common.DataTableRequestDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 
 public interface SysRoleService {
@@ -40,4 +42,11 @@ public interface SysRoleService {
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<HashMap<String, Object>> getReferenceDataForSysRole();
+	
+	/**
+	 * Get System Roles Data For Data Table
+	 * @param dataTableRequestDTO
+	 * @return {@link DataTableResponseDTO}
+	 */
+	DataTableResponseDTO getSysRolesForDataTable(DataTableRequestDTO dataTableRequestDTO);
 }

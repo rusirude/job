@@ -14,6 +14,8 @@ import com.leaf.job.dao.StatusCategoryDAO;
 import com.leaf.job.dao.StatusDAO;
 import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dto.common.DataTableRequestDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.enums.ResponseCodeEnum;
@@ -97,6 +99,15 @@ public class SysRoleServiceImpl implements SysRoleService {
 			System.err.println("Loan Ref Data Issue");
 		}
 		return new ResponseDTO<HashMap<String,Object>>(code, map);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public DataTableResponseDTO getSysRolesForDataTable(DataTableRequestDTO dataTableRequestDTO) {
+		return null;
 	}
 
 }
