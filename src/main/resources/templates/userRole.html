@@ -1,40 +1,22 @@
-  <form action="#">
-    <p>
-      <label>
-        <input type="checkbox" />
-        <span>Red</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input type="checkbox" checked="checked" />
-        <span>Yellow</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input type="checkbox" class="filled-in" checked="checked" />
-        <span>Filled in</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input id="indeterminate-checkbox" type="checkbox" />
-        <span>Indeterminate Style</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input type="checkbox" checked="checked" disabled="disabled" />
-        <span>Green</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input type="checkbox" disabled="disabled" />
-        <span>Brown</span>
-      </label>
-    </p>
-  </form>
+<button id="addNewBtn" class="btn waves-effect waves-light deep-purple darken-2" type="button" >Add New User Role</button>   
+
+
+
+  <!-- Modal Structure -->
+  <div id="sysRoleEditModal" class="modal">
+    <div class="modal-content">
+     
+	  <div class="input-field col s12">
+	    <select id="status">
+	      <option value="">Choose your option</option>
+
+	    </select>
+	    <label>Materialize Select</label>
+	  </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
 
 <script src="/js/userRole.js"></script>
