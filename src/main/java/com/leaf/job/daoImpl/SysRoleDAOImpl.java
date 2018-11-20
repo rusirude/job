@@ -20,16 +20,25 @@ public class SysRoleDAOImpl implements SysRoleDAO {
 	@Autowired
 	private EntityManager entityManager;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SysRoleEntity loadSysRoleEntity(long id) {
 		return entityManager.getReference(SysRoleEntity.class, id);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SysRoleEntity findSysRoleEntity(long id) {
 		return entityManager.find(SysRoleEntity.class, id);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SysRoleEntity findSysRoleEntityByCode(String code) {
 		SysRoleEntity sysRoleEntity = null;
@@ -52,5 +61,22 @@ public class SysRoleDAOImpl implements SysRoleDAO {
 
         return sysRoleEntity;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void saveSysRoleEntity(SysRoleEntity sysRoleEntity) {
+		entityManager.persist(sysRoleEntity);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateSysRoleEntity(SysRoleEntity sysRoleEntity) {
+		entityManager.merge(sysRoleEntity);
+	}
+
 
 }

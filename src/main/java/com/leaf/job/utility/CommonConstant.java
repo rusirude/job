@@ -1,6 +1,12 @@
 package com.leaf.job.utility;
 
 public class CommonConstant {
+	
+	/*------------ Response Code -------------------*/
+
+    public static final String RESPONSE_SUCCESS = "SUCCESS";
+    public static final String RESPONSE_FAILED = "FAILED";
+	
 	/*------------ Status Cotegory Code -------------------*/
 
     public static final String STATUS_CATEGORY_DEFAULT = "DEFAULT";
