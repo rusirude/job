@@ -2,8 +2,6 @@ package com.leaf.job.serviceImpl;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +16,13 @@ import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.entity.StatusEntity;
+import com.leaf.job.entity.SysRoleEntity;
+import com.leaf.job.enums.DeleteStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.enums.StatusCategoryEnum;
 import com.leaf.job.service.SysRoleService;
+import com.leaf.job.utility.CommonMethod;
 
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
@@ -29,12 +31,15 @@ public class SysRoleServiceImpl implements SysRoleService {
 	private StatusDAO statusDAO;
 	private StatusCategoryDAO statusCategoryDAO;
 	
+	private CommonMethod commonMethod;
+	
 	
 	@Autowired
-	public SysRoleServiceImpl(SysRoleDAO sysRoleDAO, StatusDAO statusDAO, StatusCategoryDAO statusCategoryDAO) {
+	public SysRoleServiceImpl(SysRoleDAO sysRoleDAO, StatusDAO statusDAO, StatusCategoryDAO statusCategoryDAO,CommonMethod commonMethod) {
 		this.sysRoleDAO = sysRoleDAO;
 		this.statusDAO = statusDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
+		this.commonMethod = commonMethod;
 	}
 
 	/**
@@ -42,9 +47,50 @@ public class SysRoleServiceImpl implements SysRoleService {
 	 */
 	@Override
 	@Transactional
-	public ResponseDTO<SysRoleDTO> saveSysRole(SysRoleDTO sysRoleDTO) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseDTO<SysRoleDTO> saveSysRole(SysRoleDTO sysRoleDTO) {		
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User Role Save Faield";
+		
+		SysRoleEntity sysRoleEntity;
+		try {
+			sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
+			if(sysRoleEntity == null) {
+				StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysRoleDTO.getStatusCode());
+				
+				sysRoleEntity = new SysRoleEntity();
+				sysRoleEntity.setCode(sysRoleDTO.getCode());
+				sysRoleEntity.setDescription(sysRoleDTO.getDescription());
+				sysRoleEntity.setStatusEntity(statusEntity);
+				
+				commonMethod.getPopulateEntityWhenInsert(sysRoleEntity);
+				
+				sysRoleDAO.saveSysRoleEntity(sysRoleEntity);
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "User Role Save Successfully";
+			}
+			else if(DeleteStatusEnum.DELETE.getCode().equals(sysRoleEntity.getStatusEntity().getCode())) {
+				
+				StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysRoleDTO.getStatusCode());
+				
+				sysRoleEntity.setCode(sysRoleDTO.getCode());
+				sysRoleEntity.setDescription(sysRoleDTO.getDescription());
+				sysRoleEntity.setStatusEntity(statusEntity);
+				
+				commonMethod.getPopulateEntityWhenInsert(sysRoleEntity);
+				
+				sysRoleDAO.saveSysRoleEntity(sysRoleEntity);
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "User Role Save Successfully";
+			}
+			else {
+				description = "User Role Code is Already Used ";
+			}
+
+		}
+		catch(Exception e) {
+			System.err.println("User Role Save Issue");
+		}
+		return new ResponseDTO<SysRoleDTO>(code,description);
 	}
 
 	/**
@@ -53,8 +99,26 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	@Transactional
 	public ResponseDTO<SysRoleDTO> updateSysRole(SysRoleDTO sysRoleDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User Role Update Faield";
+		try {
+			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysRoleDTO.getStatusCode());
+			
+			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
+			sysRoleEntity.setCode(sysRoleDTO.getCode());
+			sysRoleEntity.setDescription(sysRoleDTO.getDescription());
+			sysRoleEntity.setStatusEntity(statusEntity);
+			
+			commonMethod.getPopulateEntityWhenUpdate(sysRoleEntity);
+			
+			sysRoleDAO.saveSysRoleEntity(sysRoleEntity);
+			code = ResponseCodeEnum.SUCCESS.getCode();
+			description = "User Role Update Successfully";
+		}
+		catch(Exception e) {
+			System.err.println("User Role Update Issue");
+		}
+		return new ResponseDTO<SysRoleDTO>(code,description);
 	}
 
 	/**
@@ -63,8 +127,25 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	@Transactional
 	public ResponseDTO<SysRoleDTO> deleteSysRole(SysRoleDTO sysRoleDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User Role Delete Faield";
+		try {
+			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());
+			
+			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
+			
+			sysRoleEntity.setStatusEntity(statusEntity);
+			
+			commonMethod.getPopulateEntityWhenUpdate(sysRoleEntity);
+			
+			sysRoleDAO.saveSysRoleEntity(sysRoleEntity);
+			code = ResponseCodeEnum.SUCCESS.getCode();
+			description = "User Role Delete Successfully";
+		}
+		catch(Exception e) {
+			System.err.println("User Role Delete Issue");
+		}
+		return new ResponseDTO<SysRoleDTO>(code,description);
 	}
 	
 	/**
@@ -73,8 +154,33 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	@Transactional
 	public ResponseDTO<SysRoleDTO> findSysRole(SysRoleDTO sysRoleDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User Role is Not Found";
+		SysRoleDTO dto = new SysRoleDTO();
+		try {		
+			
+			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
+			
+			if(sysRoleEntity != null && ! DeleteStatusEnum.DELETE.getCode().equals(sysRoleEntity.getStatusEntity().getCode())) {
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "User Role is Found Successfully";				
+				
+				dto.setCode(sysRoleEntity.getCode());
+				dto.setDescription(sysRoleEntity.getDescription());
+				dto.setStatusCode(sysRoleEntity.getStatusEntity().getCode());
+				dto.setStatusDescription(sysRoleEntity.getStatusEntity().getDescription());
+				dto.setCreatedBy(sysRoleEntity.getCreatedBy());
+				dto.setCreatedOn(sysRoleEntity.getCreatedOn());
+				dto.setUpdatedBy(sysRoleEntity.getUpdatedBy());
+				dto.setUpdatedOn(sysRoleEntity.getUpdatedOn());				
+				
+			}		
+			
+		}
+		catch(Exception e) {
+			System.err.println("User Role Find Issue");
+		}
+		return new ResponseDTO<SysRoleDTO>(code,description,dto);
 	}
 	
 	/**
@@ -92,11 +198,12 @@ public class SysRoleServiceImpl implements SysRoleService {
 					.stream()
 					.map(s-> new DropDownDTO(s.getCode(), s.getDescription())).collect(Collectors.toList());
 			
-			map.put("status", status);
+			map.put("status", status);	
+			
 			code = ResponseCodeEnum.SUCCESS.getCode();
 		}
 		catch(Exception e) {
-			System.err.println("Loan Ref Data Issue");
+			System.err.println("User Role Ref Data Issue");
 		}
 		return new ResponseDTO<HashMap<String,Object>>(code, map);
 	}

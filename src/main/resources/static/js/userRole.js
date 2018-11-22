@@ -34,12 +34,6 @@ var loadReferenceDataForUserRole = (callback)=>{
   });
 };
 
-/*
- * Modal Open Button Event
- */
-var openUserRoleEditModal = ()=>{
-	$("#sysRoleEditModal").modal("open");
-}
 
 /**
  * Event Binder
