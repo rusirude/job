@@ -3,56 +3,73 @@
 	<head>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<link href="/css/config/materialize.min.css" rel="stylesheet"/>	
-	    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>	
+		<link href="/css/config/icon.css" rel="stylesheet"/>	
+		<link rel="stylesheet" href="/css/config/material.min.css"/>
+		<link rel="stylesheet" href="/css/config/dataTables.material.min.css"/>		
 		<script src="/js/config/jquery-3.3.1.min.js"></script>		
 		<title>Job</title>
 	</head>
 	<body>
-	
-		<div class="navbar-fixed">
-			<nav class="deep-purple darken-2">
-			<div class="nav-wrapper">
-				<a href="#!" class="brand-logo">Logo</a>
-				<ul class="right hide-on-med-and-down">
-					
-				</ul>
+		<div class="mdl-layout__container">
+			<div class="mdl-layout mdl-js-layout">
+				<header class="mdl-layout__header mdl-layout__header--scroll">
+					<div class="mdl-layout__header-row">
+						<div class="mdl-layout-spacer"></div>
+					</div>
+				</header>
+				<main class="mdl-layout__content">
+					<div class="page-content">
+						<div class="mdl-grid">
+							<div class="mdl-cell mdl-cell--12-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop">
+								<div>
+									<img src="images/NotInUse.png"/>
+								</div>
+							</div>
+							<div class="mdl-cell mdl-cell--12-col-phone mdl-cell--4-col-tablet mdl-cell--4-col-desktop">
+								<div class="mdl-cell mdl-cell--12-col">
+									<form action="/login" method="POST">							
+										<div class="mdl-card mdl-shadow--2dp mdl-cell--12-col-desktop">
+											<div class="mdl-card__title">
+												<h2 class="mdl-card__title-text">Sign In</h2>
+											</div>
+											<div class="mdl-card__supporting-text">
+												<div class="mdl-grid">
+													<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+														<input id="username" name="username" type="text" class="mdl-textfield__input"/>
+														<label class="mdl-textfield__label" for="username">Username</label>
+														<span class="mdl-textfield__error">Letters and spaces only</span>
+													</div>
+												</div>
+												<div class="mdl-grid">
+													<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+														<input id="password" name="password" type="password" class="mdl-textfield__input"/>
+														<label class="mdl-textfield__label" for="password">Password</label>
+														<span class="mdl-textfield__error">Letters and spaces only</span>
+													</div>
+												</div>										
+											</div>
+											<div class="mdl-card__actions mdl-card--border">
+												<div class="mdl-grid">
+													<div class="mdl-cell mdl-cell--12-col-phone mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+														<button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Sign In</button>
+														<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Cancel</button>
+													</div>
+												</div>
+											</div>
+										</div>							
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+	            <footer class="mdl-mini-footer">
+                </footer>
 			</div>
-			</nav>
 		</div>
-		<div>
-			<div class="row">
-		 		<div class="col s8" style="background-color: red">
-		   
-		 		</div>
-		 		<div class="col s4">
-		 			<form action="/login" method="POST">
-			      		<div class="card">
-					   		<div class="card-content">	
-					   		  	<span class="card-title">Sign In</span>			    	
-					 			<div class="row">
-						  			<div class="input-field col s12">
-						          	<input id="username" type="text" name="username"/>
-						          	<label for="lusername">User Name</label>
-						        	</div>
-					 			</div>
-					 			<div class="row">
-						  			<div class="input-field col s12">
-						          	<input id="password" type="password" name="password"/>
-						          	<label for="password">Password</label>
-						       	    </div>
-					 			</div>				    	
-					      	</div>
-					      <div class="card-action">			        	
-							<button class="btn waves-effect waves-light deep-purple darken-2" type="submit" name="action">Sign In
-								<i class="material-icons right">send</i>
-							</button>        
-					      </div>
-		 				</div>
-		 			</form>
-				</div>
-			</div>  
-   		</div>  	
-		<script src="/js/config/materialize.min.js"></script>
+		
+	<script type="text/javascript" src="/js/config/jquery.dataTables.min.js"></script>
+   	<script type="text/javascript" src="/js/config/material.min.js"></script> 
+	<script type="text/javascript" src="/js/config/dataTables.material.min.js"></script>
 	</body>
 </html>

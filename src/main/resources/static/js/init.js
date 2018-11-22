@@ -1,6 +1,5 @@
 let app;
-$(document).ready(()=>{
-	$('.sidenav').sidenav();
+$(document).ready(()=>{	
 	app = application.getInstance();
 	app.next('/dashBoard/');
 });

@@ -15,7 +15,7 @@ var loadReferenceDataForUserRole = (callback)=>{
         	
         	if(data.code === "SUCCESS"){
             	for(let s of data.data.status){
-            		$("#status").append(`<option value="${s.code}">${s.description}</option>`);
+            		$("#statusList").append(`<li class="mdl-menu__item" data-val="${s.code}">${s.description}</li>`);
             	}
             	
             	if(callback){
@@ -47,19 +47,18 @@ var openUserRoleEditModal = ()=>{
 
 var evenBinderForUserRole = ()=>{
 	
-	$("#addNewBtn").on("click",()=>{
-		openUserRoleEditModal();
-	});
+
 };
 
 
 $(document).ready(()=>{	
-	
-	let _callback_1 = ()=>{
-		$("#sysRoleEditModal").modal();
-		$('select').formSelect();
+
+ 	let _callback_1 = ()=>{
+ 		componentHandler.upgradeDom();6
+ 		getmdlSelect.init('.getmdl-select');
 	};	
 	loadReferenceDataForUserRole(_callback_1);
 	evenBinderForUserRole();
+	 
 
 })

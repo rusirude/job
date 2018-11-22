@@ -1,4 +1,3 @@
-let loadPage = (pageURL)=>{
-	$('.sidenav').sidenav('close');
+let loadPage = (pageURL)=>{	
 	app.next(pageURL);
 };

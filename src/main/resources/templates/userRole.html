@@ -1,29 +1,118 @@
-<button id="addNewBtn" class="btn waves-effect waves-light deep-purple darken-2" type="button" >Add New User Role</button>   
-
-
-
-  <!-- Modal Structure -->
-  <div id="sysRoleEditModal" class="modal">
-    <div class="modal-content">
-     
-   	  <div class="input-field col s12">
-         <input id="code" type="text" class="validate"/>
-         <label for="code">Code</label>
-	  </div>
-	  <div class="input-field col s12">
-         <input id="description" type="text" class="validate"/>
-         <label for="description">Description</label>
-	  </div>
-	  <div class="input-field col s12">
-	    <select id="status">
-	      <option value="" disabled="disabled">None</option>
-	    </select>
-	    <label>Status</label>
-	  </div>
+<div class="page-content">
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col-phone mdl-cell--4-col-tablet mdl-cell--4-col-desktop">
+            <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col-desktop">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">Add User Role</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <div class="mdl-grid">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                                <input id="code" name="code" type="text"  class="mdl-textfield__input"/>
+                                <label class="mdl-textfield__label" for="code">Code</label>
+                                <span class="mdl-textfield__error">Letters and spaces only</span>
+                            </div>
+                        </div>
+                         <div class="mdl-grid">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                                <input id="description" name="description" type="text" class="mdl-textfield__input"/>
+                                <label class="mdl-textfield__label" for="description">Description</label>
+                                <span class="mdl-textfield__error">Letters and spaces only</span>
+                            </div>
+                        </div>
+                        <div class="mdl-grid" style="padding-left: 16px">
+						    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
+						        <input type="text" value="" class="mdl-textfield__input" id="status" readonly="readonly"/>
+						        <input type="hidden" value="" name="status"/>
+						        <label for="status" class="mdl-textfield__label">Status</label>
+						        <ul for="status" id="statusList" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+						        </ul>
+						    </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col-phone mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                                <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Sign In</button>
+                                <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Forgot Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop">
+            <table id="userRole" class="mdl-data-table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Added By</th>
+                        <th>Added On</th>
+                        <th>Updated By</th>
+                        <th>Updated On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Saman</td>
+                        <td>Manage</td>
+                        <td>Active</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                    </tr>
+                    <tr>
+                        <td>001</td>
+                        <td>Saman</td>
+                        <td>Manage</td>
+                        <td>Active</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                    </tr>
+                    <tr>
+                        <td>001</td>
+                        <td>Saman</td>
+                        <td>Manage</td>
+                        <td>Active</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                    </tr>
+                    <tr>
+                        <td>001</td>
+                        <td>Saman</td>
+                        <td>Manage</td>
+                        <td>Active</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                        <td>Rusiru</td>
+                        <td>09/08/2017</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Added By</th>
+                        <th>Added On</th>
+                        <th>Updated By</th>
+                        <th>Updated On</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
+</div>
 
 <script src="/js/userRole.js"></script>
