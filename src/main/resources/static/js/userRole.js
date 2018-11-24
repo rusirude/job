@@ -15,7 +15,8 @@ var loadReferenceDataForUserRole = (callback)=>{
         	
         	if(data.code === "SUCCESS"){
             	for(let s of data.data.status){
-            		$("#statusList").append(`<li class="mdl-menu__item" data-val="${s.code}">${s.description}</li>`);
+            		//$("#statusList").append(`<li class="mdl-menu__item" data-val="${s.code}">${s.description}</li>`);
+            		$("#status1").append(`<option value="${s.code}">${s.description}</option>`);
             	}
             	
             	if(callback){
@@ -48,11 +49,11 @@ var evenBinderForUserRole = ()=>{
 $(document).ready(()=>{	
 
  	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom();6
- 		getmdlSelect.init('.getmdl-select');
+ 		componentHandler.upgradeDom();
+ 		//getmdlSelect.init('.getmdl-select');
 	};	
 	loadReferenceDataForUserRole(_callback_1);
 	evenBinderForUserRole();
 	 
 
-})
+});
