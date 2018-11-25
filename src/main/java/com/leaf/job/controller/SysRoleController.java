@@ -43,6 +43,20 @@ public class SysRoleController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USERROLE')")
+	@RequestMapping(path = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> updateUserSysRole(@RequestBody SysRoleDTO sysRoleDTO) {
+		return sysRoleService.updateSysRole(sysRoleDTO);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
+	@RequestMapping(path = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> daleteUserSysRole(@RequestBody SysRoleDTO sysRoleDTO) {
+		return sysRoleService.deleteSysRole(sysRoleDTO);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/loadRefDataForSysRole", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<HashMap<String, Object>> loadRefereceDataForSysRole() {

@@ -3,21 +3,21 @@ package com.leaf.job.dto.common;
 public class ResponseDTO<T> {
 	
 	private String code;
-	private String messsage;
+	private String message;
 	private T data;	
 	
 	public ResponseDTO(String code) {		
 		this.code = code;
 	}
 	
-	public ResponseDTO(String code, String messsage) {		
+	public ResponseDTO(String code, String message) {		
 		this.code = code;
-		this.messsage = messsage;
+		this.message = message;
 	}
 
-	public ResponseDTO(String code, String messsage, T data) {		
+	public ResponseDTO(String code, String message, T data) {		
 		this.code = code;
-		this.messsage = messsage;
+		this.message = message;
 		this.data = data;
 	}
 
@@ -33,11 +33,11 @@ public class ResponseDTO<T> {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public String getMesssage() {
-		return messsage;
+	public String getMessage() {
+		return message;
 	}
-	public void setMesssage(String messsage) {
-		this.messsage = messsage;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	public T getData() {
 		return data;
