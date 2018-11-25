@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dto.common.DataTableRequestDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.service.SysRoleService;
 
@@ -59,7 +61,14 @@ public class SysRoleController {
 	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/loadRefDataForSysRole", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseDTO<HashMap<String, Object>> loadRefereceDataForSysRole() {
+	public ResponseDTO<HashMap<String, Object>> loadSysRoleRefereceData() {
 		return sysRoleService.getReferenceDataForSysRole();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
+	@RequestMapping(path = "/loadUserRoles", method = RequestMethod.POST)
+	@ResponseBody
+	public DataTableResponseDTO loadSysRoleDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
+		return sysRoleService.getSysRolesForDataTable(dataTableRequestDTO);
 	}
 }

@@ -20,3 +20,17 @@ var callToserver = (url,method,data,successFunction,errorFunction)=>{
         }
   });
 };
+
+
+
+var createCommonDataTableRequset = (inputObj)=>{
+    return {
+            draw:inputObj.draw,
+            start:inputObj.start,
+            length:inputObj.length,
+            sortColumnName:inputObj.columns[inputObj.order[0].column].name ||"",
+            sortOrder:inputObj.order[0].dir || "desc",
+            search:inputObj.search.value || ""
+         }
+	
+}

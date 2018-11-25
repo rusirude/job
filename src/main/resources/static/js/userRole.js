@@ -2,6 +2,9 @@
  * @author: rusiru
  */
 
+var userRoleTable;
+
+
 /**
  * Generate Final Save Object
  */
@@ -105,6 +108,32 @@ var loadReferenceDataForUserRole = (callback)=>{
 };
 
 
+var loadUserRoleTable = ()=>{
+	userRoleTable = $('#userRoleTable').DataTable( {
+                        ajax: {
+                            url : "/userRole/loadUserRoles",
+                            contentType:"application/json",
+                            type:"POST",
+                            data:function(d){
+                                return JSON.stringify(createCommonDataTableRequset(d));
+                    		}
+                        },
+                        processing: true,
+                        serverSide: true,
+                        columns: [
+                            { data: "code"                ,name:"code"},
+                            { data: "description"         ,name:"description"},
+                            { data: "statusDescription"   ,name:"status"},
+                            { data: "createdBy"           ,name:"createdBy"},
+                            { data: "createdOn"           ,name:"createdOn"},
+                            { data: "updatedBy"           ,name:"updatedBy"},
+                            { data: "updatedOn"           ,name:"updatedOn"},
+                            { data: "code"}
+                        ]
+                    } );
+}
+
+
 /**
  * Event Binder
  */
@@ -134,7 +163,7 @@ $(document).ready(()=>{
 	};	
 	loadReferenceDataForUserRole(_callback_1);
 	evenBinderForUserRole();
-	$('#userRoleTable').DataTable()
+	loadUserRoleTable();
 	 
 
 });

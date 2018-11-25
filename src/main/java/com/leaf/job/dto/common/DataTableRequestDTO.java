@@ -6,6 +6,7 @@ public class DataTableRequestDTO {
     private Integer length;
     private String sortColumnName;
     private String sortOrder;
+    private String search;
     
 	public Integer getDraw() {
 		return draw;
@@ -37,6 +38,15 @@ public class DataTableRequestDTO {
 	public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
 	}
+	
+	public String getSearch() {
+		return search;
+	}
+	public void setSearch(String search) {
+		this.search = search;
+	}
+	
+	
     
     
 }
