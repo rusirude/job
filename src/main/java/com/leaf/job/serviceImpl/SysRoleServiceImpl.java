@@ -1,5 +1,6 @@
 package com.leaf.job.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import com.leaf.job.enums.DeleteStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.enums.StatusCategoryEnum;
 import com.leaf.job.service.SysRoleService;
+import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.CommonMethod;
 
 @Service
@@ -214,7 +216,36 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	@Transactional
 	public DataTableResponseDTO getSysRolesForDataTable(DataTableRequestDTO dataTableRequestDTO) {
-		return null;
+		List<SysRoleDTO> list = new ArrayList<>();
+		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
+        Long numOfRecord = Long.valueOf(0);
+        try {
+            list =  sysRoleDAO.<List<SysRoleEntity>>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARCH_LIST)
+            			.stream()
+            			.map(entity->{
+            				SysRoleDTO dto = new SysRoleDTO();
+            				dto.setCode(entity.getCode());
+            				dto.setDescription(entity.getDescription());
+            				dto.setStatusDescription(entity.getStatusEntity().getDescription());
+            				dto.setCreatedBy(entity.getCreatedBy());
+            				dto.setCreatedOn(entity.getCreatedOn());
+            				dto.setUpdatedBy(entity.getUpdatedBy());
+            				dto.setUpdatedOn(entity.getUpdatedOn());
+            				return dto;
+            			}).collect(Collectors.toList());
+            
+            numOfRecord = sysRoleDAO.<Long>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARC_COUNT);
+            
+            responseDTO.setData(list);
+            responseDTO.setRecordsTotal(numOfRecord);
+            responseDTO.setRecordsFiltered(numOfRecord);
+            responseDTO.setDraw(dataTableRequestDTO.getDraw());
+            
+        } 
+        catch (Exception e) {            
+        }
+        
+        return responseDTO;
 	}
 
 }

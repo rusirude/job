@@ -51,5 +51,5 @@ public interface SysRoleDAO {
      * @param dataTableRequestDTO
      * @return 
      */
-    <T> T getDataForGrid(DataTableRequestDTO dataTableRequestDTO);
+    <T> T getDataForGrid(DataTableRequestDTO dataTableRequestDTO, String type);
 }

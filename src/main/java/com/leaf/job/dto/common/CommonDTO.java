@@ -2,11 +2,16 @@ package com.leaf.job.dto.common;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.leaf.job.utility.CommonConstant;
+
 public class CommonDTO {
 	
 	private String createdBy;
+	@JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
 	private Date createdOn;
 	private String updatedBy;
+	@JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
 	private Date updatedOn;
 	public String getCreatedBy() {
 		return createdBy;

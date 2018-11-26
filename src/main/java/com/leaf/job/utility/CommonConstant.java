@@ -21,4 +21,14 @@ public class CommonConstant {
     public static final String DEFAULT_STATUS_ACTIVE = "ACTIVE";
     public static final String DEFAULT_STATUS_DEACTIVE = "DEACTIVE";
     
+    /*------------ Grid Search Type -------------------*/
+
+    public static final String GRID_SEARCH_LIST = "LIST";
+    public static final String GRID_SEARC_COUNT = "COUNT";
+    
+    /*------------ Date Format and Time Zone -------------------*/
+    
+    public static final String SYSTEM_DATE_FORMAT = "dd/MM/yyyy";
+    public static final String DATE_TIMEZONE_JACKSON = "Asia/Colombo";
+    
 }
