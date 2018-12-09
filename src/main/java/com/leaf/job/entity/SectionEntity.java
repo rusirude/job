@@ -1,5 +1,8 @@
 package com.leaf.job.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,25 +11,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "authority")
-public class AuthorityEntity extends CommonEntity{
+@Table(name = "section")
+public class SectionEntity extends CommonEntity{
 	private Long id;
-	private String code;
-	private String description;
-	private String authCode;
-	private String url;
-	private SectionEntity sectionEntity;
-	private StatusEntity statusEntity;
-	
-	@Id
+    private String code;
+    private String description;
+    private StatusEntity statusEntity;
+    
+    private Set<AuthorityEntity> authorityEntities = new HashSet<>();
+    
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}
-	
+    
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -49,42 +52,24 @@ public class AuthorityEntity extends CommonEntity{
 		this.description = description;
 	}
 	
-	@Column(name = "auth_code", length = 20, nullable = false)
-	public String getAuthCode() {
-		return authCode;
-	}
-	
-	public void setAuthCode(String authCode) {
-		this.authCode = authCode;
-	}
-
-	@Column(name = "url", length = 80, nullable = true)
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}	
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name =  "section" , nullable = false)
-	public SectionEntity getSectionEntity() {
-		return sectionEntity;
-	}
-
-	public void setSectionEntity(SectionEntity sectionEntity) {
-		this.sectionEntity = sectionEntity;
-	}
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name =  "status" , nullable = false)
 	public StatusEntity getStatusEntity() {
 		return statusEntity;
 	}
-
+	
 	public void setStatusEntity(StatusEntity statusEntity) {
 		this.statusEntity = statusEntity;
 	}
-		
+
+	@OneToMany(mappedBy = "sectionEntity", fetch = FetchType.LAZY)
+	public Set<AuthorityEntity> getAuthorityEntities() {
+		return authorityEntities;
+	}
+
+	public void setAuthorityEntities(Set<AuthorityEntity> authorityEntities) {
+		this.authorityEntities = authorityEntities;
+	} 
+	
+	
 }

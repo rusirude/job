@@ -59,6 +59,25 @@ CREATE TABLE `job`.`sys_user` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
     
+CREATE TABLE `job`.`section` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `description` VARCHAR(50) NOT NULL,
+  `status` INT NOT NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `sectioncol_UNIQUE` (`code` ASC),
+  INDEX `fk_section_status_idx` (`status` ASC),
+  CONSTRAINT `fk_section_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `job`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
+ 
+    
     
 CREATE TABLE `job`.`authority` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -66,6 +85,7 @@ CREATE TABLE `job`.`authority` (
   `description` VARCHAR(50) NOT NULL,
   `auth_code` VARCHAR(20) NOT NULL,
   `url` VARCHAR(80) NULL,
+  `section` INT NOT NULL,
   `status` INT NOT NULL,
   `created_by` VARCHAR(25) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -79,7 +99,14 @@ CREATE TABLE `job`.`authority` (
     FOREIGN KEY (`status`)
     REFERENCES `job`.`status` (`id`)
     ON DELETE RESTRICT
-    ON UPDATE CASCADE);
+    ON UPDATE CASCADE,
+  INDEX `fx_authority_section_idx` (`section` ASC),
+  CONSTRAINT `fk_authority_section`
+    FOREIGN KEY (`section`)
+    REFERENCES `job`.`section` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+);
 
 CREATE TABLE `job`.`sys_user_sys_role` (
   `sys_user` VARCHAR(25) NOT NULL,
