@@ -34,3 +34,29 @@ var createCommonDataTableRequset = (inputObj)=>{
          }
 	
 }
+
+
+/** Dialog Box Functionality ********/
+
+var DialogBox = (function () {
+	function openSuccessMessage(message){
+		let msg = `<i class="material-icons">done</i> ${message}`
+		let s = document.querySelector('dialog');
+		
+		$(".mdl-dialog .mdl-dialog__content").html(msg);		
+		$("#mdl-dialog-failed").html("").hide().off("click");		
+		$("#mdl-dialog-success").html("OK").on("click",()=>{
+			s.close();
+		});
+		
+		s.showModal();
+
+	};
+	return {
+		openSuccessMsgBox: function(message){
+			openSuccessMessage(message);
+		}
+	}
+})();
+
+

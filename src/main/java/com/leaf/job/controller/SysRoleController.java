@@ -38,6 +38,13 @@ public class SysRoleController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USERROLE')")
+	@RequestMapping(path = "/loadRefDataForSysRole", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<HashMap<String, Object>> loadSysRoleRefereceData() {
+		return sysRoleService.getReferenceDataForSysRole();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<?> saveUserSysRole(@RequestBody SysRoleDTO sysRoleDTO) {
@@ -59,16 +66,16 @@ public class SysRoleController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USERROLE')")
-	@RequestMapping(path = "/loadRefDataForSysRole", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseDTO<HashMap<String, Object>> loadSysRoleRefereceData() {
-		return sysRoleService.getReferenceDataForSysRole();
-	}
-	
-	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/loadUserRoles", method = RequestMethod.POST)
 	@ResponseBody
 	public DataTableResponseDTO loadSysRoleDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
 		return sysRoleService.getSysRolesForDataTable(dataTableRequestDTO);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
+	@RequestMapping(path = "/loadUserRoleByCode", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<SysRoleDTO> loadSysRoleByCode(@RequestBody SysRoleDTO sysRoleDTO) {
+		return sysRoleService.findSysRole(sysRoleDTO);
 	}
 }
