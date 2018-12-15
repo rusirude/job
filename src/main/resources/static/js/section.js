@@ -2,12 +2,11 @@
  * @author: rusiru
  */
 
-var userRoleTable;
-
+var sectionTable;
 
 /*------------------------------------------- CRUD Functions ------------------*/
 
-var generateFinalObjectForUserRole = ()=>{
+var generateFinalObjectForSection = ()=>{
 	return {
 		code:$("#code").val()||"",
 		description:$("#description").val()||"",
@@ -15,22 +14,22 @@ var generateFinalObjectForUserRole = ()=>{
 	}
 };
 
-var successFunctionForUserRole = (data)=>{
+var successFunctionForSection = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
 		DialogBox.openSuccessMsgBox(data.message);		
-		userRoleTable.ajax.reload();
-		clearDataForUserRole();
+		sectionTable.ajax.reload();
+		clearDataForSection();
 	}
 	else{
 		alert(data.message);
 	}
 };
 
-var failedFunctionForUserRole = (data)=>{
+var failedFunctionForSection = (data)=>{
 	alert("Server Error");
 };
 
-var validatorForUserRole = ()=>{
+var validatorForSection = ()=>{
 	let isValid = true;
 	
 	let code = $("#code");
@@ -52,35 +51,36 @@ var validatorForUserRole = ()=>{
 	return isValid;
 };
 
-var saveForUserRole = ()=>{
-	if(validatorForUserRole()){
-		let url = "/userRole/save";
+
+var saveForSection = ()=>{
+	if(validatorForSection()){
+		let url = "/section/save";
 		let method = "POST";		
 		
-		callToserver(url,method,generateFinalObjectForUserRole(),successFunctionForUserRole,failedFunctionForUserRole);
+		callToserver(url,method,generateFinalObjectForSection(),successFunctionForSection,failedFunctionForSection);
 	}
 	
 };
 
 var updateForUserRole = ()=>{
-	if(validatorForUserRole()){
-		let url = "/userRole/update";
+	if(validatorForSection()){
+		let url = "/section/update";
 		let method = "POST";
 				
-		callToserver(url,method,generateFinalObjectForUserRole(),successFunctionForUserRole,failedFunctionForUserRole);
+		callToserver(url,method,generateFinalObjectForSection(),successFunctionForSection,failedFunctionForSection);
 	}
 };
 
 var deleteForUserRole = ()=>{
-	if(validatorForUserRole()){
-		let url = "/userRole/delete";
+	if(validatorForSection()){
+		let url = "/section/delete";
 		let method = "POST";
 		
-		callToserver(url,method,generateFinalObjectForUserRole(),successFunctionForUserRole,failedFunctionForUserRole);
+		callToserver(url,method,generateFinalObjectForSection(),successFunctionForSection,failedFunctionForSection);
 	}
 };
 
-var findDetailByCodeForUserRole = (code,callback)=>{
+var findDetailByCodeForSection = (code,callback)=>{
 	let successFunction = (data)=>{
 		if(data.code === Constant.CODE_SUCCESS){			
 			if(callback){
@@ -95,16 +95,15 @@ var findDetailByCodeForUserRole = (code,callback)=>{
 	let failedFunction = (data)=>{
 		alert("Server Error");
 	};
-	let url = "/userRole/loadUserRoleByCode";
+	let url = "/section/loadSectionByCode";
 	let method = "POST";
 	callToserver(url,method,{code:code},successFunction,failedFunction);
 	
 };
 
-
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 
-var populateFormForUserRole = (data) => {
+var populateFormForSection = (data) => {
 	if(data){
 		$("#code")[0].parentElement.MaterialTextfield.change(data.code || "");
 		$("#description")[0].parentElement.MaterialTextfield.change(data.description || "");
@@ -112,10 +111,10 @@ var populateFormForUserRole = (data) => {
 	}	
 };
 
-var loadReferenceDataForUserRole = (callback)=>{
+var loadReferenceDataForSection = (callback)=>{
 	$.ajax({
         type: "POST",
-        url: "/userRole/loadRefDataForSysRole",        
+        url: "/section/loadRefDataForSection",        
         contentType: "application/json",
         dataType: "json",
         success: function(data){    
@@ -141,11 +140,10 @@ var loadReferenceDataForUserRole = (callback)=>{
   });
 };
 
-
-var loadUserRoleTable = ()=>{
-	userRoleTable = $('#userRoleTable').DataTable( {
+var loadSectionTable = ()=>{
+	sectionTable = $('#sectionTable').DataTable( {
                         ajax: {
-                            url : "/userRole/loadUserRoles",
+                            url : "/section/loadSections",
                             contentType:"application/json",
                             type:"POST",
                             data:function(d){
@@ -173,13 +171,13 @@ var loadUserRoleTable = ()=>{
                             {
                             	data: "code",
                             	render: function (data, type, full) {
-		                            		return `<button onClick="updateIconClickForUserRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+		                            		return `<button onClick="updateIconClickForSection('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-update-${data}" class="material-icons">create</i>
 													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
 														Update
 													  </div>
 													</button>
-													<button onClick="deleteIconClickForUserRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+													<button onClick="deleteIconClickForSection('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-delete-${data}" class="material-icons">delete</i>
 													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
 														Delete
@@ -191,7 +189,7 @@ var loadUserRoleTable = ()=>{
                     } );
 }
 
-var clearDataForUserRole = ()=>{
+var clearDataForSection = ()=>{
 	let code = $("#code");
 	let description = $("#description");
 	let status = $("#status");
@@ -216,54 +214,52 @@ var clearDataForUserRole = ()=>{
 	
 };
 
-
 /*-------------------------------- Inline Event  ----------------------*/
 
-var updateIconClickForUserRole = (code)=>{
+var updateIconClickForSection = (code)=>{
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
-		populateFormForUserRole(data);
+		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 	}
-	clearDataForUserRole();
-	findDetailByCodeForUserRole(code,_sF);
+	clearDataForSection();
+	findDetailByCodeForSection(code,_sF);
 };
 
-var deleteIconClickForUserRole = (code)=>{
+var deleteIconClickForSection = (code)=>{
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
-		populateFormForUserRole(data);
+		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
 		$("#status")[0].parentElement.MaterialSelectfield.disable();
 		$("#status").parent().find(".mdl-menu__container").hide();
 	}
-	clearDataForUserRole();
-	findDetailByCodeForUserRole(code,_sF);
+	clearDataForSection();
+	findDetailByCodeForSection(code,_sF);
 };
-
 
 /*-------------------------------- Dynamic Event  ----------------------*/
 
-var evenBinderForUserRole = ()=>{
+var evenBinderForSection = ()=>{
 	$("#btnSave").off().on("click",function(){
-		saveForUserRole();
+		saveForSection();
 	});
 	
 	$("#btnUpdate").off().on("click",function(){
-		updateForUserRole();
+		updateForSection();
 	});
 	
 	$("#btnDelete").off().on("click",function(){
-		deleteForUserRole();
+		deleteForSection();
 	});
 	
 	$("#btnCancel").off().on("click",function(){
-		clearDataForUserRole();
+		clearDataForSection();
 	});
 
 };
@@ -276,9 +272,9 @@ $(document).ready(()=>{
  	let _callback_1 = ()=>{
  		componentHandler.upgradeDom(); 		
 	};	
-	loadReferenceDataForUserRole(_callback_1);
-	evenBinderForUserRole();
-	loadUserRoleTable();
+	loadReferenceDataForSection(_callback_1);
+	evenBinderForSection();
+	loadSectionTable();
 	 
 
 });
