@@ -14,7 +14,7 @@ public interface SysRoleAuthorityDAO {
 	 * 
 	 * Select all SysRoleAuthorityEntity for SysRole Entities and Authority and SYSROLE both Status are ACTIVE
 	 * @param sysRoleEntities
-	 * @return List<SysRoleAuthorityEntity>
+	 * @return {@link List<SysRoleAuthorityEntity>]
 	 */
 	List<SysRoleAuthorityEntity> getSysRoleAuthorityEntitiesBySysRoles(List<SysRoleEntity> sysRoleEntities);
 	
@@ -25,7 +25,7 @@ public interface SysRoleAuthorityDAO {
 	 * 
 	 * Select all SysRoleAuthorityEntity for SysRole Entity and AuthorityStatus is ACTIVE
 	 * @param sysRoleId
-	 * @return List<SysRoleAuthorityEntity>
+	 * @return {@link List<SysRoleAuthorityEntity>}
 	 */
 	List<SysRoleAuthorityEntity> getSysRoleAuthorityEntitiesBySysRole(long sysRoleId);
 	
