@@ -62,7 +62,7 @@ var saveForSection = ()=>{
 	
 };
 
-var updateForUserRole = ()=>{
+var updateForSection = ()=>{
 	if(validatorForSection()){
 		let url = "/section/update";
 		let method = "POST";
@@ -71,7 +71,7 @@ var updateForUserRole = ()=>{
 	}
 };
 
-var deleteForUserRole = ()=>{
+var deleteForSection = ()=>{
 	if(validatorForSection()){
 		let url = "/section/delete";
 		let method = "POST";
