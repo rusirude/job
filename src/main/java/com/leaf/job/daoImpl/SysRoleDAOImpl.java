@@ -91,14 +91,14 @@ public class SysRoleDAOImpl implements SysRoleDAO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<SysRoleEntity> findAllSysRoleEntities(){
+	public List<SysRoleEntity> findAllSysRoleEntities(String statusCode){
 		List<SysRoleEntity> sysRoleEntities = null;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<SysRoleEntity> criteriaQuery = criteriaBuilder.createQuery(SysRoleEntity.class);
         Root<SysRoleEntity> root = criteriaQuery.from(SysRoleEntity.class);
         criteriaQuery.select(root);
         criteriaQuery.where(
-        		criteriaBuilder.notEqual(root.get(SysRoleEntity_.statusEntity).get(StatusEntity_.code), DeleteStatusEnum.DELETE.getCode())
+        		criteriaBuilder.equal(root.get(SysRoleEntity_.statusEntity).get(StatusEntity_.code), statusCode)
         );
 
         try {

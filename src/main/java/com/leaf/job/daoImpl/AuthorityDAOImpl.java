@@ -8,12 +8,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.leaf.job.dao.AuthorityDAO;
 import com.leaf.job.entity.AuthorityEntity;
 import com.leaf.job.entity.AuthorityEntity_;
 import com.leaf.job.entity.StatusEntity_;
 
+@Repository
 public class AuthorityDAOImpl implements AuthorityDAO{
 	
 	@Autowired

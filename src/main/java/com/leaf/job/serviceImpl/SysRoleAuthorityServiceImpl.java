@@ -7,36 +7,37 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.leaf.job.dao.AuthorityDAO;
-import com.leaf.job.dao.StatusDAO;
 import com.leaf.job.dao.SysRoleAuthorityDAO;
 import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dto.SysRoleAuthorityDTO;
 import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dto.common.DropDownDTO;
+import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.SysRoleEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
+import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.service.SysRoleAuthorityService;
-import com.leaf.job.utility.CommonMethod;
 
+@Service
 public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 
-	private StatusDAO statusDAO;
+	
 	private SysRoleDAO sysRoleDAO;
 	private SysRoleAuthorityDAO sysRoleAuthorityDAO;
 	private AuthorityDAO authorityDAO;
 
-	private CommonMethod commonMethod;
+	
 
 	@Autowired
-	public SysRoleAuthorityServiceImpl(StatusDAO statusDAO, SysRoleDAO sysRoleDAO,
-			SysRoleAuthorityDAO sysRoleAuthorityDAO, AuthorityDAO authorityDAO, CommonMethod commonMethod) {
-		this.statusDAO = statusDAO;
+	public SysRoleAuthorityServiceImpl(SysRoleDAO sysRoleDAO,
+			SysRoleAuthorityDAO sysRoleAuthorityDAO, AuthorityDAO authorityDAO) {		
 		this.sysRoleDAO = sysRoleDAO;
 		this.sysRoleAuthorityDAO = sysRoleAuthorityDAO;
-		this.authorityDAO = authorityDAO;
-		this.commonMethod = commonMethod;
+		this.authorityDAO = authorityDAO;		
 	}
 
 	/**
@@ -78,5 +79,30 @@ public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 		}
 		return sysRoleAuthorities;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<HashMap<String, Object>> getReferenceDataForSysRoleAuthority() {
+
+		HashMap<String, Object> map = new HashMap<>();
+		String code = ResponseCodeEnum.FAILED.getCode();
+		try {
+			
+			List<DropDownDTO> sysRole = sysRoleDAO.findAllSysRoleEntities(DefaultStatusEnum.ACTIVE.getCode())
+					.stream()
+					.map(ra-> new DropDownDTO(ra.getCode(),ra.getDescription())).collect(Collectors.toList());
+
+			map.put("sysRole", sysRole);
+
+			code = ResponseCodeEnum.SUCCESS.getCode();
+		} catch (Exception e) {
+			System.err.println("Sys Role Authority Ref Data Issue");
+		}
+		return new ResponseDTO<HashMap<String, Object>>(code, map);
+	}
+
 
 }

@@ -41,10 +41,14 @@ public interface SysRoleDAO {
     void updateSysRoleEntity(SysRoleEntity sysRoleEntity);
     
     /**
-     * Find All Not Deleted System Roles
+     * select - *
+     * From - SysRole
+     * where - STATUS = statusCode
+     * 
+     * Find SysRole Entities By Status Code
      * @return {@link List}
      */
-    List<SysRoleEntity> findAllSysRoleEntities();
+    List<SysRoleEntity> findAllSysRoleEntities(String statusCode);
     
     /**
      * Getting Data For  Grid 
