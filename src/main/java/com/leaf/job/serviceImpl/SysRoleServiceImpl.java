@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.leaf.job.dao.StatusCategoryDAO;
 import com.leaf.job.dao.StatusDAO;
+import com.leaf.job.dao.SysRoleAuthorityDAO;
 import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dto.SysRoleDTO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
@@ -31,15 +32,18 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	private SysRoleDAO sysRoleDAO;
 	private StatusDAO statusDAO;
+	private SysRoleAuthorityDAO sysRoleAuthorityDAO;
 	private StatusCategoryDAO statusCategoryDAO;
 
 	private CommonMethod commonMethod;
 
 	@Autowired
-	public SysRoleServiceImpl(SysRoleDAO sysRoleDAO, StatusDAO statusDAO, StatusCategoryDAO statusCategoryDAO,
-			CommonMethod commonMethod) {
+	public SysRoleServiceImpl(SysRoleDAO sysRoleDAO, StatusDAO statusDAO, SysRoleAuthorityDAO sysRoleAuthorityDAO,
+			StatusCategoryDAO statusCategoryDAO, CommonMethod commonMethod) {
+		super();
 		this.sysRoleDAO = sysRoleDAO;
 		this.statusDAO = statusDAO;
+		this.sysRoleAuthorityDAO = sysRoleAuthorityDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
 		this.commonMethod = commonMethod;
 	}
@@ -129,9 +133,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 		String description = "User Role Delete Faield";
 		try {
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());
-
 			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
-
+			
+			sysRoleAuthorityDAO.deleteSysRoleAuthorityEntityBySysRole(sysRoleEntity.getId());
 			sysRoleEntity.setStatusEntity(statusEntity);
 
 			commonMethod.getPopulateEntityWhenUpdate(sysRoleEntity);

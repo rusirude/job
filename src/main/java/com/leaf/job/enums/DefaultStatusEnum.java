@@ -5,7 +5,7 @@ import com.leaf.job.utility.CommonConstant;
 public enum DefaultStatusEnum {
 	
     ACTIVE(CommonConstant.DEFAULT_STATUS_ACTIVE),
-    DEACTIVE(CommonConstant.DEFAULT_STATUS_DEACTIVE);
+    INACTIVE(CommonConstant.DEFAULT_STATUS_INACTIVE);
 
 
     private String code;
@@ -23,7 +23,7 @@ public enum DefaultStatusEnum {
             case CommonConstant.DEFAULT_STATUS_ACTIVE:
                 return ACTIVE;
             default:
-                return DEACTIVE;
+                return INACTIVE;
         }
     }
 }

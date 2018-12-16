@@ -19,7 +19,7 @@ public class CommonConstant {
     /*------------ Default Status Code -------------------*/
 
     public static final String DEFAULT_STATUS_ACTIVE = "ACTIVE";
-    public static final String DEFAULT_STATUS_DEACTIVE = "DEACTIVE";
+    public static final String DEFAULT_STATUS_INACTIVE = "INACTIVE";
     
     /*------------ Grid Search Type -------------------*/
 
