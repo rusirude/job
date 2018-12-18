@@ -15,6 +15,7 @@ import com.leaf.job.dao.SysRoleAuthorityDAO;
 import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dto.SysRoleAuthorityDTO;
 import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.SysRoleEntity;
@@ -45,9 +46,10 @@ public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 	 */
 	@Override
 	@Transactional
-	public List<SysRoleAuthorityDTO> getSysRoleAuthorityForSysRole(SysRoleDTO sysRoleDTO) {
+	public DataTableResponseDTO getSysRoleAuthorityForSysRole(SysRoleDTO sysRoleDTO) {
 		Map<String, SysRoleAuthorityDTO> sysRoleAuthorityMap = new HashMap<>();
 		List<SysRoleAuthorityDTO> sysRoleAuthorities = new ArrayList<>();
+		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
 		try {
 			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
 
@@ -55,7 +57,7 @@ public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 					.forEach(authority -> {
 						SysRoleAuthorityDTO sysRoleAuthorityDTO = new SysRoleAuthorityDTO();
 						sysRoleAuthorityDTO.setSysRoleCode(sysRoleEntity.getCode());
-						sysRoleAuthorityDTO.setSysRoleDecription(sysRoleEntity.getDescription());
+						sysRoleAuthorityDTO.setSysRoleDescription(sysRoleEntity.getDescription());
 						sysRoleAuthorityDTO.setAuthorityCode(authority.getCode());
 						sysRoleAuthorityDTO.setAuthorityDescription(authority.getDescription());
 						sysRoleAuthorityDTO.setEnable(false);
@@ -73,11 +75,13 @@ public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 					});
 
 			sysRoleAuthorities = sysRoleAuthorityMap.values().stream().collect(Collectors.toList());
+			responseDTO.setData(sysRoleAuthorities);
 
 		} catch (Exception e) {
 			System.err.println("Getting SysRole Authority for Sys Role Issue");
+			responseDTO.setData(sysRoleAuthorities);
 		}
-		return sysRoleAuthorities;
+		return responseDTO;
 	}
 	
 	/**

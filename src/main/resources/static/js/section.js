@@ -201,8 +201,7 @@ var clearDataForSection = ()=>{
 	
 	code[0].parentElement.MaterialTextfield.enable();
 	description[0].parentElement.MaterialTextfield.enable();
-	status[0].parentElement.MaterialSelectfield.enable();
-	status.parent().find(".mdl-menu__container").show();
+	status[0].parentElement.MaterialSelectfield.enable();	
 	
 	code.prop("required",false);	
 	description.prop("required",false);	
@@ -224,6 +223,7 @@ var updateIconClickForSection = (code)=>{
 		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 	}
+	console.log("p");
 	clearDataForSection();
 	findDetailByCodeForSection(code,_sF);
 };
@@ -236,8 +236,7 @@ var deleteIconClickForSection = (code)=>{
 		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();
-		$("#status").parent().find(".mdl-menu__container").hide();
+		$("#status")[0].parentElement.MaterialSelectfield.disable();		
 	}
 	clearDataForSection();
 	findDetailByCodeForSection(code,_sF);
@@ -270,7 +269,8 @@ var evenBinderForSection = ()=>{
 $(document).ready(()=>{	
 
  	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 		
+ 		componentHandler.upgradeDom(); 	
+ 		$("#status")[0].parentElement.MaterialSelectfield.init()
 	};	
 	loadReferenceDataForSection(_callback_1);
 	evenBinderForSection();

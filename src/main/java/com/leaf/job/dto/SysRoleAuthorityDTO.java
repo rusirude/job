@@ -3,7 +3,7 @@ package com.leaf.job.dto;
 public class SysRoleAuthorityDTO {
 	
 	private String sysRoleCode;
-	private String sysRoleDecription;
+	private String sysRoleDescription;
 	private String authorityCode;
 	private String authorityDescription;
 	private boolean enable;
@@ -14,11 +14,11 @@ public class SysRoleAuthorityDTO {
 	public void setSysRoleCode(String sysRoleCode) {
 		this.sysRoleCode = sysRoleCode;
 	}
-	public String getSysRoleDecription() {
-		return sysRoleDecription;
+	public String getSysRoleDescription() {
+		return sysRoleDescription;
 	}
-	public void setSysRoleDecription(String sysRoleDecription) {
-		this.sysRoleDecription = sysRoleDecription;
+	public void setSysRoleDescription(String sysRoleDescription) {
+		this.sysRoleDescription = sysRoleDescription;
 	}
 	public String getAuthorityCode() {
 		return authorityCode;
