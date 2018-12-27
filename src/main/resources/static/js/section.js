@@ -209,6 +209,7 @@ var clearDataForSection = ()=>{
 	
 	code[0].parentElement.MaterialTextfield.change("");
 	description[0].parentElement.MaterialTextfield.change("");
+	status.val("");
 	status[0].parentElement.MaterialSelectfield.change("");
 	
 };

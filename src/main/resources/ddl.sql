@@ -151,7 +151,8 @@ INSERT INTO `job`.`authority` (`code`, `description`, `auth_code`, `url`, `statu
 
 
 
-<!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/-->	
+<!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/-->
+$("#status").parent().find(".mdl-menu__container").hide();	
 
     
     

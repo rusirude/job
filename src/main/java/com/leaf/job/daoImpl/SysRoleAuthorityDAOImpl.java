@@ -15,6 +15,7 @@ import com.leaf.job.dao.SysRoleAuthorityDAO;
 import com.leaf.job.entity.AuthorityEntity_;
 import com.leaf.job.entity.StatusEntity_;
 import com.leaf.job.entity.SysRoleAuthorityEntity;
+import com.leaf.job.entity.SysRoleAuthorityEntityId_;
 import com.leaf.job.entity.SysRoleAuthorityEntity_;
 import com.leaf.job.entity.SysRoleEntity;
 import com.leaf.job.entity.SysRoleEntity_;
@@ -61,8 +62,10 @@ public class SysRoleAuthorityDAOImpl implements SysRoleAuthorityDAO {
         Root<SysRoleAuthorityEntity> root = criteriaQuery.from(SysRoleAuthorityEntity.class);
         criteriaQuery.select(root);
         criteriaQuery.where(
-        		criteriaBuilder.notEqual(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.INACTIVE.getCode())     		
-        		);
+        		criteriaBuilder.and(
+        				criteriaBuilder.notEqual(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.INACTIVE.getCode()),
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.sysRoleAuthorityEntityId).get(SysRoleAuthorityEntityId_.sysRole),sysRoleId)
+        				));
         return entityManager.createQuery(criteriaQuery).getResultList();
 	}
 

@@ -37,14 +37,14 @@ var loadReferenceDataForUserRoleAuthority = (callback)=>{
 };
 
 
-var loadDataTableForSysRoleCode = (sysRoleCode)=>{
+var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
 	userRoleAutorityTable = $('#sysRoleAuthorityTable').DataTable({
         ajax: {
             url: "/sysRoleAuthority/loadAuthoritiesForSysRole",
             type: 'POST',
             contentType: "application/json",
             data: function () {
-                return JSON.stringify({code:sysRoleCode});
+                return JSON.stringify({code:($("#sysRole").val()||"")});
             },
             error: function (jqXHR, textStatus, errorThrown) {
             	alert("System Failer Occur....! :-(");
@@ -72,15 +72,24 @@ var loadDataTableForSysRoleCode = (sysRoleCode)=>{
         ]
 	});
 }
+
+/*-------------------------------- Dynamic Event  ----------------------*/
+
+var evenBinderForUserRoleAuthority = ()=>{
+	$("#sysRole").off().on("change",function(){
+		userRoleAutorityTable.ajax.reload();		
+	});
+};
 /*-------------------------------- Document Ready ----------------------*/
 
 $(document).ready(()=>{	
 
  	let _callback_1 = ()=>{
  		componentHandler.upgradeDom(); 	
- 		loadDataTableForSysRoleCode("");
+ 		loadDataTableBySysRoleCodeForUserRoleAuthority();
 	};	
 	loadReferenceDataForUserRoleAuthority(_callback_1); 
+	evenBinderForUserRoleAuthority();
 	
 
 });
