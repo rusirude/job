@@ -163,15 +163,16 @@ var loadUserRoleTable = ()=>{
                         paging:         true,
                         pagingType: "full_numbers",
                         columns: [
-                            { data: "code"                ,name:"code"         ,class:"leaf-text-left"},
-                            { data: "description"         ,name:"description"},
-                            { data: "statusDescription"   ,name:"status"},
-                            { data: "createdBy"           ,name:"createdBy"},
-                            { data: "createdOn"           ,name:"createdOn"},
-                            { data: "updatedBy"           ,name:"updatedBy"},
-                            { data: "updatedOn"           ,name:"updatedOn"},
+                            { data: "code"                ,name:"code"                ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "description"         ,name:"description"         ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "statusDescription"   ,name:"status"              ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "createdBy"           ,name:"createdBy"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "createdOn"           ,name:"createdOn"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "updatedBy"           ,name:"updatedBy"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "updatedOn"           ,name:"updatedOn"           ,class:"mdl-data-table__cell--non-numeric"},
                             {
                             	data: "code",
+                            	class:"mdl-data-table__cell--non-numeric",
                             	render: function (data, type, full) {
 		                            		return `<button onClick="updateIconClickForUserRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-update-${data}" class="material-icons">create</i>

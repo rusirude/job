@@ -58,10 +58,11 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
         },
         pagingType: "full_numbers",
         columns: [
-            {data: "authorityDescription"},
-            {data: "sysRoleDescription"},
+            {data: "authorityDescription", class:"mdl-data-table__cell--non-numeric"},
+            {data: "sysRoleDescription", class:"mdl-data-table__cell--non-numeric"},
             {
             	data: null,
+            	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
             		return `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-${data.authorityCode}">
 							  <input type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
