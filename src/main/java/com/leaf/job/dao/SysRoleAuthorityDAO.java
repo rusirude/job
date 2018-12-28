@@ -45,5 +45,19 @@ public interface SysRoleAuthorityDAO {
 	 */
 	void deleteSysRoleAuthorityEntityBySysRole(long sysRoleId);
 	
+	/**
+	 * where SysRole = sysRoleId and authorityId
+	 * 
+	 * Delete Entities by SysRole and Authority
+	 * @param sysRoleId,authorityId
+	 */
+	void deleteSysRoleAuthorityEntityBySysRoleAndAuthority(long sysRoleId, long authorityId);
+	
+	/**
+	 * Save SysRoleAuthority Entity
+	 * @param sysRoleAuthorityEntity
+	 */
+	void saveSysRoleAuthorityentity(SysRoleAuthorityEntity sysRoleAuthorityEntity);
+	
 	
 }

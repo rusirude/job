@@ -18,6 +18,9 @@ import com.leaf.job.dto.SysRoleDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.entity.AuthorityEntity;
+import com.leaf.job.entity.SysRoleAuthorityEntity;
+import com.leaf.job.entity.SysRoleAuthorityEntityId;
 import com.leaf.job.entity.SysRoleEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
@@ -107,6 +110,63 @@ public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 		}
 		return new ResponseDTO<HashMap<String, Object>>(code, map);
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<SysRoleAuthorityDTO> saveSysRoleAuthority(SysRoleAuthorityDTO sysRoleAuthorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Sys Role Authority Save Faield";
+		try {		
+			SysRoleAuthorityEntity sysRoleAuthorityEntity = new SysRoleAuthorityEntity();
+			SysRoleAuthorityEntityId id = new SysRoleAuthorityEntityId();
+			
+			
+			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleAuthorityDTO.getSysRoleCode());
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(sysRoleAuthorityDTO.getAuthorityCode());
+			
+			id.setSysRole(sysRoleEntity.getId());
+			id.setAuthority(authorityEntity.getId());
+			
+			sysRoleAuthorityEntity.setSysRoleAuthorityEntityId(id);
+			sysRoleAuthorityEntity.setSysRoleEntity(sysRoleEntity);
+			sysRoleAuthorityEntity.setAuthorityEntity(authorityEntity);
+			
+			sysRoleAuthorityDAO.saveSysRoleAuthorityentity(sysRoleAuthorityEntity);
+			
+			description = "Sys Role Authority Save Successfully";
+			code = ResponseCodeEnum.SUCCESS.getCode();
+		} catch (Exception e) {
+			System.err.println("SysRoleAuthority Save Issue");
+		}
+		return new ResponseDTO<SysRoleAuthorityDTO>(code, description);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<SysRoleAuthorityDTO> deleteSysRoleAuthority(SysRoleAuthorityDTO sysRoleAuthorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Sys Role Authority Delete Faield";
+		try {			
+			
+			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleAuthorityDTO.getSysRoleCode());
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(sysRoleAuthorityDTO.getAuthorityCode());
+			
+			sysRoleAuthorityDAO.deleteSysRoleAuthorityEntityBySysRoleAndAuthority(sysRoleEntity.getId(), authorityEntity.getId());
+			
+			description = "Sys Role Authority Delete Successfully";
+			code = ResponseCodeEnum.SUCCESS.getCode();
+		} catch (Exception e) {
+			System.err.println("SysRoleAuthority Delete Issue");
+		}
+		return new ResponseDTO<SysRoleAuthorityDTO>(code, description);
+	}
+
 
 
 }

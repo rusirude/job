@@ -14,12 +14,41 @@ import com.leaf.job.dao.AuthorityDAO;
 import com.leaf.job.entity.AuthorityEntity;
 import com.leaf.job.entity.AuthorityEntity_;
 import com.leaf.job.entity.StatusEntity_;
+import com.leaf.job.enums.DeleteStatusEnum;
 
 @Repository
 public class AuthorityDAOImpl implements AuthorityDAO{
 	
 	@Autowired
 	private EntityManager entityManager;
+	
+		
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AuthorityEntity findAuthorityEntityByCode(String code){
+		AuthorityEntity authorityEntity = null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AuthorityEntity> criteriaQuery = criteriaBuilder.createQuery(AuthorityEntity.class);
+        Root<AuthorityEntity> root = criteriaQuery.from(AuthorityEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                      criteriaBuilder.equal(root.get(AuthorityEntity_.code), code),
+                      criteriaBuilder.notEqual(root.get(AuthorityEntity_.statusEntity).get(StatusEntity_.code), DeleteStatusEnum.DELETE.getCode())
+                )
+        );
+
+        try {
+            authorityEntity = entityManager.createQuery(criteriaQuery).getSingleResult();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+
+        return authorityEntity;
+	}
 
 	/**
 	 * {@inheritDoc}

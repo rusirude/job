@@ -99,6 +99,30 @@ public class SysRoleAuthorityDAOImpl implements SysRoleAuthorityDAO {
         entityManager.createQuery(criteriaDelete).executeUpdate();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteSysRoleAuthorityEntityBySysRoleAndAuthority(long sysRoleId, long authorityId){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaDelete<SysRoleAuthorityEntity> criteriaDelete = criteriaBuilder.createCriteriaDelete(SysRoleAuthorityEntity.class);
+        Root<SysRoleAuthorityEntity> root = criteriaDelete.from(SysRoleAuthorityEntity.class);        
+        criteriaDelete.where(
+        		criteriaBuilder.and(
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.sysRoleEntity).get(SysRoleEntity_.id),sysRoleId),   
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.id), authorityId)
+        				)
+        		);        
+        entityManager.createQuery(criteriaDelete).executeUpdate();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void saveSysRoleAuthorityentity(SysRoleAuthorityEntity sysRoleAuthorityEntity){
+		entityManager.persist(sysRoleAuthorityEntity);
+	}
 	
 
 }

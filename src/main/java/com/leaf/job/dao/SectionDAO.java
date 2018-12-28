@@ -22,7 +22,7 @@ public interface SectionDAO {
 
 	/**
 	 * Find Entity from DB By Code
-	 * @param id
+	 * @param code
 	 * @return {@link SectionEntity}
 	 */
     SectionEntity findSectionEntityByCode(String code);

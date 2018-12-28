@@ -65,7 +65,7 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
             	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
             		return `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-${data.authorityCode}">
-							  <input type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
+							  <input onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.sysRoleCode}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
 							  <span class="mdl-switch__label"></span>
 							</label>`;
             	}
@@ -73,6 +73,44 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
         ]
 	});
 }
+
+var successFunctionForUserRoleAuthority = (data)=>{
+	if(data.code === Constant.CODE_FAIELD){
+		
+	}
+};
+
+var failedFunctionForUserRoleAuthority = (data)=>{
+	alert("Server Error");
+};
+
+var savePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
+	let url = "/sysRoleAuthority/save";
+	let method = "POST";
+	let data = {sysRoleCode:sysRoleCode,authorityCode:authorityCode}
+	callToserver(url,method,data,successFunctionForUserRoleAuthority,failedFunctionForUserRoleAuthority);
+
+}
+
+var deletePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
+	let url = "/sysRoleAuthority/delete";
+	let method = "POST";
+	let data = {sysRoleCode:sysRoleCode,authorityCode:authorityCode}
+	callToserver(url,method,data,successFunctionForUserRoleAuthority,failedFunctionForUserRoleAuthority);
+
+}
+
+
+/*-------------------------------- Inline Event  ----------------------*/
+
+function privilegeGrantOrRevorkForForUserRoleAuthority(ele,sysRoleCode,authorityCode){
+	if($(ele).is(":checked")){
+		savePrivilageForUserRoleAuthority(sysRoleCode,authorityCode);
+	}
+	else{
+		deletePrivilageForUserRoleAuthority(sysRoleCode,authorityCode);
+	}	
+} 
 
 /*-------------------------------- Dynamic Event  ----------------------*/
 
