@@ -100,6 +100,15 @@ var deletePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
 
 }
 
+var clearDataForUserRoleAuthority = ()=>{
+
+	let sysRole = $("#sysRole");
+	sysRole.val("");
+	sysRole[0].parentElement.MaterialSelectfield.change("");
+	userRoleAutorityTable.ajax.reload();	
+	
+};
+
 
 /*-------------------------------- Inline Event  ----------------------*/
 
@@ -117,6 +126,9 @@ function privilegeGrantOrRevorkForForUserRoleAuthority(ele,sysRoleCode,authority
 var evenBinderForUserRoleAuthority = ()=>{
 	$("#sysRole").off().on("change",function(){
 		userRoleAutorityTable.ajax.reload();		
+	});
+	$("#btnCancel").off().on("click",function(){
+		clearDataForUserRoleAuthority();
 	});
 };
 /*-------------------------------- Document Ready ----------------------*/

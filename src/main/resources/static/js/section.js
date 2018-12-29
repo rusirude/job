@@ -271,8 +271,7 @@ var evenBinderForSection = ()=>{
 $(document).ready(()=>{	
 
  	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 	
- 		$("#status")[0].parentElement.MaterialSelectfield.init()
+ 		componentHandler.upgradeDom(); 	 		
 	};	
 	loadReferenceDataForSection(_callback_1);
 	evenBinderForSection();
