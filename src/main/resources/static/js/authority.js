@@ -1,4 +1,27 @@
+var authorityTable;
+/*------------------------------------------- CRUD Functions ------------------*/
 
+
+var findDetailByCodeForAuthority = (code,callback)=>{
+	let successFunction = (data)=>{
+		if(data.code === Constant.CODE_SUCCESS){			
+			if(callback){
+				callback(data.data);
+				componentHandler.upgradeDom();
+			}
+		}
+		else{
+			alert(data.message);
+		}
+	};
+	let failedFunction = (data)=>{
+		alert("Server Error");
+	};
+	let url = "/authority/loadAuthorityByCode";
+	let method = "POST";
+	callToserver(url,method,{code:code},successFunction,failedFunction);
+	
+};
 
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 
@@ -6,6 +29,8 @@ var populateFormForAuthority = (data) => {
 	if(data){
 		$("#code")[0].parentElement.MaterialTextfield.change(data.code || "");
 		$("#description")[0].parentElement.MaterialTextfield.change(data.description || "");
+		$("#url")[0].parentElement.MaterialTextfield.change(data.url || "");
+		$("#section")[0].parentElement.MaterialSelectfield.change(data.sectionCode || "");
 		$("#status")[0].parentElement.MaterialSelectfield.change(data.statusCode || "");
 	}	
 };
@@ -44,7 +69,7 @@ var loadReferenceDataForAuthority = (callback)=>{
 
 
 var loadAuthorityTable = ()=>{
-	sectionTable = $('#authorityTable').DataTable( {
+	authorityTable = $('#authorityTable').DataTable( {
                         ajax: {
                             url : "/authority/loadAuthorities",
                             contentType:"application/json",
@@ -77,13 +102,13 @@ var loadAuthorityTable = ()=>{
                             	data: "code",
                             	class:"mdl-data-table__cell--non-numeric",
                             	render: function (data, type, full) {
-		                            		return `<button onClick="updateIconClickForSection('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+		                            		return `<button onClick="updateIconClickForAuthority('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-update-${data}" class="material-icons">create</i>
 													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
 														Update
 													  </div>
 													</button>
-													<button onClick="deleteIconClickForSection('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+													<button onClick="deleteIconClickForAuthority('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-delete-${data}" class="material-icons">delete</i>
 													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
 														Delete
@@ -95,16 +120,99 @@ var loadAuthorityTable = ()=>{
                     } );
 }
 
+var clearDataForAuthority = ()=>{
+	let code = $("#code");
+	let description = $("#description");
+	let url = $("#url");
+	let section = $("#section");
+	let status = $("#status");
+	
+	$("#btnSave").show();
+	$("#btnUpdate").hide();
+	$("#btnDelete").hide();
+
+	
+	code[0].parentElement.MaterialTextfield.enable();
+	description[0].parentElement.MaterialTextfield.enable();
+	url[0].parentElement.MaterialTextfield.enable();
+	section[0].parentElement.MaterialSelectfield.enable();	
+	status[0].parentElement.MaterialSelectfield.enable();	
+	
+
+	
+	code[0].parentElement.MaterialTextfield.change("");
+	description[0].parentElement.MaterialTextfield.change("");
+	url[0].parentElement.MaterialTextfield.change("");
+	section.val("");
+	section[0].parentElement.MaterialSelectfield.change("");
+	status.val("");
+	status[0].parentElement.MaterialSelectfield.change("");
+	
+};
+
+
+/*-------------------------------- Inline Event  ----------------------*/
+
+var updateIconClickForAuthority = (code)=>{
+	let _sF = (data)=>{
+		$("#btnSave").hide();
+		$("#btnUpdate").show();
+		$("#btnDelete").hide();
+		populateFormForAuthority(data);
+		$("#code")[0].parentElement.MaterialTextfield.disable();
+	}	
+	clearDataForAuthority();
+	findDetailByCodeForAuthority(code,_sF);
+};
+
+var deleteIconClickForAuthority = (code)=>{
+	let _sF = (data)=>{
+		$("#btnSave").hide();
+		$("#btnUpdate").hide();
+		$("#btnDelete").show();
+		populateFormForAuthority(data);
+		$("#code")[0].parentElement.MaterialTextfield.disable();
+		$("#description")[0].parentElement.MaterialTextfield.disable();
+		$("#url")[0].parentElement.MaterialTextfield.disable();
+		$("#section")[0].parentElement.MaterialSelectfield.disable();
+		$("#status")[0].parentElement.MaterialSelectfield.disable();
+	}
+	clearDataForAuthority();
+	findDetailByCodeForAuthority(code,_sF);
+};
+
+/*-------------------------------- Dynamic Event  ----------------------*/
+
+var evenBinderForAuthority = ()=>{
+	$("#btnSave").off().on("click",function(){
+		//saveForSection();
+	});
+	
+	$("#btnUpdate").off().on("click",function(){
+		//updateForSection();
+	});
+	
+	$("#btnDelete").off().on("click",function(){
+		//deleteForSection();
+	});
+	
+	$("#btnCancel").off().on("click",function(){
+		clearDataForAuthority();
+	});
+
+};
+
+
 /*-------------------------------- Document Ready ----------------------*/
 
 
 $(document).ready(()=>{	
-
 	
  	let _callback_1 = ()=>{
  		componentHandler.upgradeDom(); 	 		
 	};	
 	loadReferenceDataForAuthority(_callback_1);	 
 	loadAuthorityTable();
+	evenBinderForAuthority();
 
 });

@@ -224,8 +224,7 @@ var updateIconClickForSection = (code)=>{
 		$("#btnDelete").hide();
 		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
-	}
-	console.log("p");
+	}	
 	clearDataForSection();
 	findDetailByCodeForSection(code,_sF);
 };

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.leaf.job.dto.AuthorityDTO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
@@ -47,5 +48,12 @@ public class AuthorityController {
 	@ResponseBody
 	public DataTableResponseDTO loadAuthorityDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
 		return authorityService.getAuthoritiesForDataTable(dataTableRequestDTO);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_AUTHORITY')")
+	@RequestMapping(path = "/loadAuthorityByCode", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<AuthorityDTO> loadAuthorityByCode(@RequestBody AuthorityDTO authorityDTO) {
+		return authorityService.findAuthority(authorityDTO);
 	}
 }

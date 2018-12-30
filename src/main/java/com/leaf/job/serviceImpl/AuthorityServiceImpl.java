@@ -20,6 +20,7 @@ import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.AuthorityEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
+import com.leaf.job.enums.DeleteStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.enums.StatusCategoryEnum;
 import com.leaf.job.service.AuthorityService;
@@ -47,8 +48,9 @@ public class AuthorityServiceImpl implements AuthorityService {
 	}
 
 
-
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@Transactional
 	public ResponseDTO<HashMap<String, Object>> getReferenceDataForAuthority() {
@@ -71,6 +73,48 @@ public class AuthorityServiceImpl implements AuthorityService {
 		return new ResponseDTO<HashMap<String, Object>>(code, map);
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<AuthorityDTO> findAuthority(AuthorityDTO authorityDTO) {
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Authority is Not Found";
+		AuthorityDTO dto = new AuthorityDTO();
+		try {
+
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(authorityDTO.getCode());
+
+			if (authorityEntity != null
+					&& !DeleteStatusEnum.DELETE.getCode().equals(authorityEntity.getStatusEntity().getCode())) {
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "Authority is Found Successfully";
+
+				dto.setCode(authorityEntity.getCode());
+				dto.setDescription(authorityEntity.getDescription());
+				dto.setUrl(authorityEntity.getUrl());
+				dto.setSectionCode(authorityEntity.getSectionEntity().getCode());
+				dto.setSectionDescription(authorityEntity.getSectionEntity().getDescription());
+				dto.setStatusCode(authorityEntity.getStatusEntity().getCode());
+				dto.setStatusDescription(authorityEntity.getStatusEntity().getDescription());
+				dto.setCreatedBy(authorityEntity.getCreatedBy());
+				dto.setCreatedOn(authorityEntity.getCreatedOn());
+				dto.setUpdatedBy(authorityEntity.getUpdatedBy());
+				dto.setUpdatedOn(authorityEntity.getUpdatedOn());
+
+			}
+
+		} catch (Exception e) {
+			System.err.println("Authority Find Issue");
+		}
+		return new ResponseDTO<AuthorityDTO>(code, description, dto);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@Transactional
 	public DataTableResponseDTO getAuthoritiesForDataTable(DataTableRequestDTO dataTableRequestDTO) {
