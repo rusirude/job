@@ -2,6 +2,7 @@ package com.leaf.job.dao;
 
 import java.util.List;
 
+import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.entity.AuthorityEntity;
 import com.leaf.job.entity.SectionEntity;
 
@@ -33,4 +34,12 @@ public interface AuthorityDAO {
 	 * @return {@link List<AuthorityEntity>}
 	 */
 	List<AuthorityEntity> findAuthorityEntitiesByStatus(String statusCode);
+	
+	
+    /**
+     * Getting Data For  Grid 
+     * @param dataTableRequestDTO
+     * @return 
+     */
+    <T> T getDataForGrid(DataTableRequestDTO dataTableRequestDTO, String type);
 }

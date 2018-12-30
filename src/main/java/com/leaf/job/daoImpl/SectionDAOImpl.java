@@ -110,6 +110,31 @@ public class SectionDAOImpl implements SectionDAO {
         
         return sectionEntities;
 	}
+	
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SectionEntity> findAllSectionEntities(String statusCode){
+		List<SectionEntity> sysRoleEntities = null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SectionEntity> criteriaQuery = criteriaBuilder.createQuery(SectionEntity.class);
+        Root<SectionEntity> root = criteriaQuery.from(SectionEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+        		criteriaBuilder.equal(root.get(SectionEntity_.statusEntity).get(StatusEntity_.code), statusCode)
+        );
+
+        try {
+        	sysRoleEntities = entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        
+        return sysRoleEntities;
+	}
 
 	/**
 	 * {@inheritDoc}

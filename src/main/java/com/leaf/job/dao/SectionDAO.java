@@ -40,10 +40,25 @@ public interface SectionDAO {
     void updateSectionEntity(SectionEntity sectionEntity);
     
     /**
-     * Find All Not Deleted System Roles
+     * select - *
+     * From - Section
+     * where - STATUS <> DELETE
+     * 
+     * Find Section Entities without delete
      * @return {@link List}
      */
     List<SectionEntity> findAllSectionEntities();
+    
+    
+    /**
+     * select - *
+     * From - Section
+     * where - STATUS = statusCode
+     * 
+     * Find Section Entities By Status Code
+     * @return {@link List}
+     */
+    List<SectionEntity> findAllSectionEntities(String statusCode);
     
     /**
      * Getting Data For  Grid 

@@ -204,6 +204,7 @@ public class SectionServiceImpl implements SectionService {
 	}
 
 	@Override
+	@Transactional
 	public DataTableResponseDTO getSectionsForDataTable(DataTableRequestDTO dataTableRequestDTO) {
 		List<SectionDTO> list = new ArrayList<>();
 		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
