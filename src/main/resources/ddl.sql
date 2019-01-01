@@ -139,6 +139,24 @@ CREATE TABLE `job`.`sys_role_authoriry` (
     REFERENCES `job`.`authority` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
+    
+CREATE TABLE `job`.`title` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `description` VARCHAR(50) NOT NULL,
+  `status` INT NOT NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
+  INDEX `fk_title_status_idx` (`status` ASC),
+  CONSTRAINT `fk_title_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `job`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);    
 
     
 INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');

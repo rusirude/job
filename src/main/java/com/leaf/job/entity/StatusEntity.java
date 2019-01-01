@@ -28,6 +28,7 @@ public class StatusEntity {
 	private Set<SysRoleEntity> sysRoleEntities = new HashSet<>();
 	private Set<AuthorityEntity> authorityEntities = new HashSet<>();
 	private Set<SectionEntity> sectionEntities = new HashSet<>();
+	private Set<TitleEntity> titleEntities = new HashSet<>();
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,11 +103,14 @@ public class StatusEntity {
 	public void setSectionEntities(Set<SectionEntity> sectionEntities) {
 		this.sectionEntities = sectionEntities;
 	}
-	
-	
-	
-	
-	
-	
+
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<TitleEntity> getTitleEntities() {
+		return titleEntities;
+	}
+
+	public void setTitleEntities(Set<TitleEntity> titleEntities) {
+		this.titleEntities = titleEntities;
+	}	
 	
 }
