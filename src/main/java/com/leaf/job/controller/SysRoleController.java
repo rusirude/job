@@ -32,7 +32,7 @@ public class SysRoleController {
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public ModelAndView viewSysRole() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("userRole");
+		mv.setViewName("sysRole");
 		return mv;
 	}
 
