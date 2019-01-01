@@ -8,7 +8,28 @@ import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 
 public interface AuthorityService {
-
+	
+	/**
+	 * Save Authority
+	 * @param AuthorityDTO
+	 * @return {@link ResponseDTO}
+	 */
+	ResponseDTO<AuthorityDTO> saveAuthority(AuthorityDTO authorityDTO);
+	
+	/**
+	 * Update Authority
+	 * @param AuthorityDTO
+	 * @return {@link ResponseDTO}
+	 */
+	ResponseDTO<AuthorityDTO> updateAuthority(AuthorityDTO authorityDTO);
+	
+	/**
+	 * Delete Authority
+	 * @param AuthorityDTO - code 
+	 * @return {@link ResponseDTO}
+	 */
+	ResponseDTO<AuthorityDTO> deleteAuthority(AuthorityDTO authorityDTO);
+	
 	/**
 	 * Load Reference Data For Authority Page
 	 * @return {@link ResponseDTO}

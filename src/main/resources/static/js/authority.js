@@ -1,6 +1,91 @@
 var authorityTable;
 /*------------------------------------------- CRUD Functions ------------------*/
 
+var generateFinalObjectForAuthority = ()=>{
+	return {
+		code:$("#code").val()||"",
+		description:$("#description").val()||"",
+		url:$("#url").val()||"",
+		sectionCode:$("#section").val()||"",
+		statusCode:$("#status").val()||""
+	}
+};
+
+var successFunctionForAuthority = (data)=>{
+	if(data.code === Constant.CODE_SUCCESS){
+		DialogBox.openSuccessMsgBox(data.message);		
+		authorityTable.ajax.reload();
+		clearDataForAuthority();
+	}
+	else{
+		alert(data.message);
+	}
+};
+
+var failedFunctionForAuthority = (data)=>{
+	alert("Server Error");
+};
+
+var validatorForAuthority = ()=>{
+	let isValid = true;
+	
+	let code = $("#code");
+	let description = $("#description");
+	let url = $("#url");	
+	let section = $("#section");
+	let status = $("#status");
+	
+	if(! code.val()){		
+		//code.prop("required",true);		
+		return isValid = false;
+	}
+	if(! description.val()){
+		//description.prop("required",true);		
+		return isValid = false;
+	}
+	if(! url.val()){
+		//description.prop("required",true);		
+		return isValid = false;
+	}
+	if(! section.val()){
+		//description.prop("required",true);		
+		return isValid = false;
+	}
+	if(! status.val()){
+		//status.prop("required",true);
+		return isValid = false;
+	}
+	return isValid;
+};
+
+
+var saveForAuthority = ()=>{
+	if(validatorForAuthority()){
+		let url = "/authority/save";
+		let method = "POST";		
+		
+		callToserver(url,method,generateFinalObjectForAuthority(),successFunctionForAuthority,failedFunctionForAuthority);
+	}
+	
+};
+
+var updateForAuthority = ()=>{
+	if(validatorForAuthority()){
+		let url = "/authority/update";
+		let method = "POST";
+				
+		callToserver(url,method,generateFinalObjectForAuthority(),successFunctionForAuthority,failedFunctionForAuthority);
+	}
+};
+
+var deleteForAuthority = ()=>{
+	if(validatorForAuthority()){
+		let url = "/authority/delete";
+		let method = "POST";
+		
+		callToserver(url,method,generateFinalObjectForAuthority(),successFunctionForAuthority,failedFunctionForAuthority);
+	}
+};
 
 var findDetailByCodeForAuthority = (code,callback)=>{
 	let successFunction = (data)=>{
@@ -185,15 +270,15 @@ var deleteIconClickForAuthority = (code)=>{
 
 var evenBinderForAuthority = ()=>{
 	$("#btnSave").off().on("click",function(){
-		//saveForSection();
+		saveForAuthority();
 	});
 	
 	$("#btnUpdate").off().on("click",function(){
-		//updateForSection();
+		updateForAuthority();
 	});
 	
 	$("#btnDelete").off().on("click",function(){
-		//deleteForSection();
+		deleteForAuthority();
 	});
 	
 	$("#btnCancel").off().on("click",function(){

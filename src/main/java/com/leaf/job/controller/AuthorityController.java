@@ -41,6 +41,27 @@ public class AuthorityController {
 	@ResponseBody
 	public ResponseDTO<HashMap<String, Object>> loadAuthorityRefereceData() {
 		return authorityService.getReferenceDataForAuthority();
+	}	
+
+	@PreAuthorize("hasRole('ROLE_AUTHORITY')")
+	@RequestMapping(path = "/save", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> saveAuthority(@RequestBody AuthorityDTO authorityDTO) {
+		return authorityService.saveAuthority(authorityDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_AUTHORITY')")
+	@RequestMapping(path = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> updateAuthority(@RequestBody AuthorityDTO authorityDTO) {
+		return authorityService.updateAuthority(authorityDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_AUTHORITY')")
+	@RequestMapping(path = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> daleteAuthority(@RequestBody AuthorityDTO authorityDTO) {
+		return authorityService.deleteAuthority(authorityDTO);
 	}
 
 	@PreAuthorize("hasRole('ROLE_AUTHORITY')")

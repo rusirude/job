@@ -31,7 +31,21 @@ public class AuthorityDAOImpl implements AuthorityDAO{
 	@Autowired
 	private EntityManager entityManager;
 	
-		
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void saveAuthorityEntity(AuthorityEntity authorityEntity) {
+		entityManager.persist(authorityEntity);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateAuthorityEntity(AuthorityEntity authorityEntity) {
+		entityManager.merge(authorityEntity);
+	}
 	
 	/**
 	 * {@inheritDoc}

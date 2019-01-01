@@ -19,6 +19,8 @@ import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.AuthorityEntity;
+import com.leaf.job.entity.SectionEntity;
+import com.leaf.job.entity.StatusEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
 import com.leaf.job.enums.DeleteStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
@@ -45,6 +47,121 @@ public class AuthorityServiceImpl implements AuthorityService {
 		this.statusDAO = statusDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
 		this.commonMethod = commonMethod;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<AuthorityDTO> saveAuthority(AuthorityDTO authorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Authority Save Faield";
+
+		AuthorityEntity authorityEntity;
+		try {
+			authorityEntity = authorityDAO.findAuthorityEntityByCode(authorityDTO.getCode());
+			if (authorityEntity == null) {
+				StatusEntity statusEntity = statusDAO.findStatusEntityByCode(authorityDTO.getStatusCode());
+				SectionEntity sectionEntity = sectionDAO.findSectionEntityByCode(authorityDTO.getSectionCode());
+
+				authorityEntity = new AuthorityEntity();
+				authorityEntity.setCode(authorityDTO.getCode());
+				authorityEntity.setDescription(authorityDTO.getDescription());
+				authorityEntity.setUrl(authorityDTO.getUrl());
+				authorityEntity.setSectionEntity(sectionEntity);
+				authorityEntity.setStatusEntity(statusEntity);
+
+				commonMethod.getPopulateEntityWhenInsert(authorityEntity);
+
+				authorityDAO.saveAuthorityEntity(authorityEntity);
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "Authority Save Successfully";
+			} else if (DeleteStatusEnum.DELETE.getCode().equals(authorityEntity.getStatusEntity().getCode())) {
+
+				StatusEntity statusEntity = statusDAO.findStatusEntityByCode(authorityDTO.getStatusCode());
+				SectionEntity sectionEntity = sectionDAO.findSectionEntityByCode(authorityDTO.getSectionCode());
+				
+				authorityEntity.setCode(authorityDTO.getCode());
+				authorityEntity.setDescription(authorityDTO.getDescription());
+				authorityEntity.setUrl(authorityDTO.getUrl());
+				authorityEntity.setSectionEntity(sectionEntity);
+				authorityEntity.setStatusEntity(statusEntity);
+
+				commonMethod.getPopulateEntityWhenInsert(authorityEntity);
+
+				authorityDAO.updateAuthorityEntity(authorityEntity);
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "Authority Save Successfully";
+			} else {
+				description = "Authority Code is Already Used ";
+			}
+
+		} catch (Exception e) {
+			System.err.println("Authority Save Issue");
+		}
+		return new ResponseDTO<AuthorityDTO>(code, description);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<AuthorityDTO> updateAuthority(AuthorityDTO authorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Authority Update Faield";
+		try {
+			
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(authorityDTO.getCode());
+			
+			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(authorityDTO.getStatusCode());
+			SectionEntity sectionEntity = sectionDAO.findSectionEntityByCode(authorityDTO.getSectionCode());
+
+			authorityEntity.setCode(authorityDTO.getCode());
+			authorityEntity.setDescription(authorityDTO.getDescription());
+			authorityEntity.setUrl(authorityDTO.getUrl());
+			authorityEntity.setSectionEntity(sectionEntity);
+			authorityEntity.setStatusEntity(statusEntity);
+
+
+			commonMethod.getPopulateEntityWhenUpdate(authorityEntity);
+
+			authorityDAO.updateAuthorityEntity(authorityEntity);
+			
+			code = ResponseCodeEnum.SUCCESS.getCode();
+			description = "Authority Update Successfully";
+		} catch (Exception e) {
+			System.err.println("Authority Update Issue");
+		}
+		return new ResponseDTO<AuthorityDTO>(code, description);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<AuthorityDTO> deleteAuthority(AuthorityDTO authorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Authority Delete Faield";
+		try {
+			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());
+
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(authorityDTO.getCode());
+
+			authorityEntity.setStatusEntity(statusEntity);
+
+			commonMethod.getPopulateEntityWhenUpdate(authorityEntity);
+
+			authorityDAO.updateAuthorityEntity(authorityEntity);
+			
+			code = ResponseCodeEnum.SUCCESS.getCode();
+			description = "Authorty Delete Successfully";
+		} catch (Exception e) {
+			System.err.println("Authority Delete Issue");
+		}
+		return new ResponseDTO<AuthorityDTO>(code, description);
 	}
 
 

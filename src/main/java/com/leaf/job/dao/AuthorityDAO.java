@@ -9,7 +9,17 @@ import com.leaf.job.entity.SectionEntity;
 public interface AuthorityDAO {
 	
 	
-	
+    /**
+     * Save Authority Entity
+     * @param authorityEntity
+     */
+    void saveAuthorityEntity(AuthorityEntity authorityEntity);
+    
+    /**
+     * Update Authority Entity
+     * @param authorityEntity
+     */
+    void updateAuthorityEntity(AuthorityEntity authorityEntity);
 	
 	/**
 	 * select *
