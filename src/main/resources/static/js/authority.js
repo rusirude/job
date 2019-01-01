@@ -6,6 +6,7 @@ var generateFinalObjectForAuthority = ()=>{
 		code:$("#code").val()||"",
 		description:$("#description").val()||"",
 		url:$("#url").val()||"",
+		authCode: $("#authCode").val()||"",
 		sectionCode:$("#section").val()||"",
 		statusCode:$("#status").val()||""
 	}
@@ -32,6 +33,7 @@ var validatorForAuthority = ()=>{
 	let code = $("#code");
 	let description = $("#description");
 	let url = $("#url");	
+	let authCode = $("#authCode");	
 	let section = $("#section");
 	let status = $("#status");
 	
@@ -44,6 +46,10 @@ var validatorForAuthority = ()=>{
 		return isValid = false;
 	}
 	if(! url.val()){
+		//description.prop("required",true);		
+		return isValid = false;
+	}
+	if(! authCode.val()){
 		//description.prop("required",true);		
 		return isValid = false;
 	}
@@ -115,6 +121,7 @@ var populateFormForAuthority = (data) => {
 		$("#code")[0].parentElement.MaterialTextfield.change(data.code || "");
 		$("#description")[0].parentElement.MaterialTextfield.change(data.description || "");
 		$("#url")[0].parentElement.MaterialTextfield.change(data.url || "");
+		$("#authCode")[0].parentElement.MaterialTextfield.change(data.authCode || "");
 		$("#section")[0].parentElement.MaterialSelectfield.change(data.sectionCode || "");
 		$("#status")[0].parentElement.MaterialSelectfield.change(data.statusCode || "");
 	}	
@@ -176,7 +183,8 @@ var loadAuthorityTable = ()=>{
                         columns: [
                             { data: "code"                ,name:"code"          ,class:"mdl-data-table__cell--non-numeric"},
                             { data: "description"         ,name:"description"   ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "url"                 ,name:"url        "   ,class:"mdl-data-table__cell--non-numeric"},                            
+                            { data: "url"                 ,name:"url"           ,class:"mdl-data-table__cell--non-numeric"},             
+                            { data: "authCode"            ,name:"authCode"      ,class:"mdl-data-table__cell--non-numeric"},                            
                             { data: "sectionDescription"  ,name:"section"       ,class:"mdl-data-table__cell--non-numeric"},
                             { data: "statusDescription"   ,name:"status"        ,class:"mdl-data-table__cell--non-numeric"},
                             { data: "createdBy"           ,name:"createdBy"     ,class:"mdl-data-table__cell--non-numeric"},
@@ -209,6 +217,7 @@ var clearDataForAuthority = ()=>{
 	let code = $("#code");
 	let description = $("#description");
 	let url = $("#url");
+	let authCode = $("#authCode");
 	let section = $("#section");
 	let status = $("#status");
 	
@@ -220,6 +229,7 @@ var clearDataForAuthority = ()=>{
 	code[0].parentElement.MaterialTextfield.enable();
 	description[0].parentElement.MaterialTextfield.enable();
 	url[0].parentElement.MaterialTextfield.enable();
+	authCode[0].parentElement.MaterialTextfield.enable();
 	section[0].parentElement.MaterialSelectfield.enable();	
 	status[0].parentElement.MaterialSelectfield.enable();	
 	
@@ -228,6 +238,7 @@ var clearDataForAuthority = ()=>{
 	code[0].parentElement.MaterialTextfield.change("");
 	description[0].parentElement.MaterialTextfield.change("");
 	url[0].parentElement.MaterialTextfield.change("");
+	authCode[0].parentElement.MaterialTextfield.change("");
 	section.val("");
 	section[0].parentElement.MaterialSelectfield.change("");
 	status.val("");
@@ -259,6 +270,7 @@ var deleteIconClickForAuthority = (code)=>{
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
 		$("#url")[0].parentElement.MaterialTextfield.disable();
+		$("#authCode")[0].parentElement.MaterialTextfield.disable();
 		$("#section")[0].parentElement.MaterialSelectfield.disable();
 		$("#status")[0].parentElement.MaterialSelectfield.disable();
 	}

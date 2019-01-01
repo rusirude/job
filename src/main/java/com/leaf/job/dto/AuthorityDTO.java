@@ -7,6 +7,7 @@ public class AuthorityDTO  extends CommonDTO {
 	private String code;
 	private String description;
 	private String url;
+	private String authCode;
 	private String sectionCode;
 	private String sectionDescription;
 	private String statusCode;
@@ -29,6 +30,12 @@ public class AuthorityDTO  extends CommonDTO {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}	
+	public String getAuthCode() {
+		return authCode;
+	}
+	public void setAuthCode(String authCode) {
+		this.authCode = authCode;
 	}
 	public String getSectionCode() {
 		return sectionCode;

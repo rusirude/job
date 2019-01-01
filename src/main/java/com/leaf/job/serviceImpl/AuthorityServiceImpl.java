@@ -69,6 +69,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 				authorityEntity.setCode(authorityDTO.getCode());
 				authorityEntity.setDescription(authorityDTO.getDescription());
 				authorityEntity.setUrl(authorityDTO.getUrl());
+				authorityEntity.setAuthCode(authorityDTO.getAuthCode());
 				authorityEntity.setSectionEntity(sectionEntity);
 				authorityEntity.setStatusEntity(statusEntity);
 
@@ -85,6 +86,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 				authorityEntity.setCode(authorityDTO.getCode());
 				authorityEntity.setDescription(authorityDTO.getDescription());
 				authorityEntity.setUrl(authorityDTO.getUrl());
+				authorityEntity.setAuthCode(authorityDTO.getAuthCode());
 				authorityEntity.setSectionEntity(sectionEntity);
 				authorityEntity.setStatusEntity(statusEntity);
 
@@ -121,6 +123,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 			authorityEntity.setCode(authorityDTO.getCode());
 			authorityEntity.setDescription(authorityDTO.getDescription());
 			authorityEntity.setUrl(authorityDTO.getUrl());
+			authorityEntity.setAuthCode(authorityDTO.getAuthCode());
 			authorityEntity.setSectionEntity(sectionEntity);
 			authorityEntity.setStatusEntity(statusEntity);
 
@@ -212,6 +215,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 				dto.setCode(authorityEntity.getCode());
 				dto.setDescription(authorityEntity.getDescription());
 				dto.setUrl(authorityEntity.getUrl());
+				dto.setAuthCode(authorityEntity.getAuthCode());
 				dto.setSectionCode(authorityEntity.getSectionEntity().getCode());
 				dto.setSectionDescription(authorityEntity.getSectionEntity().getDescription());
 				dto.setStatusCode(authorityEntity.getStatusEntity().getCode());
@@ -245,6 +249,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 						dto.setCode(entity.getCode());
 						dto.setDescription(entity.getDescription());
 						dto.setUrl(entity.getUrl());
+						dto.setAuthCode(entity.getAuthCode());
 						dto.setSectionDescription(entity.getSectionEntity().getDescription());
 						dto.setStatusDescription(entity.getStatusEntity().getDescription());
 						dto.setCreatedBy(entity.getCreatedBy());
