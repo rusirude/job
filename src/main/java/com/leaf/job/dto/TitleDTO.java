@@ -1,6 +1,8 @@
 package com.leaf.job.dto;
 
-public class TitleDTO {
+import com.leaf.job.dto.common.CommonDTO;
+
+public class TitleDTO extends CommonDTO{
 
 	private String code;
 	private String description;
