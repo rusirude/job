@@ -1,5 +1,8 @@
 package com.leaf.job.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +21,9 @@ public class TitleEntity extends CommonEntity{
 	private Long id;
     private String code;
     private String description;
-    private StatusEntity statusEntity;    
+    private StatusEntity statusEntity;  
+    
+    private Set<SysUserEntity> sysUserEntities = new HashSet<>();
     
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +61,15 @@ public class TitleEntity extends CommonEntity{
 	
 	public void setStatusEntity(StatusEntity statusEntity) {
 		this.statusEntity = statusEntity;
+	}
+	
+	@OneToMany(mappedBy = "titleEntity", fetch = FetchType.LAZY)
+	public Set<SysUserEntity> getSysUserEntities() {
+		return sysUserEntities;
+	}
+
+	public void setSysUserEntities(Set<SysUserEntity> sysUserEntities) {
+		this.sysUserEntities = sysUserEntities;
 	}
 
 }

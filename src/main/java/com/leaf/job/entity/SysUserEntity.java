@@ -17,6 +17,7 @@ import javax.persistence.Table;
 public class SysUserEntity extends CommonEntity{
 	private String username;
 	private String password;
+	private TitleEntity titleEntity;
 	private String name;
 	private StatusEntity statusEntity;
 	
@@ -41,6 +42,16 @@ public class SysUserEntity extends CommonEntity{
 		this.password = password;
 	}
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name =  "title" , nullable = false)
+	public TitleEntity getTitleEntity() {
+		return titleEntity;
+	}
+
+	public void setTitleEntity(TitleEntity titleEntity) {
+		this.titleEntity = titleEntity;
+	}
+
 	@Column(name  = "name", length = 100 , nullable = false)
 	public String getName() {
 		return name;

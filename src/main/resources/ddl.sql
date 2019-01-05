@@ -44,6 +44,7 @@ CREATE TABLE `job`.`sys_role` (
 CREATE TABLE `job`.`sys_user` (
   `username` VARCHAR(25) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
+  `title` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `status` INT NOT NULL,
   `created_by` VARCHAR(25) NOT NULL,
@@ -57,7 +58,14 @@ CREATE TABLE `job`.`sys_user` (
     FOREIGN KEY (`status`)
     REFERENCES `job`.`status` (`id`)
     ON DELETE RESTRICT
-    ON UPDATE CASCADE);
+    ON UPDATE CASCADE,
+  INDEX `fx_sys_user_title_idx` (`title` ASC),
+  CONSTRAINT `fk_sys_user_title`
+    FOREIGN KEY (`title`)
+    REFERENCES `job`.`title` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+);
     
 CREATE TABLE `job`.`section` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -163,7 +171,7 @@ INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', '
 
 INSERT INTO `job`.`sys_role` (`code`, `description`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'System', '1', 'SYSTEM', 'SYSTEM');
 
-INSERT INTO `job`.`sys_user` (`username`, `password`, `name`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'SYSTEM', 'SYSEM', '1', 'SYSTEM', 'SYSTEM');
+INSERT INTO `job`.`sys_user` (`username`, `password`, `title`, `name`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'SYSTEM', '1', 'SYSTEM', '1', 'SYSTEM', 'SYSTEM');
 
 INSERT INTO `job`.`authority` (`code`, `description`, `auth_code`, `url`, `status`, `created_by`, `updated_by`) VALUES ('USER', 'User Management', 'ROLE_USER', 'viewUser', '1', 'SYSTEM', 'SYSTEM');
 
