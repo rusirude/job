@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.leaf.job.dto.SysUserDTO;
+import com.leaf.job.dto.common.DataTableRequestDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.service.SysUserService;
 
@@ -35,6 +37,13 @@ public class SysUserController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(path = "/loadRefDataForSysUser", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<HashMap<String, Object>> loadSysUserRefereceData() {
+		return sysUserService.getReferenceDataForSysUser();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<?> saveSysUser(@RequestBody SysUserDTO sysUserDTO) {
@@ -42,9 +51,30 @@ public class SysUserController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(path = "/loadRefDataForSysUser", method = RequestMethod.POST)
+	@RequestMapping(path = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseDTO<HashMap<String, Object>> loadSysUserRefereceData() {
-		return sysUserService.getReferenceDataForSysUser();
+	public ResponseDTO<?> updateSysUser(@RequestBody SysUserDTO sysUserDTO) {
+		return sysUserService.updateSysUser(sysUserDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(path = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> daleteSysUser(@RequestBody SysUserDTO sysUserDTO) {
+		return sysUserService.deleteSysUser(sysUserDTO);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(path = "/loadSysUsers", method = RequestMethod.POST)
+	@ResponseBody
+	public DataTableResponseDTO loadSysUsersDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
+		return sysUserService.getSysUsersForDataTable(dataTableRequestDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(path = "/loadSysUserByUsername", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<SysUserDTO> loadSysUseerByUsername(@RequestBody SysUserDTO sysUserDTO) {
+		return sysUserService.findSysUser(sysUserDTO);
 	}
 }

@@ -68,7 +68,7 @@ var saveForSysUser = ()=>{
 };
 
 var updateForSysUser = ()=>{
-	if(validatorForUserRole()){
+	if(validatorForSysUser()){
 		let url = "/sysUser/update";
 		let method = "POST";
 				
@@ -100,7 +100,7 @@ var findDetailByCodeForSysUser = (username,callback)=>{
 	let failedFunction = (data)=>{
 		alert("Server Error");
 	};
-	let url = "/sysUser/loadSysUserByUsename";
+	let url = "/sysUser/loadSysUserByUsername";
 	let method = "POST";
 	callToserver(url,method,{username:username},successFunction,failedFunction);
 	
@@ -148,9 +148,58 @@ var loadReferenceDataForSysUser= (callback)=>{
   });
 };
 
-//todo- Datatable Here
+var loadSysUserTable = ()=>{
+	sysUserTable = $('#sysUserTable').DataTable( {
+                        ajax: {
+                            url : "/sysUser/loadSysUsers",
+                            contentType:"application/json",
+                            type:"POST",
+                            data:function(d){
+                                return JSON.stringify(createCommonDataTableRequset(d));
+                    		}
+                        },
+                        processing: true,
+                        serverSide: true,
+                        drawCallback: function( settings ) {
+                        	componentHandler.upgradeDom();
+                        },
+                        scrollY:        true,
+                        scrollX:        true,
+                        scrollCollapse: true,
+                        paging:         true,
+                        pagingType: "full_numbers",
+                        columns: [
+                            { data: "username"            ,name:"username"            ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "titleDescription"    ,name:"title"               ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "name"                ,name:"name"                ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "statusDescription"   ,name:"status"              ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "createdBy"           ,name:"createdBy"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "createdOn"           ,name:"createdOn"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "updatedBy"           ,name:"updatedBy"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "updatedOn"           ,name:"updatedOn"           ,class:"mdl-data-table__cell--non-numeric"},
+                            {
+                            	data: "username",
+                            	class:"mdl-data-table__cell--non-numeric",
+                            	render: function (data, type, full) {
+		                            		return `<button onClick="updateIconClickForSysUser('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+													  <i id="icon-update-${data}" class="material-icons">create</i>
+													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
+														Update
+													  </div>
+													</button>
+													<button onClick="deleteIconClickForSysUser('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+													  <i id="icon-delete-${data}" class="material-icons">delete</i>
+													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
+														Delete
+													  </div>
+													</button>`;
+		                            	}
+                    		}
+                        ]
+                    } );
+}
 
-var clearDataForSysRole = ()=>{
+var clearDataForSysUser = ()=>{
 	let username = $("#username");
 	let title = $("#title");
 	let name = $("#name");
@@ -184,7 +233,7 @@ var updateIconClickForSysUser = (username)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
-		populateFormForSysRole(data);
+		populateFormForSysUser(data);
 		$("#username")[0].parentElement.MaterialTextfield.disable();
 	}
 	clearDataForSysUser();
@@ -196,7 +245,7 @@ var deleteIconClickForSysUser = (username)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
-		populateFormForUserRole(data);
+		populateFormForSysUser(data);
 		$("#username")[0].parentElement.MaterialTextfield.disable();
 		$("#title")[0].parentElement.MaterialSelectfield.disable();
 		$("#name")[0].parentElement.MaterialTextfield.disable();
@@ -237,6 +286,7 @@ $(document).ready(()=>{
  		componentHandler.upgradeDom(); 		
 	};	
 	loadReferenceDataForSysUser(_callback_1); 
+	loadSysUserTable();
 	evenBinderForSysUser();
 
 });

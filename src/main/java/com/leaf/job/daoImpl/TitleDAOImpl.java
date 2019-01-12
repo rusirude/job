@@ -22,7 +22,7 @@ import com.leaf.job.entity.SysRoleEntity_;
 import com.leaf.job.entity.TitleEntity;
 import com.leaf.job.entity.TitleEntity_;
 import com.leaf.job.enums.DeleteStatusEnum;
-import com.leaf.job.utility.CommonConstant;
+import com.leaf.job.utility.CommonConstant;;
 
 @Repository
 public class TitleDAOImpl implements TitleDAO {

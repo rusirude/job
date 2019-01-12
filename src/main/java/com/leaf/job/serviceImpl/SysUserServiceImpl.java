@@ -1,5 +1,6 @@
 package com.leaf.job.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,15 +15,19 @@ import com.leaf.job.dao.StatusDAO;
 import com.leaf.job.dao.SysUserDAO;
 import com.leaf.job.dao.TitleDAO;
 import com.leaf.job.dto.SysUserDTO;
+import com.leaf.job.dto.common.DataTableRequestDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.StatusEntity;
 import com.leaf.job.entity.SysUserEntity;
 import com.leaf.job.entity.TitleEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
+import com.leaf.job.enums.DeleteStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.enums.StatusCategoryEnum;
 import com.leaf.job.service.SysUserService;
+import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.CommonMethod;
 
 @Service
@@ -47,7 +52,7 @@ public class SysUserServiceImpl implements SysUserService {
 		this.commonMethod = commonMethod;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
-
+	
 
 	/**
 	 * {@inheritDoc}
@@ -96,6 +101,103 @@ public class SysUserServiceImpl implements SysUserService {
 	 */
 	@Override
 	@Transactional
+	public ResponseDTO<SysUserDTO> updateSysUser(SysUserDTO sysUserDTO) {
+		
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User Update Faield";
+		try {
+			TitleEntity titleEntity = titleDAO.findTitleEntityByCode(sysUserDTO.getTitleCode());
+			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysUserDTO.getStatusCode());
+
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());			
+			
+			sysUserEntity.setTitleEntity(titleEntity);
+			sysUserEntity.setName(sysUserDTO.getName());
+			sysUserEntity.setStatusEntity(statusEntity);
+
+			commonMethod.getPopulateEntityWhenUpdate(sysUserEntity);
+
+			sysUserDAO.updateSysUserEntity(sysUserEntity);
+			
+			code = ResponseCodeEnum.SUCCESS.getCode();
+			description = "Use Update Successfully";
+			
+		} catch (Exception e) {
+			System.err.println("User Update Issue");
+		}
+		return new ResponseDTO<SysUserDTO>(code, description);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<SysUserDTO> deleteSysUser(SysUserDTO sysUserDTO) {
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User Delete Faield";
+		try {
+			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());			
+
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());				
+			
+			sysUserEntity.setStatusEntity(statusEntity);
+
+			commonMethod.getPopulateEntityWhenUpdate(sysUserEntity);
+
+			sysUserDAO.updateSysUserEntity(sysUserEntity);
+			
+			code = ResponseCodeEnum.SUCCESS.getCode();
+			description = "User Delete Successfully";
+		} catch (Exception e) {
+			System.err.println("User Delete Issue");
+		}
+		return new ResponseDTO<SysUserDTO>(code, description);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<SysUserDTO> findSysUser(SysUserDTO sysUserDTO) {
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "User is Not Found";
+		SysUserDTO dto = new SysUserDTO();
+		try {
+
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());
+
+			if (sysUserEntity != null
+					&& !DeleteStatusEnum.DELETE.getCode().equals(sysUserEntity.getStatusEntity().getCode())) {
+				
+				code = ResponseCodeEnum.SUCCESS.getCode();
+				description = "User is Found Successfully";
+				
+				dto.setUsername(sysUserEntity.getUsername());
+				dto.setTitleCode(sysUserEntity.getTitleEntity().getCode());
+				dto.setTitleDescription(sysUserEntity.getTitleEntity().getDescription());
+				dto.setName(sysUserEntity.getName());
+				dto.setStatusCode(sysUserEntity.getStatusEntity().getCode());
+				dto.setStatusDescription(sysUserEntity.getStatusEntity().getDescription());
+				dto.setCreatedBy(sysUserEntity.getCreatedBy());
+				dto.setCreatedOn(sysUserEntity.getCreatedOn());
+				dto.setUpdatedBy(sysUserEntity.getUpdatedBy());
+				dto.setUpdatedOn(sysUserEntity.getUpdatedOn());
+
+			}
+
+		} catch (Exception e) {
+			System.err.println("User Role Find Issue");
+		}
+		return new ResponseDTO<SysUserDTO>(code, description, dto);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
 	public ResponseDTO<HashMap<String, Object>> getReferenceDataForSysUser() {
 
 		HashMap<String, Object> map = new HashMap<>();
@@ -117,6 +219,44 @@ public class SysUserServiceImpl implements SysUserService {
 			System.err.println("Sys User Ref Data Issue");
 		}
 		return new ResponseDTO<HashMap<String, Object>>(code, map);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public DataTableResponseDTO getSysUsersForDataTable(DataTableRequestDTO dataTableRequestDTO) {
+		List<SysUserDTO> list = new ArrayList<>();
+		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
+		Long numOfRecord = Long.valueOf(0);
+		try {
+			list = sysUserDAO.<List<SysUserEntity>>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARCH_LIST)
+					.stream().map(entity -> {
+						SysUserDTO dto = new SysUserDTO();
+						dto.setUsername(entity.getUsername());						
+						dto.setTitleDescription(entity.getTitleEntity().getDescription());
+						dto.setName(entity.getName());
+						dto.setStatusDescription(entity.getStatusEntity().getDescription());
+						dto.setCreatedBy(entity.getCreatedBy());
+						dto.setCreatedOn(entity.getCreatedOn());
+						dto.setUpdatedBy(entity.getUpdatedBy());
+						dto.setUpdatedOn(entity.getUpdatedOn());
+						return dto;
+					}).collect(Collectors.toList());
+
+			numOfRecord = sysUserDAO.<Long>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARC_COUNT);
+
+			responseDTO.setData(list);
+			responseDTO.setRecordsTotal(numOfRecord);
+			responseDTO.setRecordsFiltered(numOfRecord);
+			responseDTO.setDraw(dataTableRequestDTO.getDraw());
+
+		} catch (Exception e) {
+			System.err.println("User Data Table Issue");
+		}
+
+		return responseDTO;
 	}
 
 }
