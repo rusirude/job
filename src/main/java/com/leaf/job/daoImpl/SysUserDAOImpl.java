@@ -19,4 +19,10 @@ public class SysUserDAOImpl implements SysUserDAO {
 		return entityManager.find(SysUserEntity.class,username);
 	}
 
+	@Override
+	public void saveSysUserEntity(SysUserEntity sysUserEntity) {
+		entityManager.persist(sysUserEntity);
+		
+	}
+
 }

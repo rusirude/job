@@ -23,7 +23,7 @@ public interface SysRoleDAO {
 
 	/**
 	 * Find Entity from DB By Code
-	 * @param id
+	 * @param code
 	 * @return {@link SysRoleEntity}
 	 */
     SysRoleEntity findSysRoleEntityByCode(String code);
