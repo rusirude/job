@@ -47,6 +47,27 @@ public class SysUserDAOImpl implements SysUserDAO {
 		
 	}
 	
+	@Override
+	public List<SysUserEntity> findAllSysUsereEntities(String statusCode){
+		
+		List<SysUserEntity> sysUserEntities = null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SysUserEntity> criteriaQuery = criteriaBuilder.createQuery(SysUserEntity.class);
+        Root<SysUserEntity> root = criteriaQuery.from(SysUserEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+        		criteriaBuilder.equal(root.get(SysUserEntity_.statusEntity).get(StatusEntity_.code), statusCode)
+        );
+
+        try {
+        	sysUserEntities = entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        
+        return sysUserEntities;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

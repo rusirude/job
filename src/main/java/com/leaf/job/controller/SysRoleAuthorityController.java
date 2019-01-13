@@ -30,7 +30,7 @@ public class SysRoleAuthorityController {
 	
 	@PreAuthorize("hasRole('ROLE_ROLEAUTHORITY')")
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public ModelAndView viewSection() {
+	public ModelAndView viewSysRoleAuthority() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("sysRoleAuthority");
 		return mv;
@@ -39,7 +39,7 @@ public class SysRoleAuthorityController {
 	@PreAuthorize("hasRole('ROLE_ROLEAUTHORITY')")
 	@RequestMapping(path = "/loadRefDataForSysRoleAuthority", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseDTO<HashMap<String, Object>> loadSectionRefereceData() {
+	public ResponseDTO<HashMap<String, Object>> loadysRoleAuthorityRefereceData() {
 		return sysRoleAuthorityService.getReferenceDataForSysRoleAuthority();
 	}
 

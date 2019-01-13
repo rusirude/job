@@ -1,5 +1,7 @@
 package com.leaf.job.dao;
 
+import java.util.List;
+
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.entity.SysUserEntity;
 
@@ -26,6 +28,16 @@ public interface SysUserDAO {
      */
     void updateSysUserEntity(SysUserEntity sysUserEntity);
 	
+    /**
+     * select - *
+     * From - SysUser
+     * where - STATUS = statusCode
+     * 
+     * Find SysUser Entities By Status Code
+     * @return {@link List}
+     */
+    List<SysUserEntity> findAllSysUsereEntities(String statusCode);
+    
     /**
      * Getting Data For  Grid 
      * @param dataTableRequestDTO
