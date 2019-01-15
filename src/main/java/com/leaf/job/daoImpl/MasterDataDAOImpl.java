@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.leaf.job.dao.MasterDataDAO;
 import com.leaf.job.entity.MasterDataEntity;
-import com.leaf.job.entity.MasterDataEntity_;
 
 @Repository
 public class MasterDataDAOImpl implements MasterDataDAO {
@@ -23,28 +22,21 @@ public class MasterDataDAOImpl implements MasterDataDAO {
 	public MasterDataDAOImpl(EntityManager entityManager) {		
 		this.entityManager = entityManager;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public MasterDataEntity loadMasterDataEntity(String code) {		
+		return entityManager.getReference(MasterDataEntity.class, code);
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MasterDataEntity findMasterDataEntityByCode(String code) {
-		MasterDataEntity masterDataEntity = null;
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<MasterDataEntity> criteriaQuery = criteriaBuilder.createQuery(MasterDataEntity.class);
-        Root<MasterDataEntity> root = criteriaQuery.from(MasterDataEntity.class);
-        criteriaQuery.select(root);
-        criteriaQuery.where(
-        		criteriaBuilder.equal(root.get(MasterDataEntity_.code), code)
-        );
-
-        try {
-        	masterDataEntity = entityManager.createQuery(criteriaQuery).getSingleResult();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-
-        return masterDataEntity;
+	public MasterDataEntity findMasterDataEntity(String code) {		
+		return entityManager.find(MasterDataEntity.class, code);
 	}
 
 	/**

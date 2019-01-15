@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leaf.job.dao.MasterDataDAO;
 import com.leaf.job.dao.StatusCategoryDAO;
 import com.leaf.job.dao.StatusDAO;
 import com.leaf.job.dao.SysUserDAO;
@@ -19,11 +20,13 @@ import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.entity.MasterDataEntity;
 import com.leaf.job.entity.StatusEntity;
 import com.leaf.job.entity.SysUserEntity;
 import com.leaf.job.entity.TitleEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
 import com.leaf.job.enums.DeleteStatusEnum;
+import com.leaf.job.enums.MasterDataEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.enums.StatusCategoryEnum;
 import com.leaf.job.service.SysUserService;
@@ -37,6 +40,7 @@ public class SysUserServiceImpl implements SysUserService {
 	private StatusDAO statusDAO;
 	private TitleDAO titleDAO;
 	private StatusCategoryDAO statusCategoryDAO;
+	private MasterDataDAO masterDataDAO;
 
 	private CommonMethod commonMethod;
 	
@@ -44,11 +48,12 @@ public class SysUserServiceImpl implements SysUserService {
 	
 	@Autowired	
 	public SysUserServiceImpl(SysUserDAO sysUserDAO, StatusDAO statusDAO, TitleDAO titleDAO,
-			StatusCategoryDAO statusCategoryDAO, CommonMethod commonMethod,BCryptPasswordEncoder bCryptPasswordEncoder) {		
+			StatusCategoryDAO statusCategoryDAO,MasterDataDAO masterDataDAO, CommonMethod commonMethod,BCryptPasswordEncoder bCryptPasswordEncoder) {		
 		this.sysUserDAO = sysUserDAO;
 		this.statusDAO = statusDAO;
 		this.titleDAO = titleDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
+		this.masterDataDAO = masterDataDAO;
 		this.commonMethod = commonMethod;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
@@ -65,6 +70,8 @@ public class SysUserServiceImpl implements SysUserService {
 		SysUserEntity sysUserEntity;
 		try {
 			sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());
+			MasterDataEntity defaultPasswordMasterDataEntity = masterDataDAO.loadMasterDataEntity(MasterDataEnum.DEFAULT_PASSWORD.getCode());
+			
 			if(sysUserEntity == null){
 				sysUserEntity = new SysUserEntity();
 				
@@ -72,7 +79,7 @@ public class SysUserServiceImpl implements SysUserService {
 				StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysUserDTO.getStatusCode());
 				
 				sysUserEntity.setUsername(sysUserDTO.getUsername());
-				sysUserEntity.setPassword(bCryptPasswordEncoder.encode("123"));
+				sysUserEntity.setPassword(bCryptPasswordEncoder.encode(defaultPasswordMasterDataEntity.getValue()));
 				sysUserEntity.setTitleEntity(titleEntity);
 				sysUserEntity.setName(sysUserDTO.getName());
 				sysUserEntity.setStatusEntity(statusEntity);

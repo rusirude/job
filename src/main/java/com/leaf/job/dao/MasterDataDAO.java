@@ -11,10 +11,20 @@ public interface MasterDataDAO {
      * From - MasterDataEntity
      * where - code = code
      * 
+     * Find MasterDataEntity Entity Reference By Code
+     * @return {@link MasterDataEntity}
+     */
+	MasterDataEntity loadMasterDataEntity(String code);
+	
+    /**
+     * select - *
+     * From - MasterDataEntity
+     * where - code = code
+     * 
      * Find MasterDataEntity Entity By Code
      * @return {@link MasterDataEntity}
      */
-	MasterDataEntity findMasterDataEntityByCode(String code);
+	MasterDataEntity findMasterDataEntity(String code);
 	
     /**
      * Save MasterDataEntity Entity
