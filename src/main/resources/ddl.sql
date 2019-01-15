@@ -164,7 +164,18 @@ CREATE TABLE `job`.`title` (
     FOREIGN KEY (`status`)
     REFERENCES `job`.`status` (`id`)
     ON DELETE RESTRICT
-    ON UPDATE CASCADE);    
+    ON UPDATE CASCADE);   
+    
+    
+CREATE TABLE `job`.`master_data` (
+  `code` VARCHAR(150) NOT NULL,
+  `value` VARCHAR(255) NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`code`));
+
 
     
 INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');

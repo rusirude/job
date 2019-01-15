@@ -30,23 +30,35 @@ public class SysUserDAOImpl implements SysUserDAO {
 	@Autowired
 	private EntityManager entityManager;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SysUserEntity getSysUserEntityByUsername(String username) {
 		return entityManager.find(SysUserEntity.class,username);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void saveSysUserEntity(SysUserEntity sysUserEntity) {
 		entityManager.persist(sysUserEntity);
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updateSysUserEntity(SysUserEntity sysUserEntity) {
 		entityManager.merge(sysUserEntity);
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<SysUserEntity> findAllSysUsereEntities(String statusCode){
 		
