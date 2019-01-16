@@ -42,7 +42,7 @@ public class MasterDataController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_MASTERDATA')")
-	@RequestMapping(path = "/saveMasterData", method = RequestMethod.POST)
+	@RequestMapping(path = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	ResponseDTO<MasterDataDTO> saveMasterData(@RequestBody List<MasterDataDTO> masterDataDTOs) {
 		return masterDataService.saveOrUpdateMasterData(masterDataDTOs);
