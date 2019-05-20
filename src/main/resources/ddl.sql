@@ -176,7 +176,22 @@ CREATE TABLE `job`.`master_data` (
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`code`));
 
-
+CREATE TABLE `job`.`sys_user_authority` (
+  `sys_user` VARCHAR(25) NOT NULL,
+  `authority` INT(11) NOT NULL,
+  `is_grant` INT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`sys_user`, `authority`),
+  INDEX `fk_sys_user_authority_authority_idx` (`authority` ASC),
+  CONSTRAINT `fk_sys_user_authority_sys_user`
+    FOREIGN KEY (`sys_user`)
+    REFERENCES `job`.`sys_user` (`username`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_sys_user_authority_authority`
+    FOREIGN KEY (`authority`)
+    REFERENCES `job`.`authority` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
     
 INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
 
