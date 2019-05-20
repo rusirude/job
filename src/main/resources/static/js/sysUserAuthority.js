@@ -7,17 +7,17 @@ var userRoleAutorityTable;
 
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 
-var loadReferenceDataForUserRoleAuthority = (callback)=>{
+var loadReferenceDataForSysUserAuthority = (callback)=>{
 	$.ajax({
         type: "POST",
-        url: "/sysRoleAuthority/loadRefDataForSysRoleAuthority",        
+        url: "/sysUserAuthority/loadRefDataForSysUserAuthority",        
         contentType: "application/json",
         dataType: "json",
         success: function(data){    
         	
         	if(data.code === "SUCCESS"){
-            	for(let s of data.data.sysRole){            		
-            		$("#sysRole").append(`<option value="${s.code}">${s.description}</option>`);
+            	for(let s of data.data.sysUser){            		
+            		$("#sysUser").append(`<option value="${s.code}">${s.description}</option>`);
             	}
             	
             	if(callback){
@@ -139,7 +139,7 @@ $(document).ready(()=>{
  		componentHandler.upgradeDom(); 	
  		loadDataTableBySysRoleCodeForUserRoleAuthority();
 	};	
-	loadReferenceDataForUserRoleAuthority(_callback_1); 
+	loadReferenceDataForSysUserAuthority(_callback_1); 
 	evenBinderForUserRoleAuthority();
 	
 
