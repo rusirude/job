@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.leaf.job.dao.AuthorityDAO;
 import com.leaf.job.dao.SysRoleAuthorityDAO;
 import com.leaf.job.dao.SysRoleDAO;
+import com.leaf.job.dao.SysUserAuthorityDAO;
 import com.leaf.job.dao.SysUserDAO;
 import com.leaf.job.dao.SysUserSysRoleDAO;
 import com.leaf.job.dto.SysUserAuthorityDTO;
@@ -33,6 +36,7 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 	private SysRoleDAO sysRoleDAO;
 	private SysUserDAO sysUserDAO;
 	private SysRoleAuthorityDAO sysRoleAuthorityDAO;
+	private SysUserAuthorityDAO sysUserAuthorityDAO;
 	private SysUserSysRoleDAO sysUserSysRoleDAO;
 	private AuthorityDAO authorityDAO;
 
@@ -40,10 +44,11 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 
 	@Autowired
 	public SysUserAuthorityServiceImpl(SysRoleDAO sysRoleDAO, SysUserDAO sysUserDAO,
-			SysRoleAuthorityDAO sysRoleAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, AuthorityDAO authorityDAO) {		
+			SysRoleAuthorityDAO sysRoleAuthorityDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, AuthorityDAO authorityDAO) {		
 		this.sysRoleDAO = sysRoleDAO;
 		this.sysUserDAO =sysUserDAO;
 		this.sysRoleAuthorityDAO = sysRoleAuthorityDAO;
+		this.sysUserAuthorityDAO = sysUserAuthorityDAO;
 		this.sysUserSysRoleDAO = sysUserSysRoleDAO;
 		this.authorityDAO = authorityDAO;		
 	}
@@ -80,11 +85,25 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 
 			sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRoles(sysRoleEntities).stream()
 					.forEach(sysRoleAuthority -> {
-						SysUserAuthorityDTO sysUserAuthorityDTO = sysUserAuthorityMap
-								.get(sysRoleAuthority.getAuthorityEntity().getCode());
-						sysUserAuthorityDTO.setEnable(true);
-						sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
+						SysUserAuthorityDTO sysUserAuthorityDTO = Optional.ofNullable(sysUserAuthorityMap
+								.get(sysRoleAuthority.getAuthorityEntity().getCode())).orElse(null);
+						if(sysUserAuthorityDTO != null) {
+							sysUserAuthorityDTO.setEnable(true);
+							sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
+						}
+
 					});
+			
+			sysUserAuthorityDAO.getSysUserAuthorityEntitiesBySysUser(sysUserDTO.getUsername()).stream()
+					.forEach(sysUserAuthorty -> {
+						SysUserAuthorityDTO sysUserAuthorityDTO = Optional.ofNullable(sysUserAuthorityMap
+								.get(sysUserAuthorty.getAuthorityEntity().getCode())).orElse(null);
+						if(sysUserAuthorityDTO != null) {
+							sysUserAuthorityDTO.setEnable(sysUserAuthorty.getIsGrant()==1);
+							sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
+						}
+					});
+			
 
 			sysUserAuthorities = sysUserAuthorityMap.values().stream().collect(Collectors.toList());
 			responseDTO.setData(sysUserAuthorities);
