@@ -82,8 +82,9 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 						sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
 
 					});
-
-			sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRoles(sysRoleEntities).stream()
+			
+			if(! sysRoleEntities.isEmpty()) {
+				sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRoles(sysRoleEntities).stream()
 					.forEach(sysRoleAuthority -> {
 						SysUserAuthorityDTO sysUserAuthorityDTO = Optional.ofNullable(sysUserAuthorityMap
 								.get(sysRoleAuthority.getAuthorityEntity().getCode())).orElse(null);
@@ -91,8 +92,9 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 							sysUserAuthorityDTO.setEnable(true);
 							sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
 						}
-
+	
 					});
+			}
 			
 			sysUserAuthorityDAO.getSysUserAuthorityEntitiesBySysUser(sysUserDTO.getUsername()).stream()
 					.forEach(sysUserAuthorty -> {

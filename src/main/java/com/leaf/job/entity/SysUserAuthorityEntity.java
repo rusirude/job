@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "sys_user_authoriry")
+@Table(name = "sys_user_authority")
 public class SysUserAuthorityEntity {
 	
 	private SysUserAuthorityEntityId sysUserAuthorityEntityId;
