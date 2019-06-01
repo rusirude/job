@@ -2,8 +2,7 @@ package com.leaf.job.service;
 
 import java.util.HashMap;
 
-import com.leaf.job.dto.SysRoleAuthorityDTO;
-import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 
@@ -13,10 +12,10 @@ public interface SysUserAuthorityService {
 	 * Get All related and non related System User Authorities For System User.
 	 * related authorities are marked as enable true other are false
 	 * 
-	 * @param sysRoleDTO
+	 * @param sysUserDTO
 	 * @return{@link DataTableResponseDTO}
 	 */
-//	DataTableResponseDTO getSysRoleAuthorityForSysRole(SysRoleDTO sysRoleDTO);
+	DataTableResponseDTO getSysUserAuthorityForSysUser(SysUserDTO sysUserDTO);
 	
 	/**
 	 * Getting Reference Data For SysRole Authority Page

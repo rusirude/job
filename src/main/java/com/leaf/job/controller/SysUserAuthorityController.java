@@ -5,11 +5,14 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.leaf.job.dto.SysUserDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.service.SysUserAuthorityService;
 
@@ -37,6 +40,13 @@ public class SysUserAuthorityController {
 	@ResponseBody
 	public ResponseDTO<HashMap<String, Object>> loadysRoleAuthorityRefereceData() {
 		return sysUserAuthorityService.getReferenceDataForSysUserAuthority();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USERAUTHORITY')")
+	@RequestMapping(path = "/loadAuthoritiesForSysUser", method = RequestMethod.POST)
+	@ResponseBody
+	public DataTableResponseDTO loadAuthoritiesForSysUser(@RequestBody SysUserDTO sysUserDTO) {
+		return sysUserAuthorityService.getSysUserAuthorityForSysUser(sysUserDTO);
 	}
 
 }

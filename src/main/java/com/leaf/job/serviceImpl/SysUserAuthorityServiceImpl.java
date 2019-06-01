@@ -14,15 +14,14 @@ import com.leaf.job.dao.AuthorityDAO;
 import com.leaf.job.dao.SysRoleAuthorityDAO;
 import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dao.SysUserDAO;
-import com.leaf.job.dto.SysRoleAuthorityDTO;
-import com.leaf.job.dto.SysRoleDTO;
+import com.leaf.job.dao.SysUserSysRoleDAO;
+import com.leaf.job.dto.SysUserAuthorityDTO;
+import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
-import com.leaf.job.entity.AuthorityEntity;
-import com.leaf.job.entity.SysRoleAuthorityEntity;
-import com.leaf.job.entity.SysRoleAuthorityEntityId;
 import com.leaf.job.entity.SysRoleEntity;
+import com.leaf.job.entity.SysUserEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.service.SysUserAuthorityService;
@@ -34,61 +33,68 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 	private SysRoleDAO sysRoleDAO;
 	private SysUserDAO sysUserDAO;
 	private SysRoleAuthorityDAO sysRoleAuthorityDAO;
+	private SysUserSysRoleDAO sysUserSysRoleDAO;
 	private AuthorityDAO authorityDAO;
 
 	
 
 	@Autowired
 	public SysUserAuthorityServiceImpl(SysRoleDAO sysRoleDAO, SysUserDAO sysUserDAO,
-			SysRoleAuthorityDAO sysRoleAuthorityDAO, AuthorityDAO authorityDAO) {		
+			SysRoleAuthorityDAO sysRoleAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, AuthorityDAO authorityDAO) {		
 		this.sysRoleDAO = sysRoleDAO;
 		this.sysUserDAO =sysUserDAO;
 		this.sysRoleAuthorityDAO = sysRoleAuthorityDAO;
+		this.sysUserSysRoleDAO = sysUserSysRoleDAO;
 		this.authorityDAO = authorityDAO;		
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-//	@Override
-//	@Transactional
-//	public DataTableResponseDTO getSysRoleAuthorityForSysRole(SysRoleDTO sysRoleDTO) {
-//		Map<String, SysRoleAuthorityDTO> sysRoleAuthorityMap = new HashMap<>();
-//		List<SysRoleAuthorityDTO> sysRoleAuthorities = new ArrayList<>();
-//		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
-//		try {
-//			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleDTO.getCode());
-//
-//			authorityDAO.findAuthorityEntitiesByStatus(DefaultStatusEnum.ACTIVE.getCode()).stream()
-//					.forEach(authority -> {
-//						SysRoleAuthorityDTO sysRoleAuthorityDTO = new SysRoleAuthorityDTO();
-//						sysRoleAuthorityDTO.setSysRoleCode(sysRoleEntity.getCode());
-//						sysRoleAuthorityDTO.setSysRoleDescription(sysRoleEntity.getDescription());
-//						sysRoleAuthorityDTO.setAuthorityCode(authority.getCode());
-//						sysRoleAuthorityDTO.setAuthorityDescription(authority.getDescription());
-//						sysRoleAuthorityDTO.setEnable(false);
-//
-//						sysRoleAuthorityMap.put(sysRoleAuthorityDTO.getAuthorityCode(), sysRoleAuthorityDTO);
-//
-//					});
-//
-//			sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRole(sysRoleEntity.getId()).stream()
-//					.forEach(sysRoleAuthority -> {
-//						SysRoleAuthorityDTO sysRoleAuthorityDTO = sysRoleAuthorityMap
-//								.get(sysRoleAuthority.getAuthorityEntity().getCode());
-//						sysRoleAuthorityDTO.setEnable(true);
-//						sysRoleAuthorityMap.put(sysRoleAuthorityDTO.getAuthorityCode(), sysRoleAuthorityDTO);
-//					});
-//
-//			sysRoleAuthorities = sysRoleAuthorityMap.values().stream().collect(Collectors.toList());
-//			responseDTO.setData(sysRoleAuthorities);
-//
-//		} catch (Exception e) {
-//			System.err.println("Getting SysRole Authority for Sys Role Issue");
-//			responseDTO.setData(sysRoleAuthorities);
-//		}
-//		return responseDTO;
-//	}
+	@Override
+	@Transactional
+	public DataTableResponseDTO getSysUserAuthorityForSysUser(SysUserDTO sysUserDTO) {
+		Map<String, SysUserAuthorityDTO> sysUserAuthorityMap = new HashMap<>();
+		List<SysUserAuthorityDTO> sysUserAuthorities = new ArrayList<>();
+		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
+		try {
+			List<SysRoleEntity> sysRoleEntities = sysUserSysRoleDAO.getSysUserSysRoleEntitiesBySysUser(sysUserDTO.getUsername())
+					.stream()
+					.map(_entity -> _entity.getSysRoleEntity())
+					.collect(Collectors.toList());
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());
+
+			authorityDAO.findAuthorityEntitiesByStatus(DefaultStatusEnum.ACTIVE.getCode()).stream()
+					.forEach(authority -> {
+						SysUserAuthorityDTO sysUserAuthorityDTO = new SysUserAuthorityDTO();
+						sysUserAuthorityDTO.setUsername(sysUserDTO.getUsername());
+						sysUserAuthorityDTO.setTitleDescripton(sysUserEntity.getTitleEntity().getDescription());
+						sysUserAuthorityDTO.setName(sysUserEntity.getName());
+						sysUserAuthorityDTO.setAuthorityCode(authority.getCode());
+						sysUserAuthorityDTO.setAuthorityDescription(authority.getDescription());
+						sysUserAuthorityDTO.setEnable(false);
+
+						sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
+
+					});
+
+			sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRoles(sysRoleEntities).stream()
+					.forEach(sysRoleAuthority -> {
+						SysUserAuthorityDTO sysUserAuthorityDTO = sysUserAuthorityMap
+								.get(sysRoleAuthority.getAuthorityEntity().getCode());
+						sysUserAuthorityDTO.setEnable(true);
+						sysUserAuthorityMap.put(sysUserAuthorityDTO.getAuthorityCode(), sysUserAuthorityDTO);
+					});
+
+			sysUserAuthorities = sysUserAuthorityMap.values().stream().collect(Collectors.toList());
+			responseDTO.setData(sysUserAuthorities);
+
+		} catch (Exception e) {
+			System.err.println("Getting SysUser Authority for Sys User Issue");
+			responseDTO.setData(sysUserAuthorities);
+		}
+		return responseDTO;
+	}
 	
 	/**
 	 * {@inheritDoc}

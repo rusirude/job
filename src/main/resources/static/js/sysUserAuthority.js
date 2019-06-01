@@ -2,7 +2,7 @@
  * @author: rusiru
  */
 
-var userRoleAutorityTable;
+var sysUserAutorityTable;
 
 
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
@@ -38,13 +38,13 @@ var loadReferenceDataForSysUserAuthority = (callback)=>{
 
 
 var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
-	userRoleAutorityTable = $('#sysRoleAuthorityTable').DataTable({
+	sysUserAutorityTable = $('#sysUserAuthorityTable').DataTable({
         ajax: {
-            url: "/sysRoleAuthority/loadAuthoritiesForSysRole",
+            url: "/sysUserAuthority/loadAuthoritiesForSysUser",
             type: 'POST',
             contentType: "application/json",
             data: function () {
-                return JSON.stringify({code:($("#sysRole").val()||"")});
+                return JSON.stringify({username:($("#sysUser").val()||"")});
             },
             error: function (jqXHR, textStatus, errorThrown) {
             	alert("System Failer Occur....! :-(");
@@ -59,13 +59,13 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
         pagingType: "full_numbers",
         columns: [
             {data: "authorityDescription", class:"mdl-data-table__cell--non-numeric"},
-            {data: "sysRoleDescription", class:"mdl-data-table__cell--non-numeric"},
+            {data: "username", class:"mdl-data-table__cell--non-numeric"},
             {
             	data: null,
             	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
             		return `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-${data.authorityCode}">
-							  <input onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.sysRoleCode}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
+							  <input onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.username}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
 							  <span class="mdl-switch__label"></span>
 							</label>`;
             	}
@@ -102,10 +102,10 @@ var deletePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
 
 var clearDataForUserRoleAuthority = ()=>{
 
-	let sysRole = $("#sysRole");
+	let sysRole = $("#sysUser");
 	sysRole.val("");
 	sysRole[0].parentElement.MaterialSelectfield.change("");
-	userRoleAutorityTable.ajax.reload();	
+	sysUserAutorityTable.ajax.reload();	
 	
 };
 
@@ -124,8 +124,8 @@ function privilegeGrantOrRevorkForForUserRoleAuthority(ele,sysRoleCode,authority
 /*-------------------------------- Dynamic Event  ----------------------*/
 
 var evenBinderForUserRoleAuthority = ()=>{
-	$("#sysRole").off().on("change",function(){
-		userRoleAutorityTable.ajax.reload();		
+	$("#sysUser").off().on("change",function(){
+		sysUserAutorityTable.ajax.reload();		
 	});
 	$("#btnCancel").off().on("click",function(){
 		clearDataForUserRoleAuthority();
