@@ -2,6 +2,7 @@ package com.leaf.job.service;
 
 import java.util.HashMap;
 
+import com.leaf.job.dto.SysUserAuthorityDTO;
 import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
@@ -24,18 +25,18 @@ public interface SysUserAuthorityService {
 	ResponseDTO<HashMap<String, Object>> getReferenceDataForSysUserAuthority();
 	
 	/**
-	 * Save SysRole Authority
+	 * Save SysUser Authority
 	 * 
-	 * @param sysRoleAuthorityDTO
-	 * @return {@link ResponseDTO<SysRoleAuthorityDTO>}
+	 * @param sysUserAuthorityDTO
+	 * @return {@link ResponseDTO<SysUserAuthorityDTO>}
 	 */
-//	ResponseDTO<SysRoleAuthorityDTO> saveSysRoleAuthority(SysRoleAuthorityDTO sysRoleAuthorityDTO);
+	ResponseDTO<SysUserAuthorityDTO> saveSysUserAuthority(SysUserAuthorityDTO sysUserAuthorityDTO);
 	
 	/**
-	 * Delete SysRole Authority
+	 * Delete SysUserhority
 	 * 
-	 * @param sysRoleAuthorityDTO
-	 * @return {@link ResponseDTO<SysRoleAuthorityDTO>}
+	 * @param sysUserAuthorityDTO
+	 * @return {@link ResponseDTO<SysUserAuthorityDTO>}
 	 */
-//	ResponseDTO<SysRoleAuthorityDTO> deleteSysRoleAuthority(SysRoleAuthorityDTO sysRoleAuthorityDTO);
+	ResponseDTO<SysUserAuthorityDTO> deleteSysUserAuthority(SysUserAuthorityDTO sysUsereAuthorityDTO);
 }

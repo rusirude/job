@@ -13,6 +13,8 @@ import com.leaf.job.dao.AuthorityDAO;
 import com.leaf.job.dao.SectionDAO;
 import com.leaf.job.dao.StatusCategoryDAO;
 import com.leaf.job.dao.StatusDAO;
+import com.leaf.job.dao.SysRoleAuthorityDAO;
+import com.leaf.job.dao.SysUserAuthorityDAO;
 import com.leaf.job.dto.AuthorityDTO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
@@ -36,16 +38,20 @@ public class AuthorityServiceImpl implements AuthorityService {
 	private SectionDAO sectionDAO;
 	private StatusDAO statusDAO;
 	private StatusCategoryDAO statusCategoryDAO;
+	private SysRoleAuthorityDAO sysRoleAuthorityDAO;
+	private SysUserAuthorityDAO sysUserAuthorityDAO;
 
 	private CommonMethod commonMethod;
 	
 	@Autowired
 	public AuthorityServiceImpl(AuthorityDAO authorityDAO, SectionDAO sectionDAO, StatusDAO statusDAO, StatusCategoryDAO statusCategoryDAO,
-			CommonMethod commonMethod) {	
+			SysRoleAuthorityDAO sysRoleAuthorityDAO, SysUserAuthorityDAO sysUserAuthorityDAO, CommonMethod commonMethod) {	
 		this.authorityDAO = authorityDAO;
 		this.sectionDAO = sectionDAO;
 		this.statusDAO = statusDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
+		this.sysRoleAuthorityDAO = sysRoleAuthorityDAO;
+		this.sysUserAuthorityDAO = sysUserAuthorityDAO;
 		this.commonMethod = commonMethod;
 	}
 	
@@ -153,6 +159,9 @@ public class AuthorityServiceImpl implements AuthorityService {
 
 			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(authorityDTO.getCode());
 
+			sysRoleAuthorityDAO.deleteSysRoleAuthorityEntityByAuthority(authorityEntity.getId());
+			sysUserAuthorityDAO.deleteSysUserAuthorityEntityByAuthority(authorityEntity.getId());
+			
 			authorityEntity.setStatusEntity(statusEntity);
 
 			commonMethod.getPopulateEntityWhenUpdate(authorityEntity);

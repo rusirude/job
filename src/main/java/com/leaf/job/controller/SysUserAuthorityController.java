@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.leaf.job.dto.SysUserAuthorityDTO;
 import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
@@ -47,6 +48,21 @@ public class SysUserAuthorityController {
 	@ResponseBody
 	public DataTableResponseDTO loadAuthoritiesForSysUser(@RequestBody SysUserDTO sysUserDTO) {
 		return sysUserAuthorityService.getSysUserAuthorityForSysUser(sysUserDTO);
+	}
+	
+
+	@PreAuthorize("hasRole('ROLE_USERAUTHORITY')")
+	@RequestMapping(path = "/save", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<SysUserAuthorityDTO> saveSysUserAuthority(@RequestBody SysUserAuthorityDTO sysUserAuthorityDTO) {
+		return sysUserAuthorityService.saveSysUserAuthority(sysUserAuthorityDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_USERAUTHORITY')")
+	@RequestMapping(path = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<SysUserAuthorityDTO> deleteSysUserAuthority(@RequestBody SysUserAuthorityDTO sysUserAuthorityDTO) {
+		return sysUserAuthorityService.deleteSysUserAuthority(sysUserAuthorityDTO);
 	}
 
 }

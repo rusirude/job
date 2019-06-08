@@ -37,7 +37,7 @@ var loadReferenceDataForSysUserAuthority = (callback)=>{
 };
 
 
-var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
+var loadDataTableByUsernameForSysUserAuthority = ()=>{
 	sysUserAutorityTable = $('#sysUserAuthorityTable').DataTable({
         ajax: {
             url: "/sysUserAuthority/loadAuthoritiesForSysUser",
@@ -65,7 +65,7 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
             	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
             		return `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-${data.authorityCode}">
-							  <input onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.username}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
+							  <input onChange="privilegeGrantOrRevorkForForSysUserAuthority(this,'${data.username}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
 							  <span class="mdl-switch__label"></span>
 							</label>`;
             	}
@@ -74,37 +74,37 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
 	});
 }
 
-var successFunctionForUserRoleAuthority = (data)=>{
+var successFunctionForSysUserAuthority = (data)=>{
 	if(data.code === Constant.CODE_FAIELD){
 		
 	}
 };
 
-var failedFunctionForUserRoleAuthority = (data)=>{
+var failedFunctionForSysUserAuthority = (data)=>{
 	alert("Server Error");
 };
 
-var savePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
-	let url = "/sysRoleAuthority/save";
+var savePrivilageForSysUserAuthority = (username,authorityCode)=>{
+	let url = "/sysUserAuthority/save";
 	let method = "POST";
-	let data = {sysRoleCode:sysRoleCode,authorityCode:authorityCode}
-	callToserver(url,method,data,successFunctionForUserRoleAuthority,failedFunctionForUserRoleAuthority);
+	let data = {username:username,authorityCode:authorityCode}
+	callToserver(url,method,data,successFunctionForSysUserAuthority,failedFunctionForSysUserAuthority);
 
 }
 
-var deletePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
-	let url = "/sysRoleAuthority/delete";
+var deletePrivilageForSysUserAuthority = (username,authorityCode)=>{
+	let url = "/sysUserAuthority/delete";
 	let method = "POST";
-	let data = {sysRoleCode:sysRoleCode,authorityCode:authorityCode}
-	callToserver(url,method,data,successFunctionForUserRoleAuthority,failedFunctionForUserRoleAuthority);
+	let data = {username:username,authorityCode:authorityCode}
+	callToserver(url,method,data,successFunctionForSysUserAuthority,failedFunctionForSysUserAuthority);
 
 }
 
-var clearDataForUserRoleAuthority = ()=>{
+var clearDataForSysUserAuthority = ()=>{
 
-	let sysRole = $("#sysUser");
-	sysRole.val("");
-	sysRole[0].parentElement.MaterialSelectfield.change("");
+	let sysUser = $("#sysUser");
+	sysUser.val("");
+	sysUser[0].parentElement.MaterialSelectfield.change("");
 	sysUserAutorityTable.ajax.reload();	
 	
 };
@@ -112,23 +112,23 @@ var clearDataForUserRoleAuthority = ()=>{
 
 /*-------------------------------- Inline Event  ----------------------*/
 
-function privilegeGrantOrRevorkForForUserRoleAuthority(ele,sysRoleCode,authorityCode){
+function privilegeGrantOrRevorkForForSysUserAuthority(ele,username,authorityCode){
 	if($(ele).is(":checked")){
-		savePrivilageForUserRoleAuthority(sysRoleCode,authorityCode);
+		savePrivilageForSysUserAuthority(username,authorityCode);
 	}
 	else{
-		deletePrivilageForUserRoleAuthority(sysRoleCode,authorityCode);
+		deletePrivilageForSysUserAuthority(username,authorityCode);
 	}	
 } 
 
 /*-------------------------------- Dynamic Event  ----------------------*/
 
-var evenBinderForUserRoleAuthority = ()=>{
+var evenBinderForSysUserAuthority = ()=>{
 	$("#sysUser").off().on("change",function(){
 		sysUserAutorityTable.ajax.reload();		
 	});
 	$("#btnCancel").off().on("click",function(){
-		clearDataForUserRoleAuthority();
+		clearDataForSysUserAuthority();
 	});
 };
 /*-------------------------------- Document Ready ----------------------*/
@@ -137,10 +137,10 @@ $(document).ready(()=>{
 
  	let _callback_1 = ()=>{
  		componentHandler.upgradeDom(); 	
- 		loadDataTableBySysRoleCodeForUserRoleAuthority();
+ 		loadDataTableByUsernameForSysUserAuthority();
 	};	
 	loadReferenceDataForSysUserAuthority(_callback_1); 
-	evenBinderForUserRoleAuthority();
+	evenBinderForSysUserAuthority();
 	
 
 });

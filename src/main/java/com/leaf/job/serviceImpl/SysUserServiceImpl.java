@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.leaf.job.dao.MasterDataDAO;
 import com.leaf.job.dao.StatusCategoryDAO;
 import com.leaf.job.dao.StatusDAO;
+import com.leaf.job.dao.SysUserAuthorityDAO;
 import com.leaf.job.dao.SysUserDAO;
 import com.leaf.job.dao.TitleDAO;
 import com.leaf.job.dto.SysUserDTO;
@@ -41,6 +42,7 @@ public class SysUserServiceImpl implements SysUserService {
 	private TitleDAO titleDAO;
 	private StatusCategoryDAO statusCategoryDAO;
 	private MasterDataDAO masterDataDAO;
+	private SysUserAuthorityDAO sysUserAuthorityDAO;
 
 	private CommonMethod commonMethod;
 	
@@ -48,12 +50,13 @@ public class SysUserServiceImpl implements SysUserService {
 	
 	@Autowired	
 	public SysUserServiceImpl(SysUserDAO sysUserDAO, StatusDAO statusDAO, TitleDAO titleDAO,
-			StatusCategoryDAO statusCategoryDAO,MasterDataDAO masterDataDAO, CommonMethod commonMethod,BCryptPasswordEncoder bCryptPasswordEncoder) {		
+			StatusCategoryDAO statusCategoryDAO,MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, CommonMethod commonMethod,BCryptPasswordEncoder bCryptPasswordEncoder) {		
 		this.sysUserDAO = sysUserDAO;
 		this.statusDAO = statusDAO;
 		this.titleDAO = titleDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
 		this.masterDataDAO = masterDataDAO;
+		this.sysUserAuthorityDAO = sysUserAuthorityDAO;
 		this.commonMethod = commonMethod;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
@@ -147,6 +150,8 @@ public class SysUserServiceImpl implements SysUserService {
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());			
 
 			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());				
+		
+			sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUser(sysUserDTO.getUsername());
 			
 			sysUserEntity.setStatusEntity(statusEntity);
 

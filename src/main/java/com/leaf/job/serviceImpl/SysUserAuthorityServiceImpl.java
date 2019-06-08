@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.leaf.job.dao.AuthorityDAO;
 import com.leaf.job.dao.SysRoleAuthorityDAO;
-import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dao.SysUserAuthorityDAO;
 import com.leaf.job.dao.SysUserDAO;
 import com.leaf.job.dao.SysUserSysRoleDAO;
@@ -23,7 +21,10 @@ import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.entity.AuthorityEntity;
 import com.leaf.job.entity.SysRoleEntity;
+import com.leaf.job.entity.SysUserAuthorityEntity;
+import com.leaf.job.entity.SysUserAuthorityEntityId;
 import com.leaf.job.entity.SysUserEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
@@ -31,9 +32,8 @@ import com.leaf.job.service.SysUserAuthorityService;
 
 @Service
 public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
-
 	
-	private SysRoleDAO sysRoleDAO;
+	;
 	private SysUserDAO sysUserDAO;
 	private SysRoleAuthorityDAO sysRoleAuthorityDAO;
 	private SysUserAuthorityDAO sysUserAuthorityDAO;
@@ -43,9 +43,8 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 	
 
 	@Autowired
-	public SysUserAuthorityServiceImpl(SysRoleDAO sysRoleDAO, SysUserDAO sysUserDAO,
+	public SysUserAuthorityServiceImpl(SysUserDAO sysUserDAO,
 			SysRoleAuthorityDAO sysRoleAuthorityDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, AuthorityDAO authorityDAO) {		
-		this.sysRoleDAO = sysRoleDAO;
 		this.sysUserDAO =sysUserDAO;
 		this.sysRoleAuthorityDAO = sysRoleAuthorityDAO;
 		this.sysUserAuthorityDAO = sysUserAuthorityDAO;
@@ -146,58 +145,119 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 	/**
 	 * {@inheritDoc}
 	 */
-//	@Override
-//	@Transactional
-//	public ResponseDTO<SysRoleAuthorityDTO> saveSysRoleAuthority(SysRoleAuthorityDTO sysRoleAuthorityDTO){
-//		String code = ResponseCodeEnum.FAILED.getCode();
-//		String description = "Sys Role Authority Save Faield";
-//		try {		
-//			SysRoleAuthorityEntity sysRoleAuthorityEntity = new SysRoleAuthorityEntity();
-//			SysRoleAuthorityEntityId id = new SysRoleAuthorityEntityId();
-//			
-//			
-//			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleAuthorityDTO.getSysRoleCode());
-//			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(sysRoleAuthorityDTO.getAuthorityCode());
-//			
-//			id.setSysRole(sysRoleEntity.getId());
-//			id.setAuthority(authorityEntity.getId());
-//			
-//			sysRoleAuthorityEntity.setSysRoleAuthorityEntityId(id);
-//			sysRoleAuthorityEntity.setSysRoleEntity(sysRoleEntity);
-//			sysRoleAuthorityEntity.setAuthorityEntity(authorityEntity);
-//			
-//			sysRoleAuthorityDAO.saveSysRoleAuthorityentity(sysRoleAuthorityEntity);
-//			
-//			description = "Sys Role Authority Save Successfully";
-//			code = ResponseCodeEnum.SUCCESS.getCode();
-//		} catch (Exception e) {
-//			System.err.println("SysRoleAuthority Save Issue");
-//		}
-//		return new ResponseDTO<SysRoleAuthorityDTO>(code, description);
-//	}
-//	
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	@Transactional
-//	public ResponseDTO<SysRoleAuthorityDTO> deleteSysRoleAuthority(SysRoleAuthorityDTO sysRoleAuthorityDTO){
-//		String code = ResponseCodeEnum.FAILED.getCode();
-//		String description = "Sys Role Authority Delete Faield";
-//		try {			
-//			
-//			SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(sysRoleAuthorityDTO.getSysRoleCode());
-//			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(sysRoleAuthorityDTO.getAuthorityCode());
-//			
-//			sysRoleAuthorityDAO.deleteSysRoleAuthorityEntityBySysRoleAndAuthority(sysRoleEntity.getId(), authorityEntity.getId());
-//			
-//			description = "Sys Role Authority Delete Successfully";
-//			code = ResponseCodeEnum.SUCCESS.getCode();
-//		} catch (Exception e) {
-//			System.err.println("SysRoleAuthority Delete Issue");
-//		}
-//		return new ResponseDTO<SysRoleAuthorityDTO>(code, description);
-//	}
+	@Override
+	@Transactional
+	public ResponseDTO<SysUserAuthorityDTO> saveSysUserAuthority(SysUserAuthorityDTO sysUserAuthorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Sys User Authority Save Faield";
+		try {	
+			boolean[] isSysRoleAuthority = {false};
+			List<SysRoleEntity> sysRoleEntities = sysUserSysRoleDAO.getSysUserSysRoleEntitiesBySysUser(sysUserAuthorityDTO.getUsername())
+					.stream()
+					.map(_entity -> _entity.getSysRoleEntity())
+					.collect(Collectors.toList());
+			if(! sysRoleEntities.isEmpty()) {
+				sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRoles(sysRoleEntities).stream()
+					.forEach(sysRoleAuthority -> {
+						if(sysUserAuthorityDTO.getAuthorityCode().equals(sysRoleAuthority.getAuthorityEntity().getCode())) {
+							isSysRoleAuthority[0] = true;
+						}
+				});
+			}
+			
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserAuthorityDTO.getUsername());
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(sysUserAuthorityDTO.getAuthorityCode());
+			
+			
+			if(isSysRoleAuthority[0]){
+				sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUserAndAuthority(sysUserAuthorityDTO.getUsername(), authorityEntity.getId());
+			}
+			
+			else {
+				
+				sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUserAndAuthority(sysUserAuthorityDTO.getUsername(), authorityEntity.getId());				
+				
+				SysUserAuthorityEntity sysUserAuthorityEntity = new SysUserAuthorityEntity();
+				SysUserAuthorityEntityId id = new SysUserAuthorityEntityId();
+				
+				id.setSysUser(sysUserAuthorityDTO.getUsername());
+				id.setAuthority(authorityEntity.getId());
+				
+				sysUserAuthorityEntity.setSysUserAuthorityEntityId(id);
+				sysUserAuthorityEntity.setSysUserEntity(sysUserEntity);
+				sysUserAuthorityEntity.setAuthorityEntity(authorityEntity);
+				sysUserAuthorityEntity.setIsGrant(new Long(1));
+				
+				sysUserAuthorityDAO.saveSysUserAuthorityentity(sysUserAuthorityEntity);				
+				
+			}
+			
+			description = "Sys User Authority Save Successfully";
+			code = ResponseCodeEnum.SUCCESS.getCode();
+		} catch (Exception e) {
+			System.err.println("SysRoleAuthority Save Issue");
+		}
+		return new ResponseDTO<SysUserAuthorityDTO>(code, description);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<SysUserAuthorityDTO> deleteSysUserAuthority(SysUserAuthorityDTO sysUserAuthorityDTO){
+		String code = ResponseCodeEnum.FAILED.getCode();
+		String description = "Sys User Authority Delete Faield";
+		try {			
+			
+			boolean[] isSysRoleAuthority = {false};
+			List<SysRoleEntity> sysRoleEntities = sysUserSysRoleDAO.getSysUserSysRoleEntitiesBySysUser(sysUserAuthorityDTO.getUsername())
+					.stream()
+					.map(_entity -> _entity.getSysRoleEntity())
+					.collect(Collectors.toList());
+			if(! sysRoleEntities.isEmpty()) {
+				sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRoles(sysRoleEntities).stream()
+					.forEach(sysRoleAuthority -> {
+						if(sysUserAuthorityDTO.getAuthorityCode().equals(sysRoleAuthority.getAuthorityEntity().getCode())) {
+							isSysRoleAuthority[0] = true;
+						}
+				});
+			}
+			
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserAuthorityDTO.getUsername());
+			AuthorityEntity authorityEntity = authorityDAO.findAuthorityEntityByCode(sysUserAuthorityDTO.getAuthorityCode());
+			
+			
+			if(isSysRoleAuthority[0]){
+				
+				sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUserAndAuthority(sysUserAuthorityDTO.getUsername(), authorityEntity.getId());				
+				
+				SysUserAuthorityEntity sysUserAuthorityEntity = new SysUserAuthorityEntity();
+				SysUserAuthorityEntityId id = new SysUserAuthorityEntityId();
+				
+				id.setSysUser(sysUserAuthorityDTO.getUsername());
+				id.setAuthority(authorityEntity.getId());
+				
+				sysUserAuthorityEntity.setSysUserAuthorityEntityId(id);
+				sysUserAuthorityEntity.setSysUserEntity(sysUserEntity);
+				sysUserAuthorityEntity.setAuthorityEntity(authorityEntity);
+				sysUserAuthorityEntity.setIsGrant(new Long(0));
+				
+				sysUserAuthorityDAO.saveSysUserAuthorityentity(sysUserAuthorityEntity);	
+				
+			}
+			
+			else {
+				sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUserAndAuthority(sysUserAuthorityDTO.getUsername(), authorityEntity.getId());				
+			}
+			
+			description = "Sys User Authority Delete Successfully";
+			code = ResponseCodeEnum.SUCCESS.getCode();
+		} catch (Exception e) {
+			System.err.println("SysRoleAuthority Delete Issue");
+		}
+		return new ResponseDTO<SysUserAuthorityDTO>(code, description);
+	}
 
 
 

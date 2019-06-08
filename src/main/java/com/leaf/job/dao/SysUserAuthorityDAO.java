@@ -16,5 +16,35 @@ public interface SysUserAuthorityDAO {
 	 * @return {@link List<SysRoleAuthorityEntity>]
 	 */
 	List<SysUserAuthorityEntity> getSysUserAuthorityEntitiesBySysUser(String username);
+	
+	/**
+	 * where Authority = authorityId
+	 * 
+	 * Delete Entities by Authority
+	 * @param authorityId
+	 */
+	void deleteSysUserAuthorityEntityByAuthority(long authorityId);
+	
+	/**
+	 * where SysUser = username
+	 * 
+	 * Delete Entities by SysUser
+	 * @param username
+	 */
+	void deleteSysUserAuthorityEntityBySysUser(String username);
+	
+	/**
+	 * where username and authorityId
+	 * 
+	 * Delete Entities by SysUser and Authority
+	 * @param username,authorityId
+	 */
+	void deleteSysUserAuthorityEntityBySysUserAndAuthority(String username, long authorityId);
+	
+	/**
+	 * Save SysUserAuthority Entity
+	 * @param sysUserAuthorityEntity
+	 */
+	void saveSysUserAuthorityentity(SysUserAuthorityEntity sysUserAuthorityEntity);
 
 }
