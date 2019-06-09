@@ -36,18 +36,21 @@ var validatorForTitle = ()=>{
 	let description = $("#description");
 	let status = $("#status");
 	
-	if(! code.val()){		
-		//code.prop("required",true);		
-		return isValid = false;
+	if(! code.val()){			
+		code.prop("required",true);		
+		isValid = false;
 	}
 	if(! description.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		description.prop("required",true);		
+		isValid = false;
 	}
 	if(! status.val()){
-		//status.prop("required",true);
-		return isValid = false;
+		status.prop("required",true);
+		isValid = false;
 	}
+	code[0].parentElement.MaterialTextfield.change("");
+	description[0].parentElement.MaterialTextfield.change("");	
+	status[0].parentElement.MaterialSelectfield.change("");
 	return isValid;
 };
 
