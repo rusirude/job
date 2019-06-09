@@ -13,9 +13,11 @@ import org.springframework.stereotype.Repository;
 
 import com.leaf.job.dao.SysUserAuthorityDAO;
 import com.leaf.job.entity.AuthorityEntity_;
+import com.leaf.job.entity.StatusEntity_;
 import com.leaf.job.entity.SysUserAuthorityEntity;
 import com.leaf.job.entity.SysUserAuthorityEntity_;
 import com.leaf.job.entity.SysUserEntity_;
+import com.leaf.job.enums.DefaultStatusEnum;
 
 @Repository
 public class SysUserAuthorityDAOImpl implements SysUserAuthorityDAO {
@@ -35,8 +37,11 @@ public class SysUserAuthorityDAOImpl implements SysUserAuthorityDAO {
         Root<SysUserAuthorityEntity> root = criteriaQuery.from(SysUserAuthorityEntity.class);
         criteriaQuery.select(root);
         criteriaQuery.where(
-        	criteriaBuilder.equal(root.get(SysUserAuthorityEntity_.sysUserEntity).get(SysUserEntity_.username),username)
-        );
+        		criteriaBuilder.and(
+        				criteriaBuilder.equal(root.get(SysUserAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.ACTIVE.getCode()),
+        				criteriaBuilder.equal(root.get(SysUserAuthorityEntity_.sysUserEntity).get(SysUserEntity_.username),username)        		     
+        				)
+    		);
         return entityManager.createQuery(criteriaQuery).getResultList();
 	}
 

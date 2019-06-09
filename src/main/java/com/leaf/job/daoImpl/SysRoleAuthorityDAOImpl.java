@@ -27,6 +27,31 @@ public class SysRoleAuthorityDAOImpl implements SysRoleAuthorityDAO {
 	@Autowired
 	private EntityManager entityManager;
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SysRoleAuthorityEntity> getSysRoleAuthorityEntitiesBySysRolesAndAnuthorityStatusAndSysRoleStatus(List<SysRoleEntity> sysRoleEntities,String authorityStatus, String sysRoleStatus) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SysRoleAuthorityEntity> criteriaQuery = criteriaBuilder.createQuery(SysRoleAuthorityEntity.class);
+        Root<SysRoleAuthorityEntity> root = criteriaQuery.from(SysRoleAuthorityEntity.class);
+        criteriaQuery.select(root).distinct(true);
+        CriteriaBuilder.In<Long> sysRoleIn = criteriaBuilder.in(root.get(SysRoleAuthorityEntity_.sysRoleEntity).get(SysRoleEntity_.id));
+        sysRoleEntities.forEach(sysRole -> {
+            sysRoleIn.value(sysRole.getId());
+        });
+        criteriaQuery.where(
+        		criteriaBuilder.and(
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),authorityStatus),
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.sysRoleEntity).get(SysRoleEntity_.statusEntity).get(StatusEntity_.code),sysRoleStatus),
+        				sysRoleIn
+        				)        		
+        		);
+        return entityManager.createQuery(criteriaQuery).getResultList();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -43,8 +68,7 @@ public class SysRoleAuthorityDAOImpl implements SysRoleAuthorityDAO {
         });
         criteriaQuery.where(
         		criteriaBuilder.and(
-        				criteriaBuilder.notEqual(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.INACTIVE.getCode()),
-        				criteriaBuilder.notEqual(root.get(SysRoleAuthorityEntity_.sysRoleEntity).get(SysRoleEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.INACTIVE.getCode()),
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.ACTIVE.getCode()),
         				sysRoleIn
         				)        		
         		);
@@ -63,7 +87,7 @@ public class SysRoleAuthorityDAOImpl implements SysRoleAuthorityDAO {
         criteriaQuery.select(root);
         criteriaQuery.where(
         		criteriaBuilder.and(
-        				criteriaBuilder.notEqual(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.INACTIVE.getCode()),
+        				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.authorityEntity).get(AuthorityEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.ACTIVE.getCode()),
         				criteriaBuilder.equal(root.get(SysRoleAuthorityEntity_.sysRoleAuthorityEntityId).get(SysRoleAuthorityEntityId_.sysRole),sysRoleId)
         				));
         return entityManager.createQuery(criteriaQuery).getResultList();

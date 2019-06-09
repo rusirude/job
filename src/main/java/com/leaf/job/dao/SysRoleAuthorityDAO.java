@@ -10,9 +10,20 @@ public interface SysRoleAuthorityDAO {
 	/**
 	 * Select - *
 	 * From - SysRoleAuthorityEntity
-	 * Where - Authority STATUS <> INACTIVE and SYS_ROLE STATUS<> INACTIVE and SYS_ROLE IN (sysRoleEntities)
+	 * Where - Authority STATUS = ACTIVE and SYS_ROLE STATUS = ACTIVE and SYS_ROLE IN (sysRoleEntities)
 	 * 
 	 * Select all SysRoleAuthorityEntity for SysRole Entities and Authority and SYSROLE both Status are ACTIVE
+	 * @param sysRoleEntities,authorityStatus,sysRoleStatus
+	 * @return {@link List<SysRoleAuthorityEntity>]
+	 */
+	List<SysRoleAuthorityEntity> getSysRoleAuthorityEntitiesBySysRolesAndAnuthorityStatusAndSysRoleStatus(List<SysRoleEntity> sysRoleEntities,String authorityStatus, String sysRoleStatus);
+	
+	/**
+	 * Select - *
+	 * From - SysRoleAuthorityEntity
+	 * Where - Authority STATUS = ACTIVE and SYS_ROLE IN (sysRoleEntities)
+	 * 
+	 * Select all SysRoleAuthorityEntity for SysRole Entities and Authority Status are ACTIVE
 	 * @param sysRoleEntities
 	 * @return {@link List<SysRoleAuthorityEntity>]
 	 */
@@ -21,7 +32,7 @@ public interface SysRoleAuthorityDAO {
 	/**
 	 * Select - *
 	 * From - SysRoleAuthorityEntity
-	 * Where - Authority STATUS <> INACTIVE and SYS_ROLE =  SYS_ROLE_ID
+	 * Where - Authority STATUS = ACTIVE and SYS_ROLE =  SYS_ROLE_ID
 	 * 
 	 * Select all SysRoleAuthorityEntity for SysRole Entity and AuthorityStatus is ACTIVE
 	 * @param sysRoleId

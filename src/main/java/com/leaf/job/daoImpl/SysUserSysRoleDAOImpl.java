@@ -38,7 +38,7 @@ public class SysUserSysRoleDAOImpl implements SysUserSysRoleDAO {
         criteriaQuery.select(root);
         criteriaQuery.where(
         		criteriaBuilder.and(
-        				criteriaBuilder.notEqual(root.get(SysUserSysRoleEntity_.sysRoleEntity).get(SysRoleEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.INACTIVE.getCode()),
+        				criteriaBuilder.equal(root.get(SysUserSysRoleEntity_.sysRoleEntity).get(SysRoleEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.ACTIVE.getCode()),
         				criteriaBuilder.equal(root.get(SysUserSysRoleEntity_.sysUserSysRoleEntityId).get(SysUserSysRoleEntityId_.sysUser),username)
         				));
         return entityManager.createQuery(criteriaQuery).getResultList();

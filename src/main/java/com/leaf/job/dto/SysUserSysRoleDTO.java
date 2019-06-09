@@ -4,7 +4,7 @@ public class SysUserSysRoleDTO {
 	private String username;
 	private String name;
 	private String sysRoleCode;
-	private String sysRoleDescription;
+	private String sysRoleDescription;	
 	private boolean enable;
 	
 	public String getUsername() {
@@ -27,7 +27,7 @@ public class SysUserSysRoleDTO {
 	}
 	public String getSysRoleDescription() {
 		return sysRoleDescription;
-	}
+	}	
 	public void setSysRoleDescription(String sysRoleDescription) {
 		this.sysRoleDescription = sysRoleDescription;
 	}

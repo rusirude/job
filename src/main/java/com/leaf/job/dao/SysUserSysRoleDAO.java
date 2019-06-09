@@ -9,7 +9,7 @@ public interface SysUserSysRoleDAO {
 	/**
 	 * Select - *
 	 * From - SysUserSysRoleEntity
-	 * Where - SysRole STATUS <> INACTIVE and SYS_USER Username =  username
+	 * Where - SysRole STATUS =ACTIVE and SYS_USER Username =  username
 	 * 
 	 * Select all SysUserSysRoleEntity for SysUser Entity and SysRoleStatus is ACTIVE
 	 * @param username
