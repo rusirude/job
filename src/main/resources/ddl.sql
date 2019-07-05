@@ -40,6 +40,24 @@ CREATE TABLE `job`.`sys_role` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 
+CREATE TABLE `job`.`title` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `description` VARCHAR(50) NOT NULL,
+  `status` INT NOT NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
+  INDEX `fk_title_status_idx` (`status` ASC),
+  CONSTRAINT `fk_title_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `job`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
+
 
 CREATE TABLE `job`.`sys_user` (
   `username` VARCHAR(25) NOT NULL,
@@ -148,24 +166,6 @@ CREATE TABLE `job`.`sys_role_authoriry` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
     
-CREATE TABLE `job`.`title` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `code` VARCHAR(10) NOT NULL,
-  `description` VARCHAR(50) NOT NULL,
-  `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
-  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
-  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
-  INDEX `fk_title_status_idx` (`status` ASC),
-  CONSTRAINT `fk_title_status`
-    FOREIGN KEY (`status`)
-    REFERENCES `job`.`status` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE);   
-    
     
 CREATE TABLE `job`.`master_data` (
   `code` VARCHAR(150) NOT NULL,
@@ -194,13 +194,40 @@ CREATE TABLE `job`.`sys_user_authority` (
     ON UPDATE CASCADE);
     
 INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
+INSERT INTO `job`.`status_category` (`code`,`description`) VALUES ('DELETE','Delete');
 
-INSERT INTO `job`.`sys_role` (`code`, `description`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'System', '1', 'SYSTEM', 'SYSTEM');
+INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('ACTIVE','Active',1);
+INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('INACTIVE','Inactive',1);
+INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('DELETE','Delete',2);
 
-INSERT INTO `job`.`sys_user` (`username`, `password`, `title`, `name`, `status`, `created_by`, `updated_by`) VALUES ('SYSTEM', 'SYSTEM', '1', 'SYSTEM', '1', 'SYSTEM', 'SYSTEM');
+INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('USER_MGT_S','User Management',1,'SYSTEM','SYSTEM');
+INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('REF_MGT_S','Reference Data Management',1,'SYSTEM','SYSTEM');
+INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYS_CFG_S','System Configuration',1,'SYSTE','SYSTEM');
 
-INSERT INTO `job`.`authority` (`code`, `description`, `auth_code`, `url`, `status`, `created_by`, `updated_by`) VALUES ('USER', 'User Management', 'ROLE_USER', 'viewUser', '1', 'SYSTEM', 'SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_NONE','None',1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_MR','Mr.',1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_MRS','Mrs.',1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_MISS','Miss.',1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_MS','Ms.',1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_PROF','Prof.',1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_DR','Dr.',1,'SYSTEM','SYSTEM');
 
+
+
+
+INSERT INTO `job`.`sys_role` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYSTEM','System',1,'SYSTEM','SYSTEM');
+
+INSERT INTO `job`.`sys_user` (`username`,`password`,`title`,`name`,`status`,`created_by`,`updated_by`) VALUES ('SYSTEM','$2a$10$/9rQ/RW6jv1DS0uXS4FoxeHvzZPiWpgnB6XdIxjymSYE9UFoGKEnq',1,'System',1,'SYSTEM','SYSTEM');
+
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USER','User Management','ROLE_USER','/user/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERROLE','User Role Management','ROLE_SYSROLE','/userRole/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('SECTION','Section Management','ROLE_SECTION','/section/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ROLEAUTHOR','User Role Authority Management','ROLE_ROLEAUTHORITY','/sysRoleAuthority/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('AUTHORITY','Authorry Management','ROLE_AUTHORITY','/authority/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('TITLE','Title','ROLE_TITLE','/title/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ASGNROLE','Assign System Role to Sys User','ROLE_ASGNROLE','/sysUserSysRole/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('MASTERDATA','Master Data Management','ROLE_MASTERDATA','/masterData/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERAUTHOR','Sys User Authority','ROLE_USERAUTHORITY','/sysUserAuthority/',1,1,'SYSTEM','SYSTEM');
 
 
 <!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/-->
