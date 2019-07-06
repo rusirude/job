@@ -202,7 +202,7 @@ INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('DEL
 
 INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('USER_MGT_S','User Management',1,'SYSTEM','SYSTEM');
 INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('REF_MGT_S','Reference Data Management',1,'SYSTEM','SYSTEM');
-INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYS_CFG_S','System Configuration',1,'SYSTE','SYSTEM');
+INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYS_CFG_S','System Configuration',1,'SYSTEM','SYSTEM');
 
 INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_NONE','None',1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_MR','Mr.',1,'SYSTEM','SYSTEM');
@@ -228,6 +228,20 @@ INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ASGNROLE','Assign System Role to Sys User','ROLE_ASGNROLE','/sysUserSysRole/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('MASTERDATA','Master Data Management','ROLE_MASTERDATA','/masterData/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERAUTHOR','Sys User Authority','ROLE_USERAUTHORITY','/sysUserAuthority/',1,1,'SYSTEM','SYSTEM');
+
+
+INSERT INTO `job`.`sys_user_sys_role` (`sys_user`, `sys_role`) VALUES ('SYSTEM', '1');
+
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '1');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '2');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '3');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '4');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '5');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '6');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '7');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '8');
+INSERT INTO `job`.`sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '9');
+
 
 
 <!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/-->
