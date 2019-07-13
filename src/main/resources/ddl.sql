@@ -250,6 +250,7 @@ INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ASGNROLE','Assign System Role to Sys User','ROLE_ASGNROLE','/sysUserSysRole/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('MASTERDATA','Master Data Management','ROLE_MASTERDATA','/masterData/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERAUTHOR','Sys User Authority','ROLE_USERAUTHORITY','/sysUserAuthority/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('PPOLICY','Password Policy','ROLE_PPOLICY','/passwordPolicy/',1,1,'SYSTEM','SYSTEM');
 
 
 INSERT INTO `job`.`sys_user_sys_role` (`sys_user`, `sys_role`) VALUES ('SYSTEM', '1');
