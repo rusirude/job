@@ -44,7 +44,12 @@ public class CustomUserDetailService implements UserDetailsService{
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try {
-			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(username);	
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(username);
+
+			if(! DefaultStatusEnum.ACTIVE.getCode().equals(sysUserEntity.getStatusEntity().getCode())){
+				throw new UsernameNotFoundException("User is Not Activated");
+			}
+
 			return new User(sysUserEntity.getUsername(),sysUserEntity.getPassword(),getGrantedAuthoritiesForUser(sysUserEntity));
 		}
 		catch (Exception e) {

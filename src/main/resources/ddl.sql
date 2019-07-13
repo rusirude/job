@@ -192,6 +192,28 @@ CREATE TABLE `job`.`sys_user_authority` (
     REFERENCES `job`.`authority` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
+
+CREATE TABLE `job`.`password_policy` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `min_length` INT NOT NULL DEFAULT 0,
+  `max_length` INT NOT NULL DEFAULT 0,
+  `min_char` INT NOT NULL DEFAULT 0,
+  `min_num` INT NOT NULL DEFAULT 0,
+  `min_spe_char` INT NOT NULL DEFAULT 0,
+  `no_of_invalid_attempt` INT NOT NULL DEFAULT 0,
+  `no_of_history_password` INT NOT NULL DEFAULT 0,
+  `status` INT NOT NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_password_policy_status_idx` (`status` ASC),
+  CONSTRAINT `fk_password_policy_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `job`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
     
 INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
 INSERT INTO `job`.`status_category` (`code`,`description`) VALUES ('DELETE','Delete');

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -35,6 +35,9 @@
 												<h2 class="mdl-card__title-text">Sign In</h2>
 											</div>
 											<div class="mdl-card__supporting-text">
+												<div class="mdl-grid" th:if="${param.error}" style="background-color: red">
+													<h4 class="mdl-card__title-text"  th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" style="color: white"></h4>
+												</div>
 												<div class="mdl-grid">
 													<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
 														<input id="username" name="username" type="text" class="mdl-textfield__input"/>
