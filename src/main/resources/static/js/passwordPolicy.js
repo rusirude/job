@@ -1,3 +1,11 @@
 /**
- * Created by rusiru on 7/13/19.
+ * @author: rusiru
  */
+
+
+/*-------------------------------- Document Ready ----------------------*/
+
+
+$(document).ready(()=>{
+    componentHandler.upgradeDom();
+});
