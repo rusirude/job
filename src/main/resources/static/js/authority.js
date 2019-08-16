@@ -37,29 +37,29 @@ var validatorForAuthority = ()=>{
 	let section = $("#section");
 	let status = $("#status");
 	
-	if(! code.val()){		
-		//code.prop("required",true);		
-		return isValid = false;
+	if(! code.val()){
+		InputsValidator.inlineEmptyValidation(code);
+		isValid = false;
 	}
 	if(! description.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(description);
+		isValid = false;
 	}
 	if(! url.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(url);
+		isValid = false;
 	}
 	if(! authCode.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(authCode);
+		isValid = false;
 	}
 	if(! section.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(section);
+		isValid = false;
 	}
 	if(! status.val()){
-		//status.prop("required",true);
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(status);
+		isValid = false;
 	}
 	return isValid;
 };
@@ -135,7 +135,7 @@ var loadReferenceDataForAuthority = (callback)=>{
         dataType: "json",
         success: function(data){    
         	
-        	if(data.code === "SUCCESS"){
+        	if(data.code === Constant.CODE_SUCCESS){
             	for(let s of data.data.status||[]){            		
             		$("#status").append(`<option value="${s.code}">${s.description}</option>`);
             	}
@@ -211,7 +211,7 @@ var loadAuthorityTable = ()=>{
                     		}
                         ]
                     } );
-}
+};
 
 var clearDataForAuthority = ()=>{
 	let code = $("#code");
@@ -225,16 +225,22 @@ var clearDataForAuthority = ()=>{
 	$("#btnUpdate").hide();
 	$("#btnDelete").hide();
 
-	
+	$("#formHeading").html("");
+
 	code[0].parentElement.MaterialTextfield.enable();
 	description[0].parentElement.MaterialTextfield.enable();
 	url[0].parentElement.MaterialTextfield.enable();
 	authCode[0].parentElement.MaterialTextfield.enable();
 	section[0].parentElement.MaterialSelectfield.enable();	
-	status[0].parentElement.MaterialSelectfield.enable();	
-	
+	status[0].parentElement.MaterialSelectfield.enable();
 
-	
+	InputsValidator.removeInlineValidation(code);
+	InputsValidator.removeInlineValidation(description);
+	InputsValidator.removeInlineValidation(url);
+	InputsValidator.removeInlineValidation(authCode);
+	InputsValidator.removeInlineValidation(section);
+	InputsValidator.removeInlineValidation(status);
+
 	code[0].parentElement.MaterialTextfield.change("");
 	description[0].parentElement.MaterialTextfield.change("");
 	url[0].parentElement.MaterialTextfield.change("");
@@ -243,11 +249,18 @@ var clearDataForAuthority = ()=>{
 	section[0].parentElement.MaterialSelectfield.change("");
 	status.val("");
 	status[0].parentElement.MaterialSelectfield.change("");
+
+	FormTransition.closeForm('#authorityForm','#authorityGrid');
 	
 };
 
 
 /*-------------------------------- Inline Event  ----------------------*/
+var clickAddForAuthority = ()=>{
+	clearDataForAuthority();
+	$("#formHeading").html("Add Authority");
+	FormTransition.openForm('#authorityForm','#authorityGrid');
+};
 
 var updateIconClickForAuthority = (code)=>{
 	let _sF = (data)=>{
@@ -256,7 +269,9 @@ var updateIconClickForAuthority = (code)=>{
 		$("#btnDelete").hide();
 		populateFormForAuthority(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
-	}	
+		$("#formHeading").html("Update Authority");
+		FormTransition.openForm('#authorityForm','#authorityGrid');
+	};
 	clearDataForAuthority();
 	findDetailByCodeForAuthority(code,_sF);
 };
@@ -273,7 +288,9 @@ var deleteIconClickForAuthority = (code)=>{
 		$("#authCode")[0].parentElement.MaterialTextfield.disable();
 		$("#section")[0].parentElement.MaterialSelectfield.disable();
 		$("#status")[0].parentElement.MaterialSelectfield.disable();
-	}
+		$("#formHeading").html("Delete Authority");
+		FormTransition.openForm('#authorityForm','#authorityGrid');
+	};
 	clearDataForAuthority();
 	findDetailByCodeForAuthority(code,_sF);
 };
@@ -281,6 +298,10 @@ var deleteIconClickForAuthority = (code)=>{
 /*-------------------------------- Dynamic Event  ----------------------*/
 
 var evenBinderForAuthority = ()=>{
+	$("#btnAuthorityAdd").off().on("click",function(){
+		clickAddForAuthority();
+	});
+
 	$("#btnSave").off().on("click",function(){
 		saveForAuthority();
 	});

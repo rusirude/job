@@ -36,17 +36,17 @@ var validatorForSection = ()=>{
 	let description = $("#description");
 	let status = $("#status");
 	
-	if(! code.val()){		
-		//code.prop("required",true);		
-		return isValid = false;
+	if(! code.val()){
+		InputsValidator.inlineEmptyValidation(code);
+		isValid = false;
 	}
 	if(! description.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(description);
+		isValid = false;
 	}
 	if(! status.val()){
-		//status.prop("required",true);
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(status);
+		isValid = false;
 	}
 	return isValid;
 };
@@ -119,7 +119,7 @@ var loadReferenceDataForSection = (callback)=>{
         dataType: "json",
         success: function(data){    
         	
-        	if(data.code === "SUCCESS"){
+        	if(data.code === Constant.CODE_SUCCESS){
             	for(let s of data.data.status){            		
             		$("#status").append(`<option value="${s.code}">${s.description}</option>`);
             	}
@@ -188,7 +188,7 @@ var loadSectionTable = ()=>{
                     		}
                         ]
                     } );
-}
+};
 
 var clearDataForSection = ()=>{
 	let code = $("#code");
@@ -199,23 +199,31 @@ var clearDataForSection = ()=>{
 	$("#btnUpdate").hide();
 	$("#btnDelete").hide();
 
+	$("#formHeading").html("");
 	
 	code[0].parentElement.MaterialTextfield.enable();
 	description[0].parentElement.MaterialTextfield.enable();
-	status[0].parentElement.MaterialSelectfield.enable();	
-	
-	code.prop("required",false);	
-	description.prop("required",false);	
-	status.prop("required",false);	
+	status[0].parentElement.MaterialSelectfield.enable();
+
+	InputsValidator.removeInlineValidation(code);
+	InputsValidator.removeInlineValidation(description);
+	InputsValidator.removeInlineValidation(status);
 	
 	code[0].parentElement.MaterialTextfield.change("");
 	description[0].parentElement.MaterialTextfield.change("");
 	status.val("");
 	status[0].parentElement.MaterialSelectfield.change("");
+
+	FormTransition.closeForm('#sectionForm','#sectionGrid');
 	
 };
 
 /*-------------------------------- Inline Event  ----------------------*/
+var clickAddForSection = ()=>{
+	clearDataForSection();
+	$("#formHeading").html("Add Section");
+	FormTransition.openForm('#sectionForm','#sectionGrid');
+};
 
 var updateIconClickForSection = (code)=>{
 	let _sF = (data)=>{
@@ -224,7 +232,9 @@ var updateIconClickForSection = (code)=>{
 		$("#btnDelete").hide();
 		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
-	}	
+		$("#formHeading").html("Update Section");
+		FormTransition.openForm('#sectionForm','#sectionGrid');
+	};
 	clearDataForSection();
 	findDetailByCodeForSection(code,_sF);
 };
@@ -237,8 +247,10 @@ var deleteIconClickForSection = (code)=>{
 		populateFormForSection(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();		
-	}
+		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		$("#formHeading").html("Delete Section");
+		FormTransition.openForm('#sectionForm','#sectionGrid');
+	};
 	clearDataForSection();
 	findDetailByCodeForSection(code,_sF);
 };
@@ -246,6 +258,10 @@ var deleteIconClickForSection = (code)=>{
 /*-------------------------------- Dynamic Event  ----------------------*/
 
 var evenBinderForSection = ()=>{
+	$("#btnSectionAdd").off().on("click",function(){
+		clickAddForSection();
+	});
+
 	$("#btnSave").off().on("click",function(){
 		saveForSection();
 	});

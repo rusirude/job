@@ -122,7 +122,7 @@ var loadReferenceDataForTitle = (callback)=>{
         dataType: "json",
         success: function(data){    
         	
-        	if(data.code === "SUCCESS"){
+        	if(data.code === Constant.CODE_SUCCESS){
             	for(let s of data.data.status){            		
             		$("#status").append(`<option value="${s.code}">${s.description}</option>`);
             	}
@@ -202,6 +202,7 @@ var clearDataForTitle = ()=>{
 	$("#btnUpdate").hide();
 	$("#btnDelete").hide();
 
+	$("#formHeading").html("");
 	
 	code[0].parentElement.MaterialTextfield.enable();
 	description[0].parentElement.MaterialTextfield.enable();
@@ -226,6 +227,7 @@ var clearDataForTitle = ()=>{
 
 var clickAddForTitle = ()=>{
 	clearDataForTitle();
+	$("#formHeading").html("Add Title");
 	FormTransition.openForm('#titleForm','#titleGrid');
 };
 
@@ -236,6 +238,7 @@ var updateIconClickForTitle = (code)=>{
 		$("#btnDelete").hide();
 		populateFormForTitle(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
+		$("#formHeading").html("Update Title");
 		FormTransition.openForm('#titleForm','#titleGrid');
 	};
 	clearDataForTitle();
@@ -251,6 +254,7 @@ var deleteIconClickForTitle = (code)=>{
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
 		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		$("#formHeading").html("Delete Title");
 		FormTransition.openForm('#titleForm','#titleGrid');
 	};
 	clearDataForTitle();
