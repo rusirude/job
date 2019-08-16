@@ -16,6 +16,7 @@ var generateFinalObjectForTitle = ()=>{
 
 var successFunctionForTitle = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
+		FormTransition.closeForm('#titleForm','#titleGrid');
 		DialogBox.openSuccessMsgBox(data.message);		
 		titleTable.ajax.reload();
 		clearDataForTitle();
@@ -30,6 +31,8 @@ var failedFunctionForTitle = (data)=>{
 };
 
 var validatorForTitle = ()=>{
+
+
 	let isValid = true;
 	
 	let code = $("#code");
@@ -37,20 +40,17 @@ var validatorForTitle = ()=>{
 	let status = $("#status");
 	
 	if(! code.val()){			
-		code.prop("required",true);		
+		InputsValidator.inlineEmptyValidation(code);
 		isValid = false;
 	}
 	if(! description.val()){
-		description.prop("required",true);		
+		InputsValidator.inlineEmptyValidation(description);
 		isValid = false;
 	}
 	if(! status.val()){
-		status.prop("required",true);
+		InputsValidator.inlineEmptyValidation(status);
 		isValid = false;
 	}
-	code[0].parentElement.MaterialTextfield.change("");
-	description[0].parentElement.MaterialTextfield.change("");	
-	status[0].parentElement.MaterialSelectfield.change("");
 	return isValid;
 };
 
@@ -191,7 +191,7 @@ var loadTitleTable = ()=>{
                     		}
                         ]
                     } );
-}
+};
 
 var clearDataForTitle = ()=>{
 	let code = $("#code");
@@ -207,18 +207,27 @@ var clearDataForTitle = ()=>{
 	description[0].parentElement.MaterialTextfield.enable();
 	status[0].parentElement.MaterialSelectfield.enable();	
 	
-	code.prop("required",false);	
-	description.prop("required",false);	
-	status.prop("required",false);	
+
 	
 	code[0].parentElement.MaterialTextfield.change("");
 	description[0].parentElement.MaterialTextfield.change("");
 	status.val("");
 	status[0].parentElement.MaterialSelectfield.change("");
+
+	InputsValidator.removeInlineValidation(code);
+	InputsValidator.removeInlineValidation(description);
+	InputsValidator.removeInlineValidation(status);
+
+	FormTransition.closeForm('#titleForm','#titleGrid');
 	
 };
 
 /*-------------------------------- Inline Event  ----------------------*/
+
+var clickAddForTitle = ()=>{
+	clearDataForTitle();
+	FormTransition.openForm('#titleForm','#titleGrid');
+};
 
 var updateIconClickForTitle = (code)=>{
 	let _sF = (data)=>{
@@ -227,7 +236,8 @@ var updateIconClickForTitle = (code)=>{
 		$("#btnDelete").hide();
 		populateFormForTitle(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
-	}	
+		FormTransition.openForm('#titleForm','#titleGrid');
+	};
 	clearDataForTitle();
 	findDetailByCodeForTitle(code,_sF);
 };
@@ -240,8 +250,9 @@ var deleteIconClickForTitle = (code)=>{
 		populateFormForTitle(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();		
-	}
+		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		FormTransition.openForm('#titleForm','#titleGrid');
+	};
 	clearDataForTitle();
 	findDetailByCodeForTitle(code,_sF);
 };
@@ -249,6 +260,10 @@ var deleteIconClickForTitle = (code)=>{
 /*-------------------------------- Dynamic Event  ----------------------*/
 
 var evenBinderForTitle = ()=>{
+	$("#btnTitleAdd").off().on("click",function(){
+		clickAddForTitle();
+	});
+
 	$("#btnSave").off().on("click",function(){
 		saveForTitle();
 	});
