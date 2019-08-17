@@ -18,7 +18,7 @@ import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.service.SysRoleService;
 
 @Controller
-@RequestMapping(path = "/userRole")
+@RequestMapping(path = "/sysRole")
 public class SysRoleController {
 
 	private SysRoleService sysRoleService;
@@ -65,14 +65,14 @@ public class SysRoleController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_SYSROLE')")
-	@RequestMapping(path = "/loadUserRoles", method = RequestMethod.POST)
+	@RequestMapping(path = "/loadSysRoles", method = RequestMethod.POST)
 	@ResponseBody
 	public DataTableResponseDTO loadSysRoleDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
 		return sysRoleService.getSysRolesForDataTable(dataTableRequestDTO);
 	}
 
 	@PreAuthorize("hasRole('ROLE_SYSROLE')")
-	@RequestMapping(path = "/loadUserRoleByCode", method = RequestMethod.POST)
+	@RequestMapping(path = "/loadSysRoleByCode", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<SysRoleDTO> loadSysRoleByCode(@RequestBody SysRoleDTO sysRoleDTO) {
 		return sysRoleService.findSysRole(sysRoleDTO);

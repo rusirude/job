@@ -2,12 +2,12 @@
  * @author: rusiru
  */
 
-var userRoleTable;
+var sysRoleTable;
 
 
 /*------------------------------------------- CRUD Functions ------------------*/
 
-var generateFinalObjectForUserRole = ()=>{
+var generateFinalObjectForSysRole = ()=>{
 	return {
 		code:$("#code").val()||"",
 		description:$("#description").val()||"",
@@ -15,72 +15,72 @@ var generateFinalObjectForUserRole = ()=>{
 	}
 };
 
-var successFunctionForUserRole = (data)=>{
+var successFunctionForSysRole = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
 		DialogBox.openSuccessMsgBox(data.message);		
-		userRoleTable.ajax.reload();
-		clearDataForUserRole();
+		sysRoleTable.ajax.reload();
+		clearDataForSysRole();
 	}
 	else{
 		alert(data.message);
 	}
 };
 
-var failedFunctionForUserRole = (data)=>{
+var failedFunctionForSysRole = (data)=>{
 	alert("Server Error");
 };
 
-var validatorForUserRole = ()=>{
+var validatorForSysRole = ()=>{
 	let isValid = true;
 	
 	let code = $("#code");
 	let description = $("#description");
 	let status = $("#status");
 	
-	if(! code.val()){		
-		//code.prop("required",true);		
-		return isValid = false;
+	if(! code.val()){
+		InputsValidator.inlineEmptyValidation(code);
+		isValid = false;
 	}
 	if(! description.val()){
-		//description.prop("required",true);		
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(description);
+		isValid = false;
 	}
 	if(! status.val()){
-		//status.prop("required",true);
-		return isValid = false;
+		InputsValidator.inlineEmptyValidation(status);
+		isValid = false;
 	}
 	return isValid;
 };
 
-var saveForUserRole = ()=>{
-	if(validatorForUserRole()){
-		let url = "/userRole/save";
+var saveForSysRole = ()=>{
+	if(validatorForSysRole()){
+		let url = "/sysRole/save";
 		let method = "POST";		
 		
-		callToserver(url,method,generateFinalObjectForUserRole(),successFunctionForUserRole,failedFunctionForUserRole);
+		callToserver(url,method,generateFinalObjectForSysRole(),successFunctionForSysRole,failedFunctionForSysRole);
 	}
 	
 };
 
-var updateForUserRole = ()=>{
-	if(validatorForUserRole()){
-		let url = "/userRole/update";
+var updateForSysRole = ()=>{
+	if(validatorForSysRole()){
+		let url = "/sysRole/update";
 		let method = "POST";
 				
-		callToserver(url,method,generateFinalObjectForUserRole(),successFunctionForUserRole,failedFunctionForUserRole);
+		callToserver(url,method,generateFinalObjectForSysRole(),successFunctionForSysRole,failedFunctionForSysRole);
 	}
 };
 
-var deleteForUserRole = ()=>{
-	if(validatorForUserRole()){
-		let url = "/userRole/delete";
+var deleteForSysRole = ()=>{
+	if(validatorForSysRole()){
+		let url = "/sysRole/delete";
 		let method = "POST";
 		
-		callToserver(url,method,generateFinalObjectForUserRole(),successFunctionForUserRole,failedFunctionForUserRole);
+		callToserver(url,method,generateFinalObjectForSysRole(),successFunctionForSysRole,failedFunctionForSysRole);
 	}
 };
 
-var findDetailByCodeForUserRole = (code,callback)=>{
+var findDetailByCodeForSysRole = (code,callback)=>{
 	let successFunction = (data)=>{
 		if(data.code === Constant.CODE_SUCCESS){			
 			if(callback){
@@ -95,7 +95,7 @@ var findDetailByCodeForUserRole = (code,callback)=>{
 	let failedFunction = (data)=>{
 		alert("Server Error");
 	};
-	let url = "/userRole/loadUserRoleByCode";
+	let url = "/sysRole/loadSysRoleByCode";
 	let method = "POST";
 	callToserver(url,method,{code:code},successFunction,failedFunction);
 	
@@ -104,7 +104,7 @@ var findDetailByCodeForUserRole = (code,callback)=>{
 
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 
-var populateFormForUserRole = (data) => {
+var populateFormForSysRole = (data) => {
 	if(data){
 		$("#code")[0].parentElement.MaterialTextfield.change(data.code || "");
 		$("#description")[0].parentElement.MaterialTextfield.change(data.description || "");
@@ -112,15 +112,15 @@ var populateFormForUserRole = (data) => {
 	}	
 };
 
-var loadReferenceDataForUserRole = (callback)=>{
+var loadReferenceDataForSysRole = (callback)=>{
 	$.ajax({
         type: "POST",
-        url: "/userRole/loadRefDataForSysRole",        
+        url: "/sysRole/loadRefDataForSysRole",
         contentType: "application/json",
         dataType: "json",
         success: function(data){    
         	
-        	if(data.code === "SUCCESS"){
+        	if(data.code === Constant.CODE_SUCCESS){
             	for(let s of data.data.status){            		
             		$("#status").append(`<option value="${s.code}">${s.description}</option>`);
             	}
@@ -142,10 +142,10 @@ var loadReferenceDataForUserRole = (callback)=>{
 };
 
 
-var loadUserRoleTable = ()=>{
-	userRoleTable = $('#userRoleTable').DataTable( {
+var loadSysRoleTable = ()=>{
+	sysRoleTable = $('#sysRoleTable').DataTable( {
                         ajax: {
-                            url : "/userRole/loadUserRoles",
+                            url : "/sysRole/loadSysRoles",
                             contentType:"application/json",
                             type:"POST",
                             data:function(d){
@@ -174,13 +174,13 @@ var loadUserRoleTable = ()=>{
                             	data: "code",
                             	class:"mdl-data-table__cell--non-numeric",
                             	render: function (data, type, full) {
-		                            		return `<button onClick="updateIconClickForUserRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+		                            		return `<button onClick="updateIconClickForSysRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-update-${data}" class="material-icons">create</i>
 													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
 														Update
 													  </div>
 													</button>
-													<button onClick="deleteIconClickForUserRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+													<button onClick="deleteIconClickForSysRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
 													  <i id="icon-delete-${data}" class="material-icons">delete</i>
 													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
 														Delete
@@ -192,7 +192,7 @@ var loadUserRoleTable = ()=>{
                     } );
 }
 
-var clearDataForUserRole = ()=>{
+var clearDataForSysRole = ()=>{
 	let code = $("#code");
 	let description = $("#description");
 	let status = $("#status");
@@ -201,69 +201,85 @@ var clearDataForUserRole = ()=>{
 	$("#btnUpdate").hide();
 	$("#btnDelete").hide();
 
+	$("#formHeading").html("");
 	
 	code[0].parentElement.MaterialTextfield.enable();
 	description[0].parentElement.MaterialTextfield.enable();
-	status[0].parentElement.MaterialSelectfield.enable();	
-	
-	code.prop("required",false);	
-	description.prop("required",false);	
-	status.prop("required",false);	
+	status[0].parentElement.MaterialSelectfield.enable();
+
+	InputsValidator.removeInlineValidation(code);
+	InputsValidator.removeInlineValidation(description);
+	InputsValidator.removeInlineValidation(status);
 	
 	code[0].parentElement.MaterialTextfield.change("");
 	description[0].parentElement.MaterialTextfield.change("");
 	status.val("");
 	status[0].parentElement.MaterialSelectfield.change("");
+
+	FormTransition.closeForm('#sysRoleForm','#sysRoleGrid');
 	
 };
 
 
 /*-------------------------------- Inline Event  ----------------------*/
+var clickAddForSysRole = ()=>{
+	clearDataForSysRole();
+	$("#formHeading").html("Add System Role");
+	FormTransition.openForm('#sysRoleForm','#sysRoleGrid');
+};
 
-var updateIconClickForUserRole = (code)=>{
+var updateIconClickForSysRole = (code)=>{
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
-		populateFormForUserRole(data);
+		populateFormForSysRole(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
-	}
-	clearDataForUserRole();
-	findDetailByCodeForUserRole(code,_sF);
+		$("#formHeading").html("Update System Role");
+		FormTransition.openForm('#sysRoleForm','#sysRoleGrid');
+	};
+	clearDataForSysRole();
+	findDetailByCodeForSysRole(code,_sF);
 };
 
-var deleteIconClickForUserRole = (code)=>{
+var deleteIconClickForSysRole = (code)=>{
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
-		populateFormForUserRole(data);
+		populateFormForSysRole(data);
 		$("#code")[0].parentElement.MaterialTextfield.disable();
 		$("#description")[0].parentElement.MaterialTextfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();		
-	}
-	clearDataForUserRole();
-	findDetailByCodeForUserRole(code,_sF);
+		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		$("#formHeading").html("Delete System Role");
+		FormTransition.openForm('#sysRoleForm','#sysRoleGrid');
+	};
+	clearDataForSysRole();
+	findDetailByCodeForSysRole(code,_sF);
 };
 
 
 /*-------------------------------- Dynamic Event  ----------------------*/
 
-var evenBinderForUserRole = ()=>{
+var evenBinderForSysRole = ()=>{
+	$("#btnSysRoleAdd").off().on("click",function(){
+		clickAddForSysRole();
+	});
+
 	$("#btnSave").off().on("click",function(){
-		saveForUserRole();
+		saveForSysRole();
 	});
 	
 	$("#btnUpdate").off().on("click",function(){
-		updateForUserRole();
+		updateForSysRole();
 	});
 	
 	$("#btnDelete").off().on("click",function(){
-		deleteForUserRole();
+		deleteForSysRole();
 	});
 	
 	$("#btnCancel").off().on("click",function(){
-		clearDataForUserRole();
+		clearDataForSysRole();
 	});
 
 };
@@ -276,9 +292,9 @@ $(document).ready(()=>{
  	let _callback_1 = ()=>{
  		componentHandler.upgradeDom(); 		
 	};	
-	loadReferenceDataForUserRole(_callback_1);
-	evenBinderForUserRole();
-	loadUserRoleTable();
+	loadReferenceDataForSysRole(_callback_1);
+	evenBinderForSysRole();
+	loadSysRoleTable();
 	 
 
 });
