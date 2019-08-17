@@ -242,7 +242,7 @@ INSERT INTO `job`.`sys_role` (`code`,`description`,`status`,`created_by`,`update
 INSERT INTO `job`.`sys_user` (`username`,`password`,`title`,`name`,`status`,`created_by`,`updated_by`) VALUES ('SYSTEM','$2a$10$/9rQ/RW6jv1DS0uXS4FoxeHvzZPiWpgnB6XdIxjymSYE9UFoGKEnq',1,'System',1,'SYSTEM','SYSTEM');
 
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USER','User Management','ROLE_USER','/user/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERROLE','User Role Management','ROLE_SYSROLE','/userRole/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERROLE','User Role Management','ROLE_SYSROLE','/sysRole/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('SECTION','Section Management','ROLE_SECTION','/section/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ROLEAUTHOR','User Role Authority Management','ROLE_ROLEAUTHORITY','/sysRoleAuthority/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('AUTHORITY','Authorry Management','ROLE_AUTHORITY','/authority/',1,1,'SYSTEM','SYSTEM');
