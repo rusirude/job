@@ -10,28 +10,28 @@ import com.leaf.job.dto.common.ResponseDTO;
 public interface TitleService {
 	/**
 	 * Save Title
-	 * @param TitleDTO
+	 * @param titleDTO
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<TitleDTO> saveTitle(TitleDTO titleDTO);
 	
 	/**
 	 * Update Title
-	 * @param TitleDTO
+	 * @param titleDTO
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<TitleDTO> updateTitle(TitleDTO titleDTO);
 	
 	/**
 	 * Delete Title
-	 * @param TitleDTO - code 
+	 * @param titleDTO - code
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<TitleDTO> deleteTitle(TitleDTO titleDTO);
 	
 	/**
 	 * Find Title By Code
-	 * @param TitleDTO - code 
+	 * @param titleDTO - code
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<TitleDTO> findTitle(TitleDTO titleDTO);

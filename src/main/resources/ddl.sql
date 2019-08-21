@@ -193,6 +193,24 @@ CREATE TABLE `job`.`sys_user_authority` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 
+CREATE TABLE `job`.`country` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(10) NOT NULL,
+  `description` VARCHAR(50) NOT NULL,
+  `status` INT NOT NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
+  INDEX `fk_country_status_idx` (`status` ASC),
+  CONSTRAINT `fk_country_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `job`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
+
 CREATE TABLE `job`.`password_policy` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `min_length` INT NOT NULL DEFAULT 0,
@@ -250,6 +268,7 @@ INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ASGNROLE','Assign System Role to Sys User','ROLE_ASGNROLE','/sysUserSysRole/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('MASTERDATA','Master Data Management','ROLE_MASTERDATA','/masterData/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERAUTHOR','Sys User Authority','ROLE_USERAUTHORITY','/sysUserAuthority/',1,1,'SYSTEM','SYSTEM');
+INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('COUNTRY','Country','ROLE_COUNTRY','/country/',1,1,'SYSTEM','SYSTEM');
 INSERT INTO `job`.`authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('PPOLICY','Password Policy','ROLE_PPOLICY','/passwordPolicy/',1,1,'SYSTEM','SYSTEM');
 
 

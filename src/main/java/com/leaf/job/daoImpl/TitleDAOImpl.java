@@ -93,7 +93,7 @@ public class TitleDAOImpl implements TitleDAO {
 	 */
 	@Override
 	public List<TitleEntity> findAllTitleEntities() {
-		List<TitleEntity> TitleEntities = null;
+		List<TitleEntity> titleEntities = null;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<TitleEntity> criteriaQuery = criteriaBuilder.createQuery(TitleEntity.class);
         Root<TitleEntity> root = criteriaQuery.from(TitleEntity.class);
@@ -103,12 +103,12 @@ public class TitleDAOImpl implements TitleDAO {
         );
 
         try {
-        	TitleEntities = entityManager.createQuery(criteriaQuery).getResultList();
+        	titleEntities = entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             System.err.println(e);
         }
         
-        return TitleEntities;
+        return titleEntities;
 	}
 	
 	
@@ -118,7 +118,7 @@ public class TitleDAOImpl implements TitleDAO {
 	 */
 	@Override
 	public List<TitleEntity> findAllTitleEntities(String statusCode){
-		List<TitleEntity> sysRoleEntities = null;
+		List<TitleEntity> titleEntities = null;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<TitleEntity> criteriaQuery = criteriaBuilder.createQuery(TitleEntity.class);
         Root<TitleEntity> root = criteriaQuery.from(TitleEntity.class);
@@ -128,12 +128,12 @@ public class TitleDAOImpl implements TitleDAO {
         );
 
         try {
-        	sysRoleEntities = entityManager.createQuery(criteriaQuery).getResultList();
+			titleEntities = entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             System.err.println(e);
         }
         
-        return sysRoleEntities;
+        return titleEntities;
 	}
 
 	/**

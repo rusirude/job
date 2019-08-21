@@ -29,6 +29,7 @@ public class StatusEntity {
 	private Set<AuthorityEntity> authorityEntities = new HashSet<>();
 	private Set<SectionEntity> sectionEntities = new HashSet<>();
 	private Set<TitleEntity> titleEntities = new HashSet<>();
+	private Set<CountryEntity> countryEntities = new HashSet<>();
 	private Set<PasswordPolicyEntity> passwordPolicyEntities = new HashSet<>();
 	
 	@Id
@@ -112,6 +113,15 @@ public class StatusEntity {
 
 	public void setTitleEntities(Set<TitleEntity> titleEntities) {
 		this.titleEntities = titleEntities;
+	}
+
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<CountryEntity> getCountryEntities() {
+		return countryEntities;
+	}
+
+	public void setCountryEntities(Set<CountryEntity> countryEntities) {
+		this.countryEntities = countryEntities;
 	}
 
 	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
