@@ -1,5 +1,6 @@
 package com.leaf.job.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,13 @@ public class MasterDataController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("masterData");
 		return mv;
+	}
+
+	@PreAuthorize("hasRole('ROLE_MASTERDATA')")
+	@RequestMapping(path = "/loadRefDataForMasterData", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<HashMap<String, Object>> loadMasterDataReferenceData() {
+		return masterDataService.getReferenceDataForMasterData();
 	}
 	
 	@PreAuthorize("hasRole('ROLE_MASTERDATA')")

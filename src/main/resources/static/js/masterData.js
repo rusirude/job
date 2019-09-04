@@ -1,5 +1,35 @@
 /*------------------------------------------- CRUD Functions ------------------*/
 
+var loadReferenceDataForMasterData = (callback)=>{
+	$.ajax({
+		type: "POST",
+		url: "/masterData/loadRefDataForMasterData",
+		contentType: "application/json",
+		dataType: "json",
+		success: function(data){
+
+			if(data.code === Constant.CODE_SUCCESS){
+				for(let c of data.data.countries){
+					$("#DEFAULT_COUNTRY").append(`<option value="${c.code}">${c.description}</option>`);
+				}
+
+				if(callback){
+					callback();
+				}
+			}
+			else{
+				alert("System Failer Occur....! :-(");
+			}
+
+
+		},
+		failure: function(errMsg) {
+			alert(errMsg);
+		}
+	});
+};
+
+
 var findExsistingDataForMasterData = ()=>{
 	let successFunction = (data)=>{
 		if(data.code === Constant.CODE_SUCCESS){			
@@ -36,7 +66,8 @@ var saveDataForMasterData = ()=>{
 		};
 		let data = [
 					{code:"DEFAULT_PASSWORD",value:$("#DEFAULT_PASSWORD").val()||""},
-					{code:"COMPANY_NAME",value:$("#COMPANY_NAME").val()||""}
+					{code:"COMPANY_NAME",value:$("#COMPANY_NAME").val()||""},
+					{code:"DEFAULT_COUNTRY",value:$("#DEFAULT_COUNTRY").val()||""}
 					];
 		let url = "/masterData/save";
 		let method = "POST";
@@ -77,7 +108,7 @@ var evenBinderForMasterData = ()=>{
 /*-------------------------------- Document Ready ----------------------*/
 
 
-$(document).ready(()=>{	
-	findExsistingDataForMasterData();
+$(document).ready(()=>{
+	loadReferenceDataForMasterData(findExsistingDataForMasterData);
 	evenBinderForMasterData();
 });

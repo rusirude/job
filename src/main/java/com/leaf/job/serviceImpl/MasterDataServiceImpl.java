@@ -1,8 +1,12 @@
 package com.leaf.job.serviceImpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.leaf.job.dao.CountryDAO;
+import com.leaf.job.dto.common.DropDownDTO;
+import com.leaf.job.enums.DefaultStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +23,39 @@ import com.leaf.job.utility.CommonMethod;
 public class MasterDataServiceImpl implements MasterDataService {
 	
 	private MasterDataDAO masterDataDAO;
+	private CountryDAO countryDAO;
 	private CommonMethod commonMethod;
 	
 	@Autowired
-	public MasterDataServiceImpl(MasterDataDAO masterDataDAO,CommonMethod commonMethod) {		
+	public MasterDataServiceImpl(MasterDataDAO masterDataDAO, CountryDAO countryDAO, CommonMethod commonMethod) {
 		this.masterDataDAO = masterDataDAO;
+		this.countryDAO = countryDAO;
 		this.commonMethod = commonMethod;
-	}	
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public ResponseDTO<HashMap<String, Object>> getReferenceDataForMasterData() {
+
+		HashMap<String, Object> map = new HashMap<>();
+		String code = ResponseCodeEnum.FAILED.getCode();
+		try {
+			List<DropDownDTO> countries = countryDAO.findAllCountryEntities(DefaultStatusEnum.ACTIVE.getCode())
+					.stream().map(c -> new DropDownDTO(c.getCode(), c.getDescription()))
+					.collect(Collectors.toList());
+
+			map.put("countries", countries);
+
+			code = ResponseCodeEnum.SUCCESS.getCode();
+		} catch (Exception e) {
+			System.err.println("Country Ref Data Issue");
+		}
+		return new ResponseDTO<HashMap<String, Object>>(code, map);
+	}
 	
 	/**
 	 * {@inheritDoc}
