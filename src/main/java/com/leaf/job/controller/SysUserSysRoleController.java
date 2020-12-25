@@ -28,7 +28,7 @@ public class SysUserSysRoleController {
 		this.sysUserSysRoleService = sysUserSysRoleService;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ASGNROLE')")
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public ModelAndView viewSysUserSysRole() {
 		ModelAndView mv = new ModelAndView();
@@ -36,7 +36,7 @@ public class SysUserSysRoleController {
 		return mv;
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ASGNROLE')")
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/loadRefDataForSysUserSysRole", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<HashMap<String, Object>> loadSysUserSysRoleRefereceData() {
@@ -44,21 +44,21 @@ public class SysUserSysRoleController {
 	}
 
 		
-	@PreAuthorize("hasRole('ROLE_ASGNROLE')")
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/loadSysRolesForSysUser", method = RequestMethod.POST)
 	@ResponseBody
 	public DataTableResponseDTO loadSysRolesForSysUser(@RequestBody SysUserDTO sysUserDTO) {
 		return sysUserSysRoleService.getSysUserSysRoleForSysUser(sysUserDTO);
 	}		
 
-	@PreAuthorize("hasRole('ROLE_ASGNROLE')")
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/save", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<SysUserSysRoleDTO> saveSysUserSysRole(@RequestBody SysUserSysRoleDTO sysUserSysRoleDTO) {
 		return sysUserSysRoleService.saveSysUserSysRole(sysUserSysRoleDTO);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ASGNROLE')")
+	@PreAuthorize("hasRole('ROLE_USERROLE')")
 	@RequestMapping(path = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseDTO<SysUserSysRoleDTO> deleteSysUserSysRole(@RequestBody SysUserSysRoleDTO sysUserSysRoleDTO) {
