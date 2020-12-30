@@ -20,6 +20,12 @@ public class CommonConstant {
 
     public static final String DEFAULT_STATUS_ACTIVE = "ACTIVE";
     public static final String DEFAULT_STATUS_INACTIVE = "INACTIVE";
+
+
+        /*------------ Password reset Request Status Code -------------------*/
+
+    public static final String PASSWORD_REST_REQUEST_STATUS_ACTIVE = "REQUEST";
+    public static final String PASSWORD_REST_REQUEST_STATUS_INACTIVE = "PRESET";
     
     /*------------ Grid Search Type -------------------*/
 

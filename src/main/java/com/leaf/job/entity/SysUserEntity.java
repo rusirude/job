@@ -20,6 +20,7 @@ public class SysUserEntity extends CommonEntity{
 	private TitleEntity titleEntity;
 	private String name;
 	private StatusEntity statusEntity;
+	private Boolean resetRequest;
 	
 	private Set<SysUserSysRoleEntity> sysUserSysRoleEntities = new HashSet<>();
 	
@@ -66,7 +67,16 @@ public class SysUserEntity extends CommonEntity{
 	public StatusEntity getStatusEntity() {
 		return statusEntity;
 	}
-	
+
+	@Column(name  = "reset_password", nullable = false)
+	public Boolean getResetRequest() {
+		return resetRequest;
+	}
+
+	public void setResetRequest(Boolean resetRequest) {
+		this.resetRequest = resetRequest;
+	}
+
 	public void setStatusEntity(StatusEntity statusEntity) {
 		this.statusEntity = statusEntity;
 	}

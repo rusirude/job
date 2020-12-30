@@ -53,14 +53,14 @@ public class DashboardServiceImpl implements DashboardService {
         if (! sysRoles.isEmpty()) {
             sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRolesAndAnuthorityStatusAndSysRoleStatus(sysRoles, DefaultStatusEnum.ACTIVE.getCode(),DefaultStatusEnum.ACTIVE.getCode())
                     .stream()
+                    .filter(sysRoleAuthorityEntity -> DefaultStatusEnum.ACTIVE.getCode().equalsIgnoreCase(sysRoleAuthorityEntity.getAuthorityEntity().getSectionEntity().getStatusEntity().getCode()))
                     .forEach(roleAuthority -> {
-                        String key = roleAuthority.getAuthorityEntity().getSectionEntity().getCode()+"-"+roleAuthority.getAuthorityEntity().getSectionEntity().getDescription();
-                        if(! menuMap.containsKey(key)){
+                        String key = roleAuthority.getAuthorityEntity().getSectionEntity().getCode() + "-" + roleAuthority.getAuthorityEntity().getSectionEntity().getDescription();
+                        if (!menuMap.containsKey(key)) {
                             Set<AuthorityEntity> set = new HashSet<>();
                             set.add(roleAuthority.getAuthorityEntity());
                             menuMap.put(key, set);
-                        }
-                        else{
+                        } else {
                             menuMap.get(key).add(roleAuthority.getAuthorityEntity());
                         }
                     });
@@ -68,28 +68,26 @@ public class DashboardServiceImpl implements DashboardService {
 
         sysUserAuthorityDAO.getSysUserAuthorityEntitiesBySysUser(user.getUsername())
                 .stream()
+                .filter(userAuthority -> DefaultStatusEnum.ACTIVE.getCode().equalsIgnoreCase(userAuthority.getAuthorityEntity().getSectionEntity().getStatusEntity().getCode()))
                 .forEach(userAuthority -> {
-                    String key = userAuthority.getAuthorityEntity().getSectionEntity().getCode()+"-"+userAuthority.getAuthorityEntity().getSectionEntity().getDescription();
+                    String key = userAuthority.getAuthorityEntity().getSectionEntity().getCode() + "-" + userAuthority.getAuthorityEntity().getSectionEntity().getDescription();
 
                     long isEnabled = userAuthority.getIsGrant();
-                    if(isEnabled == 1) {
-                        if(! menuMap.containsKey(key)){
+                    if (isEnabled == 1) {
+                        if (!menuMap.containsKey(key)) {
                             Set<AuthorityEntity> set = new HashSet<>();
                             set.add(userAuthority.getAuthorityEntity());
                             menuMap.put(key, set);
-                        }
-                        else{
+                        } else {
                             menuMap.get(key).add(userAuthority.getAuthorityEntity());
                         }
-                    }
-                    else {
-                        if(menuMap.containsKey(key)){
+                    } else {
+                        if (menuMap.containsKey(key)) {
                             menuMap.get(key).remove(userAuthority.getAuthorityEntity());
                         }
                     }
 
                 });
-
 
 
         List<MenuSectionDTO> sectionDTOs = menuMap.entrySet()

@@ -3,6 +3,7 @@ package com.leaf.job.serviceImpl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,11 +70,11 @@ public class SysUserServiceImpl implements SysUserService {
 	@Transactional
 	public ResponseDTO<SysUserDTO> saveSysUser(SysUserDTO sysUserDTO){
 		String code = ResponseCodeEnum.FAILED.getCode();
-		String description = "User Save Faield";
+		String description = "User Save Failed";
 		SysUserEntity sysUserEntity;
 		try {
 			sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());
-			MasterDataEntity defaultPasswordMasterDataEntity = masterDataDAO.loadMasterDataEntity(MasterDataEnum.DEFAULT_PASSWORD.getCode());
+			MasterDataEntity defaultPasswordMasterDataEntity = Optional.ofNullable(masterDataDAO.loadMasterDataEntity(MasterDataEnum.DEFAULT_PASSWORD.getCode())).orElse(new MasterDataEntity());
 			
 			if(sysUserEntity == null){
 				sysUserEntity = new SysUserEntity();
@@ -82,10 +83,11 @@ public class SysUserServiceImpl implements SysUserService {
 				StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysUserDTO.getStatusCode());
 				
 				sysUserEntity.setUsername(sysUserDTO.getUsername());
-				sysUserEntity.setPassword(bCryptPasswordEncoder.encode(defaultPasswordMasterDataEntity.getValue()));
+				sysUserEntity.setPassword(bCryptPasswordEncoder.encode(Optional.ofNullable(defaultPasswordMasterDataEntity.getValue()).orElse("")));
 				sysUserEntity.setTitleEntity(titleEntity);
 				sysUserEntity.setName(sysUserDTO.getName());
 				sysUserEntity.setStatusEntity(statusEntity);
+				sysUserEntity.setResetRequest(false);
 				
 				commonMethod.getPopulateEntityWhenInsert(sysUserEntity);
 				
@@ -97,7 +99,7 @@ public class SysUserServiceImpl implements SysUserService {
 			}
 			
 			else {
-				description = "Username is not Avaialble in the System";
+				description = "Username is not Available in the System";
 			}
 		}
 		catch(Exception e) {
@@ -114,7 +116,7 @@ public class SysUserServiceImpl implements SysUserService {
 	public ResponseDTO<SysUserDTO> updateSysUser(SysUserDTO sysUserDTO) {
 		
 		String code = ResponseCodeEnum.FAILED.getCode();
-		String description = "User Update Faield";
+		String description = "User Update Failed";
 		try {
 			TitleEntity titleEntity = titleDAO.findTitleEntityByCode(sysUserDTO.getTitleCode());
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(sysUserDTO.getStatusCode());
@@ -145,7 +147,7 @@ public class SysUserServiceImpl implements SysUserService {
 	@Transactional
 	public ResponseDTO<SysUserDTO> deleteSysUser(SysUserDTO sysUserDTO) {
 		String code = ResponseCodeEnum.FAILED.getCode();
-		String description = "User Delete Faield";
+		String description = "User Delete Failed";
 		try {
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());			
 

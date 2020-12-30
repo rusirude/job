@@ -12,28 +12,28 @@ public interface SysUserService {
 	
 	/**
 	 * Save System User
-	 * @param SysUserDTO
+	 * @param sysUserDTO
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SysUserDTO> saveSysUser(SysUserDTO sysUserDTO);
 	
 	/**
 	 * Update System User
-	 * @param SysUserDTO
+	 * @param sysUserDTO
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SysUserDTO> updateSysUser(SysUserDTO sysUserDTO);
 	
 	/**
 	 * Delete System User
-	 * @param SysUserDTO - username 
+	 * @param sysUserDTO - username
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SysUserDTO> deleteSysUser(SysUserDTO sysUserDTO);
 	
 	/**
 	 * Find System User By username
-	 * @param SysUserDTO - username 
+	 * @param sysUserDTO - username
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SysUserDTO> findSysUser(SysUserDTO sysUserDTO);

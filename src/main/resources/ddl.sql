@@ -65,6 +65,7 @@ CREATE TABLE `job`.`sys_user` (
   `title` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `status` INT NOT NULL,
+  `reset_password` TINYINT NOT NULL DEFAULT 0,
   `created_by` VARCHAR(25) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(25) NOT NULL,
@@ -232,13 +233,42 @@ CREATE TABLE `job`.`password_policy` (
     REFERENCES `job`.`status` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
+
+
+
+
+CREATE TABLE `job`.`password_reset_request` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `sys_user` VARCHAR(25) NOT NULL,
+  `status` INT NOT NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_password_reset_request_status_idx` (`status` ASC),
+  CONSTRAINT `fk_password_reset_request_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `job`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fx_password_reset_request_sys_user_idx` (`sys_user` ASC),
+  CONSTRAINT `fk_password_reset_request_sys_user`
+    FOREIGN KEY (`sys_user`)
+    REFERENCES `job`.`sys_user` (`username`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+);
     
 INSERT INTO `job`.`status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
 INSERT INTO `job`.`status_category` (`code`,`description`) VALUES ('DELETE','Delete');
+INSERT INTO `job`.`status_category` (`code`,`description`) VALUES ('PASREREQ','Password Reset Request');
 
 INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('ACTIVE','Active',1);
 INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('INACTIVE','Inactive',1);
 INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('DELETE','Delete',2);
+INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('REQUEST','Requested',3);
+INSERT INTO `job`.`status` (`code`,`description`,`status_category`) VALUES ('PRESET','Password Reset',3);
 
 INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('USER_MGT_S','User Management',1,'SYSTEM','SYSTEM');
 INSERT INTO  `job`.`section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('REF_MGT_S','Reference Data Management',1,'SYSTEM','SYSTEM');
