@@ -31,7 +31,11 @@ public class StatusEntity {
 	private Set<TitleEntity> titleEntities = new HashSet<>();
 	private Set<CountryEntity> countryEntities = new HashSet<>();
 	private Set<PasswordPolicyEntity> passwordPolicyEntities = new HashSet<>();
-	
+	private Set<ExaminationEntity> examinationEntities = new HashSet<>();
+	private Set<QuestionAnswerEntity> questionAnswerEntities = new HashSet<>();
+	private Set<QuestionEntity> questionEntities = new HashSet<>();
+	private Set<QuestionCategoryEntity> questionCategoryEntities = new HashSet<>();
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
@@ -131,5 +135,41 @@ public class StatusEntity {
 
 	public void setPasswordPolicyEntities(Set<PasswordPolicyEntity> passwordPolicyEntities) {
 		this.passwordPolicyEntities = passwordPolicyEntities;
+	}
+
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<ExaminationEntity> getExaminationEntities() {
+		return examinationEntities;
+	}
+
+	public void setExaminationEntities(Set<ExaminationEntity> examinationEntities) {
+		this.examinationEntities = examinationEntities;
+	}
+
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<QuestionAnswerEntity> getQuestionAnswerEntities() {
+		return questionAnswerEntities;
+	}
+
+	public void setQuestionAnswerEntities(Set<QuestionAnswerEntity> questionAnswerEntities) {
+		this.questionAnswerEntities = questionAnswerEntities;
+	}
+
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<QuestionEntity> getQuestionEntities() {
+		return questionEntities;
+	}
+
+	public void setQuestionEntities(Set<QuestionEntity> questionEntities) {
+		this.questionEntities = questionEntities;
+	}
+
+	@OneToMany(mappedBy = "statusEntity", fetch = FetchType.LAZY)
+	public Set<QuestionCategoryEntity> getQuestionCategoryEntities() {
+		return questionCategoryEntities;
+	}
+
+	public void setQuestionCategoryEntities(Set<QuestionCategoryEntity> questionCategoryEntities) {
+		this.questionCategoryEntities = questionCategoryEntities;
 	}
 }
