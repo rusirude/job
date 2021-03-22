@@ -305,7 +305,12 @@ public class QuestionServiceImpl implements QuestionService {
 					.getStatusEntities().stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 
+			List<DropDownDTO> questionCategory = questionCategoryDAO.findAllQuestionCategoryEntities(DefaultStatusEnum.ACTIVE.getCode())
+					.stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.collect(Collectors.toList());
+
 			map.put("status", status);
+			map.put("questionCategory", questionCategory);
 
 			code = ResponseCodeEnum.SUCCESS.getCode();
 		} catch (Exception e) {
