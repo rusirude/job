@@ -343,6 +343,7 @@ CREATE TABLE `exam`.`examination` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
+  `question_category` INT NOT NULL,
   `status` INT NOT NULL,
   `effective_on` DATETIME NULL,
   `expier_on` DATETIME  NULL,
@@ -352,6 +353,12 @@ CREATE TABLE `exam`.`examination` (
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
+  INDEX `fk_examination_question_category_idx` (`status` ASC),
+  CONSTRAINT `fk_examination_question_category`
+    FOREIGN KEY (`question_category`)
+    REFERENCES `exam`.`question_category` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
   INDEX `fk_examination_status_idx` (`status` ASC),
   CONSTRAINT `fk_examination_status`
     FOREIGN KEY (`status`)

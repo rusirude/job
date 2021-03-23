@@ -1,0 +1,79 @@
+package com.leaf.job.controller;
+
+import com.leaf.job.dto.ExaminationDTO;
+import com.leaf.job.dto.common.DataTableRequestDTO;
+import com.leaf.job.dto.common.DataTableResponseDTO;
+import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.service.ExaminationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+
+@Controller
+@RequestMapping(path = "/examination")
+public class ExaminationController {
+
+	private ExaminationService examinationService;
+
+	@Autowired
+	public ExaminationController(ExaminationService examinationService) {
+		this.examinationService = examinationService;
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/", method = RequestMethod.GET)
+	public ModelAndView viewExamination() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("examination");
+		return mv;
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/loadRefDataForExamination", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<HashMap<String, Object>> loadExaminationReferenceData() {
+		return examinationService.getReferenceDataForExamination();
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/save", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> saveExamination(@RequestBody ExaminationDTO examinationDTO) {
+		return examinationService.saveExamination(examinationDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> updateExamination(@RequestBody ExaminationDTO examinationDTO) {
+		return examinationService.updateExamination(examinationDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> deleteExamination(@RequestBody ExaminationDTO examinationDTO) {
+		return examinationService.deleteExamination(examinationDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/loadQuestionCategories", method = RequestMethod.POST)
+	@ResponseBody
+	public DataTableResponseDTO loadExaminationDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
+		return examinationService.getExaminationsForDataTable(dataTableRequestDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
+	@RequestMapping(path = "/loadExaminationByCode", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<ExaminationDTO> loadExaminationByCode(@RequestBody ExaminationDTO examinationDTO) {
+		return examinationService.findExamination(examinationDTO);
+	}
+}

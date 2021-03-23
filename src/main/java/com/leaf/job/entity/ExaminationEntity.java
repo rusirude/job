@@ -10,7 +10,8 @@ public class ExaminationEntity extends CommonEntity{
 	private Long id;
     private String code;
 	private String description;
-    private StatusEntity statusEntity;
+	private QuestionCategoryEntity questionCategoryEntity;
+	private StatusEntity statusEntity;
 	private Date effectiveOn;
 	private Date expireOn;
 
@@ -42,7 +43,17 @@ public class ExaminationEntity extends CommonEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name =  "question_category" , nullable = false)
+	public QuestionCategoryEntity getQuestionCategoryEntity() {
+		return questionCategoryEntity;
+	}
+
+	public void setQuestionCategoryEntity(QuestionCategoryEntity questionCategoryEntity) {
+		this.questionCategoryEntity = questionCategoryEntity;
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name =  "status" , nullable = false)
 	public StatusEntity getStatusEntity() {
