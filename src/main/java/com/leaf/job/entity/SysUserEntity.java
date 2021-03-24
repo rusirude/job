@@ -21,7 +21,8 @@ public class SysUserEntity extends CommonEntity{
 	private String name;
 	private StatusEntity statusEntity;
 	private Boolean resetRequest;
-	
+	private Boolean student;
+
 	private Set<SysUserSysRoleEntity> sysUserSysRoleEntities = new HashSet<>();
 	
 	@Id
@@ -75,6 +76,15 @@ public class SysUserEntity extends CommonEntity{
 
 	public void setResetRequest(Boolean resetRequest) {
 		this.resetRequest = resetRequest;
+	}
+
+	@Column(name  = "student", nullable = false)
+	public Boolean getStudent() {
+		return student;
+	}
+
+	public void setStudent(Boolean student) {
+		this.student = student;
 	}
 
 	public void setStatusEntity(StatusEntity statusEntity) {

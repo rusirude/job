@@ -11,6 +11,7 @@ public class CommonConstant {
 
     public static final String STATUS_CATEGORY_DEFAULT = "DEFAULT";
     public static final String STATUS_CATEGORY_DELETE = "DELETE";
+    public static final String STATUS_CATEGORY_EXAM = "EXAM";
 
      /*------------ Delete Status Code -------------------*/
 
@@ -21,8 +22,13 @@ public class CommonConstant {
     public static final String DEFAULT_STATUS_ACTIVE = "ACTIVE";
     public static final String DEFAULT_STATUS_INACTIVE = "INACTIVE";
 
+    /*------------ Exam Status Code -------------------*/
 
-        /*------------ Password reset Request Status Code -------------------*/
+    public static final String EXAM_STATUS_PENDING = "PENDING";
+    public static final String EXAM_STATUS_START = "START";
+
+
+    /*------------ Password reset Request Status Code -------------------*/
 
     public static final String PASSWORD_REST_REQUEST_STATUS_ACTIVE = "REQUEST";
     public static final String PASSWORD_REST_REQUEST_STATUS_INACTIVE = "PRESET";

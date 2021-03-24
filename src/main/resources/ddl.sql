@@ -65,6 +65,7 @@ CREATE TABLE `exam`.`sys_user` (
   `title` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `status` INT NOT NULL,
+  `student` BOOLEAN DEFAULT FALSE,
   `reset_password` TINYINT NOT NULL DEFAULT 0,
   `created_by` VARCHAR(25) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -361,6 +362,51 @@ CREATE TABLE `exam`.`examination` (
     ON UPDATE CASCADE,
   INDEX `fk_examination_status_idx` (`status` ASC),
   CONSTRAINT `fk_examination_status`
+    FOREIGN KEY (`status`)
+    REFERENCES `exam`.`status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `exam`.`student` (
+  `username` VARCHAR(25) NOT NULL,
+  `dob` DATETIME NULL,
+  `email` VARCHAR(100) NULL,
+  `telephone` VARCHAR(100) NULL,
+  `effective_on` DATETIME NULL,
+  `expier_on` DATETIME  NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`username`));
+
+CREATE TABLE `exam`.`student_examination` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `student` VARCHAR(25) NOT NULL,
+  `examination` INT NOT NULL,
+  `status` INT NOT NULL,
+  `strat_on` DATETIME NULL,
+  `end_on` DATETIME NULL,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_student_examination_student_idx` (`student` ASC),
+  CONSTRAINT `fk_student_examination_student`
+    FOREIGN KEY (`student`)
+    REFERENCES `exam`.`sys_user` (`username`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_examination_idx` (`examination` ASC),
+  CONSTRAINT `fk_student_examination_examination`
+    FOREIGN KEY (`examination`)
+    REFERENCES `exam`.`examination` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_status_idx` (`status` ASC),
+  CONSTRAINT `fk_student_examination_status`
     FOREIGN KEY (`status`)
     REFERENCES `exam`.`status` (`id`)
     ON DELETE RESTRICT

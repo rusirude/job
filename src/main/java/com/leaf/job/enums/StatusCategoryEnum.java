@@ -5,6 +5,7 @@ import com.leaf.job.utility.CommonConstant;
 public enum StatusCategoryEnum {
 	
 	DEFAULT(CommonConstant.STATUS_CATEGORY_DEFAULT),
+	EXAM(CommonConstant.STATUS_CATEGORY_EXAM),
     DELETE(CommonConstant.STATUS_CATEGORY_DELETE);
 
 
@@ -22,6 +23,8 @@ public enum StatusCategoryEnum {
         switch (code){
             case CommonConstant.STATUS_CATEGORY_DEFAULT:
                 return DEFAULT;
+            case CommonConstant.STATUS_CATEGORY_EXAM:
+                return EXAM;
             default:
                 return DELETE;
         }
