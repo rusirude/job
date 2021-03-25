@@ -1,82 +1,62 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<link href="/css/config/icon.css" rel="stylesheet"/>	
-		<link rel="stylesheet" href="/css/config/material.min.css"/>
-		<link rel="stylesheet" href="/css/config/material.blue-yellow.min.css"/>
-		<link rel="stylesheet" href="/css/config/dataTables.material.min.css"/>		
-		<script src="/js/config/jquery-3.3.1.min.js"></script>		
-		<title>Job</title>
-	</head>
-	<body>
-		<div class="mdl-layout__container">
-			<div class="mdl-layout mdl-js-layout">
-				<!--<header class="mdl-layout__header mdl-layout__header&#45;&#45;scroll">-->
-					<!--<div class="mdl-layout__header-row">-->
-						<!--<div class="mdl-layout-spacer"></div>-->
-					<!--</div>-->
-				<!--</header>-->
-				<main class="mdl-layout__content">
-					<div class="page-content">
-						<div class="mdl-grid"></div>
-						<div class="mdl-grid">
-							<div class="mdl-cell mdl-cell--12-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop">
-								<div style="text-align: center;margin-top: 6%">
-									<img src="/images/init.svg"/>
-								</div>
-							</div>
-							<div class="mdl-cell mdl-cell--12-col-phone mdl-cell--4-col-tablet mdl-cell--4-col-desktop">
-								<div class="mdl-cell mdl-cell--12-col">
-									<form action="/login" method="POST">							
-										<div class="mdl-card mdl-shadow--2dp mdl-cell--12-col-desktop">
-											<div class="mdl-card__title">
-												<h2 class="mdl-card__title-text">Sign In</h2>
-											</div>
-											<div class="mdl-card__supporting-text">
-												<div class="mdl-grid" th:if="${param.error}" style="background-color: red">
-													<h4 class="mdl-card__title-text"  th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" style="color: white"></h4>
-												</div>
-												<div class="mdl-grid">
-													<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-														<input id="username" name="username" type="text" class="mdl-textfield__input"/>
-														<label class="mdl-textfield__label" for="username">Username</label>
-														<span class="mdl-textfield__error">Letters and spaces only</span>
-													</div>
-												</div>
-												<div class="mdl-grid">
-													<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-														<input id="password" name="password" type="password" class="mdl-textfield__input"/>
-														<label class="mdl-textfield__label" for="password">Password</label>
-														<span class="mdl-textfield__error">Letters and spaces only</span>
-													</div>
-												</div>										
-											</div>
-											<div class="mdl-card__actions mdl-card--border">
-												<div class="mdl-grid">
-													<div class="mdl-cell mdl-cell--12-col-phone mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-														<button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Sign In</button>
-														<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent" onclick="location.href = 'forgotPassword'">Forgot Password</button>
-													</div>
-												</div>
-											</div>
-										</div>							
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</main>
-	            <footer class="mdl-mini-footer">
-                </footer>
-			</div>
-		</div>
-		
-		<script type="text/javascript" src="/js/config/jquery.dataTables.min.js"></script>
-	   	<script type="text/javascript" src="/js/config/material.min.js"></script> 
-		<script type="text/javascript" src="/js/config/dataTables.material.min.js"></script>
-		<script type="text/javascript" src="/js/login.js"></script>
-		
-	</body>
-</html>
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>e-examen</title> 
+    <link rel="stylesheet" href="/css/config/fonts.css"/>
+    <link rel="stylesheet" href="/css/config/all.min.css"/>
+    <link rel="stylesheet" href="/css/config/icheck-bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/config/adminlte.min.css"/>
+     
+</head>
+ 
+<body class="hold-transition login-page"> 
+<div class="login-box"> 
+    <div class="login-logo">  <a href="#"><b>e-</b>examen</a> </div>
+     
+    <div class="card"> 
+        <div class="card-body login-card-body">  <p class="login-box-msg">Sign in to start your session</p>  
+            <form action="/login" method="post"> 
+                <div class="input-group mb-3">  <input name="username" type="text" class="form-control"
+                                                       placeholder="Username"/>  
+                    <div class="input-group-append"> 
+                        <div class="input-group-text">  <span class="fas fa-user"></span> </div>
+                         
+                    </div>
+                     
+                </div>
+                 
+                <div class="input-group mb-3">  <input name="password" type="password" class="form-control"
+                                                       placeholder="Password"/>  
+                    <div class="input-group-append"> 
+                        <div class="input-group-text">  <span class="fas fa-lock"></span> </div>
+                         
+                    </div>
+                     
+                </div>
+                 
+                <div class="row"> 
+                    <div class="col-8">  <a href="forgot-password.html">I forgot my password</a> </div>
+                      
+                    <div class="col-4"> 
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                         
+                    </div>
+                     
+                </div>
+                 
+            </form>
+             
+        </div>
+         
+    </div>
+     
+</div>
+  
+<script src="/js/config/jquery.min.js"></script>
+<script src="/js/config/bootstrap.bundle.min.js"></script>
+<script src="/js/config/adminlte.min.js"></script>
+</body>
+ 
+</html> 

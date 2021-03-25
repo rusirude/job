@@ -16,11 +16,10 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     	registry.addResourceHandler(                
                 "/images/**",
                 "/css/**",
-                "/fonts/**",
                 "/js/**")
                 .addResourceLocations(            
-                		"classpath:/static/images/",
-                		"classpath:/static/css/fonts/roboto",                		
+                		"classpath:/static/images",
+                        "classpath:/static/css",
                         "classpath:/static/css/config",
                         "classpath:/static/js",
                         "classpath:/static/js/config");
