@@ -152,39 +152,36 @@ var loadSysRoleTable = ()=>{
                                 return JSON.stringify(createCommonDataTableRequset(d));
                     		}
                         },
+						paging: true,
+						lengthChange: false,
+						searching: true,
+						ordering: true,
+						info: true,
+						autoWidth: false,
+						responsive: true,
                         processing: true,
                         serverSide: true,
-                        drawCallback: function( settings ) {
-                        	componentHandler.upgradeDom();
-                        },
-                        scrollY:        true,
-                        scrollX:        true,
-                        scrollCollapse: true,
-                        paging:         true,
-                        pagingType: "full_numbers",
                         columns: [
-                            { data: "code"                ,name:"code"                ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "description"         ,name:"description"         ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "statusDescription"   ,name:"status"              ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "createdBy"           ,name:"createdBy"           ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "createdOn"           ,name:"createdOn"           ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "updatedBy"           ,name:"updatedBy"           ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "updatedOn"           ,name:"updatedOn"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "code"                ,name:"code"                },
+                            { data: "code"                ,name:"code"                },
+                            { data: "code"                ,name:"code"                },
+                            { data: "code"                ,name:"code"                },
+                            { data: "description"         ,name:"description"         },
+                            { data: "statusDescription"   ,name:"status"              },
+                            { data: "createdBy"           ,name:"createdBy"           },
+                            { data: "createdOn"           ,name:"createdOn"           },
+                            { data: "updatedBy"           ,name:"updatedBy"           },
+                            { data: "updatedOn"           ,name:"updatedOn"           },
                             {
                             	data: "code",
-                            	class:"mdl-data-table__cell--non-numeric",
                             	render: function (data, type, full) {
-		                            		return `<button onClick="updateIconClickForSysRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-update-${data}" class="material-icons">create</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
-														Update
-													  </div>
+
+
+		                            		return `<button onClick="updateIconClickForSysRole('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
+														<i class="fa fa-pencil-alt"></i>
 													</button>
-													<button onClick="deleteIconClickForSysRole('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-delete-${data}" class="material-icons">delete</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
-														Delete
-													  </div>
+													<button onClick="deleteIconClickForSysRole('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
+														<i class="fa fa-trash-alt"></i>
 													</button>`;
 		                            	}
                     		}
@@ -289,12 +286,16 @@ var evenBinderForSysRole = ()=>{
 
 $(document).ready(()=>{	
 
- 	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 		
-	};	
-	loadReferenceDataForSysRole(_callback_1);
-	evenBinderForSysRole();
+ 	//let _callback_1 = ()=>{
+ 	//	componentHandler.upgradeDom();
+	//};
+	//loadReferenceDataForSysRole(_callback_1);
+	//evenBinderForSysRole();
 	loadSysRoleTable();
+
+	sysRoleTable.on( 'buttons-action', function ( e, buttonApi, dataTable, node, config ) {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
 	 
 
 });

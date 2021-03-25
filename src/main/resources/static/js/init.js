@@ -3,7 +3,6 @@ $(document).ready(()=>{
 	app = application.getInstance();
 	app.next('/dashBoard/');
 	loadMainMenu();
-	componentHandler.upgradeDom();
 });
 
 var loadMainMenu = (callback)=>{
@@ -18,12 +17,31 @@ var loadMainMenu = (callback)=>{
 
 			if(data.menuSectionDTOs && (data.menuSectionDTOs).length){
 				for(let section of data.menuSectionDTOs){
-					menuList += `<a class="mdl-navigation__link" style="color: #0091ea" href="#">${section.description}</a>`;
+
+
+					menuList += `<li class="nav-item">
+									<a href="#" class="nav-link">
+									  <i class="nav-icon fas fa-edit"></i>
+									  <p>
+										${section.description}
+										<i class="fas fa-angle-left right"></i>
+									  </p>
+									</a>`;
+
 					if(section.menuDTOs && (section.menuDTOs).length){
+						menuList += '<ul class="nav nav-treeview">';
 						for(let menu of section.menuDTOs){
-							menuList += `<a class="mdl-navigation__link" href="Javascript:loadPage('${menu.url}')">${menu.description}</a>`;
+							menuList += `<li class="nav-item">
+											<a href="Javascript:loadPage('${menu.url}')" class="nav-link">
+												<i class="far fa-circle nav-icon"></i>
+												<p>${menu.description}</p>
+											</a>
+										</li>`;
 						}
+						menuList += '</ul>';
 					}
+
+					menuList += `</li>`;
 				}
 			}
 
