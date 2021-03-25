@@ -163,9 +163,6 @@ var loadSysRoleTable = ()=>{
                         serverSide: true,
                         columns: [
                             { data: "code"                ,name:"code"                },
-                            { data: "code"                ,name:"code"                },
-                            { data: "code"                ,name:"code"                },
-                            { data: "code"                ,name:"code"                },
                             { data: "description"         ,name:"description"         },
                             { data: "statusDescription"   ,name:"status"              },
                             { data: "createdBy"           ,name:"createdBy"           },
