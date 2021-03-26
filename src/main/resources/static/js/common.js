@@ -37,21 +37,18 @@ var createCommonDataTableRequset = (inputObj)=>{
 
 
 var FormTransition = (function () {
-	function openForm(formId,tableId){
-		$(formId).show('fast');
-		$(tableId).hide('fast');
-
-	};
-	function closeForm(formId,tableId){
-		$(formId).hide('fast');
-		$(tableId).show('fast');
-	};
+	function openModal(formId){
+		$(formId).modal('show');
+	}
+	function closeModal(formId,tableId){
+		$(formId).modal('hide');
+	}
 	return {
-		openForm: function(formId,tableId){
-			openForm(formId,tableId);
+		openModal: function(formId,tableId){
+			openModal(formId,tableId);
 		},
-		closeForm:function(formId,tableId){
-			closeForm(formId,tableId);
+		closeModal:function(formId,tableId){
+			closeModal(formId,tableId);
 		}
 
 	}

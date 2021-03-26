@@ -85,7 +85,6 @@ var findDetailByCodeForSysRole = (code,callback)=>{
 		if(data.code === Constant.CODE_SUCCESS){			
 			if(callback){
 				callback(data.data);
-				componentHandler.upgradeDom();
 			}
 		}
 		else{
@@ -106,9 +105,9 @@ var findDetailByCodeForSysRole = (code,callback)=>{
 
 var populateFormForSysRole = (data) => {
 	if(data){
-		$("#code")[0].parentElement.MaterialTextfield.change(data.code || "");
-		$("#description")[0].parentElement.MaterialTextfield.change(data.description || "");
-		$("#status")[0].parentElement.MaterialSelectfield.change(data.statusCode || "");
+		$("#code").val(data.code || "");
+		$("#description").val(data.description || "");
+		$("#status").val(data.statusCode || "");
 	}	
 };
 
@@ -172,8 +171,6 @@ var loadSysRoleTable = ()=>{
                             {
                             	data: "code",
                             	render: function (data, type, full) {
-
-
 		                            		return `<button onClick="updateIconClickForSysRole('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
 														<i class="fa fa-pencil-alt"></i>
 													</button>
@@ -197,20 +194,19 @@ var clearDataForSysRole = ()=>{
 
 	$("#formHeading").html("");
 	
-	code[0].parentElement.MaterialTextfield.enable();
-	description[0].parentElement.MaterialTextfield.enable();
-	status[0].parentElement.MaterialSelectfield.enable();
+	code.prop("disabled",false);
+	description.prop("disabled",false);
+	status.prop("disabled",false);
 
 	InputsValidator.removeInlineValidation(code);
 	InputsValidator.removeInlineValidation(description);
 	InputsValidator.removeInlineValidation(status);
 	
-	code[0].parentElement.MaterialTextfield.change("");
-	description[0].parentElement.MaterialTextfield.change("");
+	code.val("");
+	description.val("");
 	status.val("");
-	status[0].parentElement.MaterialSelectfield.change("");
 
-	FormTransition.closeForm('#sysRoleForm','#sysRoleGrid');
+	FormTransition.closeModal('#sysRoleModal');
 	
 };
 
@@ -219,18 +215,19 @@ var clearDataForSysRole = ()=>{
 var clickAddForSysRole = ()=>{
 	clearDataForSysRole();
 	$("#formHeading").html("Add System Role");
-	FormTransition.openForm('#sysRoleForm','#sysRoleGrid');
+	FormTransition.openModal('#sysRoleModal');
 };
 
 var updateIconClickForSysRole = (code)=>{
+	console.log(code);
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
 		populateFormForSysRole(data);
-		$("#code")[0].parentElement.MaterialTextfield.disable();
+		$("#code").prop("disabled",true);
 		$("#formHeading").html("Update System Role");
-		FormTransition.openForm('#sysRoleForm','#sysRoleGrid');
+		FormTransition.openModal('#sysRoleModal');
 	};
 	clearDataForSysRole();
 	findDetailByCodeForSysRole(code,_sF);
@@ -242,11 +239,11 @@ var deleteIconClickForSysRole = (code)=>{
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
 		populateFormForSysRole(data);
-		$("#code")[0].parentElement.MaterialTextfield.disable();
-		$("#description")[0].parentElement.MaterialTextfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		$("#code").prop("disabled",true);
+		$("#description").prop("disabled",true);
+		$("#status").prop("disabled",true);
 		$("#formHeading").html("Delete System Role");
-		FormTransition.openForm('#sysRoleForm','#sysRoleGrid');
+		FormTransition.openModal('#sysRoleModal');
 	};
 	clearDataForSysRole();
 	findDetailByCodeForSysRole(code,_sF);
@@ -281,18 +278,8 @@ var evenBinderForSysRole = ()=>{
 /*-------------------------------- Document Ready ----------------------*/
 
 
-$(document).ready(()=>{	
-
- 	//let _callback_1 = ()=>{
- 	//	componentHandler.upgradeDom();
-	//};
-	//loadReferenceDataForSysRole(_callback_1);
-	//evenBinderForSysRole();
+$(document).ready(()=>{
+	loadReferenceDataForSysRole();
+	evenBinderForSysRole();
 	loadSysRoleTable();
-
-	sysRoleTable.on( 'buttons-action', function ( e, buttonApi, dataTable, node, config ) {
-		$('[data-toggle="tooltip"]').tooltip();
-	});
-	 
-
 });
