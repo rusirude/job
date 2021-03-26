@@ -58,22 +58,22 @@ var FormTransition = (function () {
 /* Dialog Box Functionality ********/
 
 var DialogBox = (function () {
-	function openSuccessMessage(message){
-		let msg = `<i class="material-icons">done</i> ${message}`
-		let s = document.querySelector('dialog');
-		
-		$(".mdl-dialog .mdl-dialog__content").html(msg);		
-		$("#mdl-dialog-failed").html("").hide().off("click");		
-		$("#mdl-dialog-success").html("OK").on("click",()=>{
-			s.close();
+	let Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 3000
+	});
+	function openMessage(message,type){
+		Toast.fire({
+			icon: type,
+			title: message
 		});
-		
-		s.showModal();
 
 	}
 	return {
-		openSuccessMsgBox: function(message){
-			openSuccessMessage(message);
+		openMsgBox: function(message,type){
+			openMessage(message,type);
 		}
 	}
 })();
@@ -82,19 +82,23 @@ var DialogBox = (function () {
 var InputsValidator = (function(){
 	function inlineValidation(element,message){
 		let _element = $(element);
-		_element.parent().find("span.mdl-textfield__error, span.mdl-selectfield__error").html(message||"");
-		_element.parent().addClass('is-invalid');
+		_element.parent().find("span.error").html(message||"");
+		_element.addClass('is-invalid');
 
 	}
 	function removeInlineValidation(element){
 		let _element = $(element);
-		_element.parent().find("span.mdl-textfield__error, span.mdl-selectfield__error").html("");
-		_element.parent().removeClass('is-invalid');
+		_element.parent().find("span.error").html("");
+		_element.removeClass('is-invalid');
+		_element.off("keypress");
 	}
 	function inlineEmptyValidation(element){
 		let _element = $(element);
-		_element.parent().find("span.mdl-textfield__error, span.mdl-selectfield__error").html("Can't be Empty");
-		_element.parent().addClass('is-invalid');
+		_element.parent().find("span.error").html("Can't be Empty");
+		_element.addClass('is-invalid');
+		_element.off("keypress").on("keypress",()=>{
+			_element.removeClass('is-invalid');
+		});
 	}
 	return{
 		inlineValidation: function(element,message){

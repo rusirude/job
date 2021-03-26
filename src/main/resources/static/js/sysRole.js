@@ -17,17 +17,17 @@ var generateFinalObjectForSysRole = ()=>{
 
 var successFunctionForSysRole = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
-		DialogBox.openSuccessMsgBox(data.message);		
+		DialogBox.openMsgBox(data.message,'success');
 		sysRoleTable.ajax.reload();
 		clearDataForSysRole();
 	}
 	else{
-		alert(data.message);
+		DialogBox.openMsgBox(data.message,'error');
 	}
 };
 
 var failedFunctionForSysRole = (data)=>{
-	alert("Server Error");
+	DialogBox.openMsgBox("Server Error",'error');
 };
 
 var validatorForSysRole = ()=>{
@@ -88,11 +88,11 @@ var findDetailByCodeForSysRole = (code,callback)=>{
 			}
 		}
 		else{
-			alert(data.message);
+			DialogBox.openMsgBox(data.message,'error');
 		}
 	};
 	let failedFunction = (data)=>{
-		alert("Server Error");
+		DialogBox.openMsgBox("Server Error",'error');
 	};
 	let url = "/sysRole/loadSysRoleByCode";
 	let method = "POST";
@@ -129,13 +129,13 @@ var loadReferenceDataForSysRole = (callback)=>{
             	}
         	}
         	else{
-        		alert("System Failer Occur....! :-(");
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
         	}
         	
 
     	},
         failure: function(errMsg) {
-            alert(errMsg);
+			DialogBox.openMsgBox(errMsg,'error');
         }
   });
 };
