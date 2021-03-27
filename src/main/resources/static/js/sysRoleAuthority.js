@@ -25,7 +25,7 @@ var loadReferenceDataForUserRoleAuthority = (callback)=>{
             	}
         	}
         	else{
-        		alert("System Failer Occur....! :-(");
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
         	}
         	
 
@@ -50,24 +50,31 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
             	alert("System Failer Occur....! :-(");
             }
         },
-        scrollY: true,
-        scrollX: true,
-        scrollCollapse: true,
-        drawCallback: function( settings ) {
-        	componentHandler.upgradeDom();
-        },
-        pagingType: "full_numbers",
+		paging: true,
+		lengthChange: false,
+		searching: true,
+		ordering: true,
+		info: true,
+		autoWidth: false,
+		drawCallback: function( settings ) {
+			$("input[data-bootstrap-switch]").each(function(){
+				$(this).bootstrapSwitch();
+			})
+		},
         columns: [
-            {data: "authorityDescription", class:"mdl-data-table__cell--non-numeric"},
-            {data: "sysRoleDescription", class:"mdl-data-table__cell--non-numeric"},
+            {data: "authorityDescription"},
+            {data: "sysRoleDescription"},
             {
             	data: null,
             	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
-            		return `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-${data.authorityCode}">
-							  <input onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.sysRoleCode}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
-							  <span class="mdl-switch__label"></span>
-							</label>`;
+					return `<input 
+							type="checkbox" id="switch-${data.authorityCode}" name="switch-${data.authorityCode}" 
+							data-bootstrap-switch data-off-color="danger" data-on-color="primary"
+							onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.sysRoleCode}','${data.authorityCode}')"
+							${(data.enable)?"checked":""}
+							>`
+
             	}
     		}
         ]
@@ -104,7 +111,6 @@ var clearDataForUserRoleAuthority = ()=>{
 
 	let sysRole = $("#sysRole");
 	sysRole.val("");
-	sysRole[0].parentElement.MaterialSelectfield.change("");
 	userRoleAutorityTable.ajax.reload();	
 	
 };
@@ -136,7 +142,6 @@ var evenBinderForUserRoleAuthority = ()=>{
 $(document).ready(()=>{	
 
  	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 	
  		loadDataTableBySysRoleCodeForUserRoleAuthority();
 	};	
 	loadReferenceDataForUserRoleAuthority(_callback_1); 

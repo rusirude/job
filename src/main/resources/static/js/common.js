@@ -80,10 +80,13 @@ var DialogBox = (function () {
 
 /*  Inputs Validations    */
 var InputsValidator = (function(){
-	function inlineValidation(element,message){
+	function inlineEmptyValidationSelect(element){
 		let _element = $(element);
-		_element.parent().find("span.error").html(message||"");
+		_element.parent().find("span.error").html("Can't bsse Empty");
 		_element.addClass('is-invalid');
+		_element.off("change").on("change",()=>{
+			_element.removeClass('is-invalid');
+		});
 
 	}
 	function removeInlineValidation(element){
@@ -91,6 +94,7 @@ var InputsValidator = (function(){
 		_element.parent().find("span.error").html("");
 		_element.removeClass('is-invalid');
 		_element.off("keypress");
+		_element.off("change");
 	}
 	function inlineEmptyValidation(element){
 		let _element = $(element);
@@ -101,8 +105,8 @@ var InputsValidator = (function(){
 		});
 	}
 	return{
-		inlineValidation: function(element,message){
-			inlineValidation(element,message)
+		inlineEmptyValidationSelect: function(element){
+			inlineEmptyValidationSelect(element)
 		},
 		removeInlineValidation: function(element){
 			removeInlineValidation(element);

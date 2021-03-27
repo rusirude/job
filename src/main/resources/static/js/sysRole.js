@@ -46,7 +46,7 @@ var validatorForSysRole = ()=>{
 		isValid = false;
 	}
 	if(! status.val()){
-		InputsValidator.inlineEmptyValidation(status);
+		InputsValidator.inlineEmptyValidationSelect(status);
 		isValid = false;
 	}
 	return isValid;
