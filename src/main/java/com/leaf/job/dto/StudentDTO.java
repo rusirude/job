@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class StudentDTO extends SysUserDTO{
 
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
     private Date dob;
     private String email;
     private String telephone;

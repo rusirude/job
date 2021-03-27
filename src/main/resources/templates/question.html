@@ -1,159 +1,15 @@
-<div class="page-content">
-    <div class="mdl-grid">
-        <div id="questionForm" class="mdl-cell mdl-cell--12-col-phone mdl-cell--12-col-tablet mdl-cell--12-col-desktop" style="display: none">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--1-col"></div>
-                <div class="mdl-cell mdl-cell--10-col">
-                    <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col-desktop" style="overflow: inherit; z-index: 1">
-                        <div class="mdl-card__title">
-                            <h2 class="mdl-card__title-text" id="formHeading">Add Question and Answers</h2>
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div class="mdl-grid">
-                                <div class="mdl-cell mdl-cell--6-col">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                                        <input id="code" name="code" type="text"  class="mdl-textfield__input"/>
-                                        <label class="mdl-textfield__label" for="code">Code</label>
-                                        <span class="mdl-textfield__error"></span>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--6-col" style="padding-top: 9px">
-                                    <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label" style="width:98%">
-                                        <select class="mdl-selectfield__select" id="status" name="statusName">
-                                            <option value=""></option>
-                                        </select>
-                                        <div class="mdl-selectfield__icon"><i class="material-icons">arrow_drop_down</i></div>
-                                        <label class="mdl-selectfield__label" for="status">Status</label>
-                                        <span class="mdl-selectfield__error"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="mdl-grid">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                                    <input id="description" name="description" type="text" class="mdl-textfield__input"/>
-                                    <label class="mdl-textfield__label" for="description">Description</label>
-                                    <span class="mdl-textfield__error"></span>
-                                </div>
-                            </div>
-                            <div class="mdl-grid">
-                                <div class="mdl-cell mdl-cell--12-col" style="border: 0px">
-                                    <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--10-col" style="margin-left: 0px;padding-left: 0px">
-                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                                                <input  name="description" type="text" class="mdl-textfield__input"/>
-                                                <label class="mdl-textfield__label" for="description">Answer 1</label>
-                                                <span class="mdl-textfield__error"></span>
-                                            </div>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--1-col" style="height: 40px; padding-top: 20px">
-                                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
-                                                <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input"/>
-                                            </label>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--1-col" style="height: 40px; padding-top: 16px">
-                                            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                                            <i id="icon-update-${data}" class="material-icons">create</i>
-                                            <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
-                                                Update
-                                            </div>
-                                            </button>
-                                            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                                                <i id="icon-delete-${data}" class="material-icons">delete</i>
-                                                <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
-                                                    Delete
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--12-col" style="border: 0px">
-                                    <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--10-col" style="margin-left: 0px;padding-left: 0px">
-                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                                                <input  name="description" type="text" class="mdl-textfield__input"/>
-                                                <label class="mdl-textfield__label" for="description">Answer 1</label>
-                                                <span class="mdl-textfield__error"></span>
-                                            </div>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--1-col" style="height: 40px; padding-top: 20px">
-                                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
-                                                <input type="checkbox"  class="mdl-checkbox__input"/>
-                                            </label>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--1-col" style="height: 40px; padding-top: 16px">
-                                            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                                                <i  class="material-icons">create</i>
-                                                <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
-                                                    Update
-                                                </div>
-                                            </button>
-                                            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                                                <i  class="material-icons">delete</i>
-                                                <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
-                                                    Delete
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--12-col" style="border: 0px">
-                                    <div class="mdl-grid">
-                                        <div class="mdl-cell mdl-cell--10-col" style="margin-left: 0px;padding-left: 0px">
-                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
-                                                <input  name="description" type="text" class="mdl-textfield__input"/>
-                                                <label class="mdl-textfield__label" for="description">Answer 1</label>
-                                                <span class="mdl-textfield__error"></span>
-                                            </div>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--1-col" style="height: 40px; padding-top: 20px">
-                                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
-                                                <input type="checkbox"  class="mdl-checkbox__input"/>
-                                            </label>
-                                        </div>
-                                        <div class="mdl-cell mdl-cell--1-col" style="height: 40px; padding-top: 16px">
-                                            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                                                <i  class="material-icons">create</i>
-                                                <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
-                                                    Update
-                                                </div>
-                                            </button>
-                                            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                                                <i  class="material-icons">delete</i>
-                                                <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
-                                                    Delete
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mdl-grid">
-                                <div class="mdl-cell mdl-cell--12-col-phone mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-                                    <button id="btnSave" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Save</button>
-                                    <button id="btnUpdate" type="button" style="display: none;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Update</button>
-                                    <button id="btnDelete" type="button" style="display: none;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Delete</button>
-                                    <button id="btnCancel" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-button--accent">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mdl-cell mdl-cell--1-col"></div>
-            </div>
-        </div>
-        <div id="questionGrid" class="mdl-cell mdl-cell--12-col-phone mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-            <div class="mdl-grid" style="margin-left: 0.5%">
-                <button id="btnQuestionAdd" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                    <i class="material-icons">add</i>Add
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <button id="btnQuestionAdd" type="button" class="btn btn-block bg-gradient-primary btn-sm" style="width:12%;float:left">
+                    <i class="fa fa-plus"></i> Add New
                 </button>
-            </div>
-            <table id="questionTable" class="mdl-data-table" cellspacing="0" width="100%">
-                <thead>
+                <table id="questionTable" class="table table-bordered table-striped">
+                    <thead>
                     <tr>
                         <th>Code</th>
-                        <th>Description</th>
+                        <th>Question</th>
                         <th>Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
@@ -161,11 +17,75 @@
                         <th>Updated On</th>
                         <th>Action</th>
                     </tr>
-                </thead>            
-                
-            </table>
+                    </thead>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
         </div>
+        <!-- /.card -->
+        <!-- /.card -->
     </div>
+    <!-- /.col -->
 </div>
 
-<script src="/js/question.js"></script>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="bs-stepper">
+                    <div class="bs-stepper-header" role="tablist">
+                        <!-- your steps here -->
+                        <div class="step" data-target="#logins-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                                <span class="bs-stepper-circle">1</span>
+                                <span class="bs-stepper-label">Logins</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#information-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
+                                <span class="bs-stepper-circle">2</span>
+                                <span class="bs-stepper-label">Various information</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bs-stepper-content">
+                        <!-- your steps content here -->
+                        <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                            </div>
+                            <button class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        </div>
+                        <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                            <div class="form-group">
+                                <label for="exampleInputFile">File input</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="exampleInputFile"/>
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
