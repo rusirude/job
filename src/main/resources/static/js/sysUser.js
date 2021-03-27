@@ -17,17 +17,17 @@ var generateFinalObjectForSysUser = ()=>{
 
 var successFunctionForSysUser = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
-		DialogBox.openSuccessMsgBox(data.message);		
+		DialogBox.openMsgBox(data.message,'success');		
 		sysUserTable.ajax.reload();
 		clearDataForSysUser();
 	}
 	else{
-		alert(data.message);
+		DialogBox.openMsgBox(data.message,'error');
 	}
 };
 
 var failedFunctionForSysUser = (data)=>{
-	alert("Server Error");
+	DialogBox.openMsgBox("Server Error",'error');
 };
 
 var validatorForSysUser = ()=>{
@@ -51,7 +51,7 @@ var validatorForSysUser = ()=>{
 		isValid = false;
 	}
 	if(! status.val()){
-		InputsValidator.inlineEmptyValidation(status);
+		InputsValidator.inlineEmptyValidationSelect(status);
 		isValid = false;
 	}
 	return isValid;
@@ -90,15 +90,14 @@ var findDetailByCodeForSysUser = (username,callback)=>{
 		if(data.code === Constant.CODE_SUCCESS){			
 			if(callback){
 				callback(data.data);
-				componentHandler.upgradeDom();
 			}
 		}
 		else{
-			alert(data.message);
+			DialogBox.openMsgBox(data.message,'error');
 		}
 	};
 	let failedFunction = (data)=>{
-		alert("Server Error");
+		DialogBox.openMsgBox("Server Error",'error');
 	};
 	let url = "/sysUser/loadSysUserByUsername";
 	let method = "POST";
@@ -109,10 +108,10 @@ var findDetailByCodeForSysUser = (username,callback)=>{
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 var populateFormForSysUser = (data) => {
 	if(data){
-		$("#username")[0].parentElement.MaterialTextfield.change(data.username || "");
-		$("#title")[0].parentElement.MaterialSelectfield.change(data.titleCode || "");
-		$("#name")[0].parentElement.MaterialTextfield.change(data.name || "");
-		$("#status")[0].parentElement.MaterialSelectfield.change(data.statusCode || "");
+		$("#username").val(data.username || "");
+		$("#title").val(data.titleCode || "");
+		$("#name").val(data.name || "");
+		$("#status").val(data.statusCode || "");
 	}	
 };
 
@@ -137,13 +136,13 @@ var loadReferenceDataForSysUser= (callback)=>{
             	}
         	}
         	else{
-        		alert("System Failer Occur....! :-(");
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
         	}
         	
 
     	},
         failure: function(errMsg) {
-            alert(errMsg);
+			DialogBox.openMsgBox(errMsg,'error');
         }
   });
 };
@@ -158,42 +157,34 @@ var loadSysUserTable = ()=>{
                                 return JSON.stringify(createCommonDataTableRequset(d));
                     		}
                         },
+						paging: true,
+						lengthChange: false,
+						searching: true,
+						ordering: true,
+						info: true,
+						autoWidth: false,
                         processing: true,
                         serverSide: true,
-                        drawCallback: function( settings ) {
-                        	componentHandler.upgradeDom();
-                        },
-                        scrollY:        true,
-                        scrollX:        true,
-                        scrollCollapse: true,
-                        paging:         true,
-                        pagingType: "full_numbers",
                         columns: [
-                            { data: "username"            ,name:"username"            ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "titleDescription"    ,name:"title"               ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "name"                ,name:"name"                ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "statusDescription"   ,name:"status"              ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "createdBy"           ,name:"createdBy"           ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "createdOn"           ,name:"createdOn"           ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "updatedBy"           ,name:"updatedBy"           ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "updatedOn"           ,name:"updatedOn"           ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "username"            ,name:"username"            },
+                            { data: "titleDescription"    ,name:"title"               },
+                            { data: "name"                ,name:"name"                },
+                            { data: "statusDescription"   ,name:"status"              },
+                            { data: "createdBy"           ,name:"createdBy"           },
+                            { data: "createdOn"           ,name:"createdOn"           },
+                            { data: "updatedBy"           ,name:"updatedBy"           },
+                            { data: "updatedOn"           ,name:"updatedOn"           },
                             {
                             	data: "username",
                             	class:"mdl-data-table__cell--non-numeric",
                             	render: function (data, type, full) {
-		                            		return `<button onClick="updateIconClickForSysUser('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-update-${data}" class="material-icons">create</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
-														Update
-													  </div>
-													</button>
-													<button onClick="deleteIconClickForSysUser('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-delete-${data}" class="material-icons">delete</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
-														Delete
-													  </div>
-													</button>`;
-		                            	}
+										return `<button onClick="updateIconClickForSysUser('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
+															<i class="fa fa-pencil-alt"></i>
+														</button>
+														<button onClick="deleteIconClickForSysUser('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
+															<i class="fa fa-trash-alt"></i>
+														</button>`;
+											}
                     		}
                         ]
                     } );
@@ -211,24 +202,23 @@ var clearDataForSysUser = ()=>{
 
 	$("#formHeading").html("");
 
-	username[0].parentElement.MaterialTextfield.enable();
-	title[0].parentElement.MaterialSelectfield.enable();
-	name[0].parentElement.MaterialTextfield.enable();
-	status[0].parentElement.MaterialSelectfield.enable();
+	username.prop("disabled",false);
+	title.prop("disabled",false);
+	name.prop("disabled",false);
+	status.prop("disabled",false);
 
 	InputsValidator.removeInlineValidation(username);
 	InputsValidator.removeInlineValidation(title);
 	InputsValidator.removeInlineValidation(name);
 	InputsValidator.removeInlineValidation(status);
 
-	username[0].parentElement.MaterialTextfield.change("");
+	username.val("");
 	title.val("");
-	title[0].parentElement.MaterialSelectfield.change("");
-	name[0].parentElement.MaterialTextfield.change("");
+	name.val("");
 	status.val("");
-	status[0].parentElement.MaterialSelectfield.change("");
+	
 
-	FormTransition.closeForm('#sysUserForm','#sysUserGrid');
+	FormTransition.closeModal('#sysUserModal');
 	
 };
 
@@ -236,7 +226,7 @@ var clearDataForSysUser = ()=>{
 var clickAddForSysUser = ()=>{
 	clearDataForSysUser();
 	$("#formHeading").html("Add System User");
-	FormTransition.openForm('#sysUserForm','#sysUserGrid');
+	FormTransition.openModal('#sysUserModal');
 };
 
 var updateIconClickForSysUser = (username)=>{
@@ -245,9 +235,9 @@ var updateIconClickForSysUser = (username)=>{
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
 		populateFormForSysUser(data);
-		$("#username")[0].parentElement.MaterialTextfield.disable();
+		$("#username").prop("disabled",true);
 		$("#formHeading").html("Update System User");
-		FormTransition.openForm('#sysUserForm','#sysUserGrid');
+		FormTransition.openModal('#sysUserModal');
 	};
 	clearDataForSysUser();
 	findDetailByCodeForSysUser(username,_sF);
@@ -259,12 +249,12 @@ var deleteIconClickForSysUser = (username)=>{
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
 		populateFormForSysUser(data);
-		$("#username")[0].parentElement.MaterialTextfield.disable();
-		$("#title")[0].parentElement.MaterialSelectfield.disable();
-		$("#name")[0].parentElement.MaterialTextfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		$("#username").prop("disabled",true);
+		$("#title").prop("disabled",true);
+		$("#name").prop("disabled",true);
+		$("#status").prop("disabled",true);
 		$("#formHeading").html("Delete System User");
-		FormTransition.openForm('#sysUserForm','#sysUserGrid');
+		FormTransition.openModal('#sysUserModal');
 	};
 	clearDataForSysUser();
 	findDetailByCodeForSysUser(username,_sF);
@@ -300,12 +290,8 @@ var evenBinderForSysUser = ()=>{
 /*-------------------------------- Document Ready ----------------------*/
 
 
-$(document).ready(()=>{	
-
- 	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 		
-	};	
-	loadReferenceDataForSysUser(_callback_1); 
+$(document).ready(()=>{
+	loadReferenceDataForSysUser();
 	loadSysUserTable();
 	evenBinderForSysUser();
 

@@ -66,7 +66,6 @@ var loadDataTableBySysUserUsernameForSysUserSysRole = ()=>{
             {data: "username"},
             {
             	data: null,
-            	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
 					return `<input 
 							type="checkbox" id="switch-${data.sysRoleCode}" name="switch-${data.sysRoleCode}" 

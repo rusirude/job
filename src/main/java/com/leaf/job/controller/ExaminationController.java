@@ -64,7 +64,7 @@ public class ExaminationController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_EXAMMGT')")
-	@RequestMapping(path = "/loadQuestionCategories", method = RequestMethod.POST)
+	@RequestMapping(path = "/loadExaminations", method = RequestMethod.POST)
 	@ResponseBody
 	public DataTableResponseDTO loadExaminationDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
 		return examinationService.getExaminationsForDataTable(dataTableRequestDTO);

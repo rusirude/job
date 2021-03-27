@@ -166,8 +166,10 @@ public class ExaminationImpl implements ExaminationService {
 				dto.setDescription(examinationEntity.getDescription());
 				dto.setStatusCode(examinationEntity.getStatusEntity().getCode());
 				dto.setStatusDescription(examinationEntity.getStatusEntity().getDescription());
-				dto.setQuestionCategoryCode(examinationEntity.getQuestionCategoryEntity().getDescription());
+				dto.setQuestionCategoryCode(examinationEntity.getQuestionCategoryEntity().getCode());
 				dto.setQuestionCategoryDescription(examinationEntity.getQuestionCategoryEntity().getDescription());
+				dto.setEffectiveOn(examinationEntity.getEffectiveOn());
+				dto.setExpireOn(examinationEntity.getExpireOn());
 				dto.setCreatedBy(examinationEntity.getCreatedBy());
 				dto.setCreatedOn(examinationEntity.getCreatedOn());
 				dto.setUpdatedBy(examinationEntity.getUpdatedBy());
@@ -224,6 +226,8 @@ public class ExaminationImpl implements ExaminationService {
 						dto.setStatusDescription(entity.getStatusEntity().getDescription());
 						dto.setQuestionCategoryCode(entity.getQuestionCategoryEntity().getDescription());
 						dto.setQuestionCategoryDescription(entity.getQuestionCategoryEntity().getDescription());
+						dto.setEffectiveOn(entity.getEffectiveOn());
+						dto.setExpireOn(entity.getExpireOn());
 						dto.setCreatedBy(entity.getCreatedBy());
 						dto.setCreatedOn(entity.getCreatedOn());
 						dto.setUpdatedBy(entity.getUpdatedBy());

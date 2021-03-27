@@ -14,17 +14,17 @@ var generateFinalObjectForAuthority = ()=>{
 
 var successFunctionForAuthority = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
-		DialogBox.openSuccessMsgBox(data.message);		
+		DialogBox.openMsgBox(data.message,'success');
 		authorityTable.ajax.reload();
 		clearDataForAuthority();
 	}
 	else{
-		alert(data.message);
+		DialogBox.openMsgBox(data.message,'error');
 	}
 };
 
 var failedFunctionForAuthority = (data)=>{
-	alert("Server Error");
+	DialogBox.openMsgBox("Server Error",'error');
 };
 
 var validatorForAuthority = ()=>{
@@ -54,11 +54,11 @@ var validatorForAuthority = ()=>{
 		isValid = false;
 	}
 	if(! section.val()){
-		InputsValidator.inlineEmptyValidation(section);
+		InputsValidator.inlineEmptyValidationSelect(section);
 		isValid = false;
 	}
 	if(! status.val()){
-		InputsValidator.inlineEmptyValidation(status);
+		InputsValidator.inlineEmptyValidationSelect(status);
 		isValid = false;
 	}
 	return isValid;
@@ -98,15 +98,14 @@ var findDetailByCodeForAuthority = (code,callback)=>{
 		if(data.code === Constant.CODE_SUCCESS){			
 			if(callback){
 				callback(data.data);
-				componentHandler.upgradeDom();
 			}
 		}
 		else{
-			alert(data.message);
+			DialogBox.openMsgBox(data.message,'error');
 		}
 	};
 	let failedFunction = (data)=>{
-		alert("Server Error");
+		DialogBox.openMsgBox("Server Error",'error');
 	};
 	let url = "/authority/loadAuthorityByCode";
 	let method = "POST";
@@ -118,12 +117,12 @@ var findDetailByCodeForAuthority = (code,callback)=>{
 
 var populateFormForAuthority = (data) => {
 	if(data){
-		$("#code")[0].parentElement.MaterialTextfield.change(data.code || "");
-		$("#description")[0].parentElement.MaterialTextfield.change(data.description || "");
-		$("#url")[0].parentElement.MaterialTextfield.change(data.url || "");
-		$("#authCode")[0].parentElement.MaterialTextfield.change(data.authCode || "");
-		$("#section")[0].parentElement.MaterialSelectfield.change(data.sectionCode || "");
-		$("#status")[0].parentElement.MaterialSelectfield.change(data.statusCode || "");
+		$("#code").val(data.code || "");
+		$("#description").val(data.description || "");
+		$("#url").val(data.url || "");
+		$("#authCode").val(data.authCode || "");
+		$("#section").val(data.sectionCode || "");
+		$("#status").val(data.statusCode || "");
 	}	
 };
 
@@ -148,13 +147,13 @@ var loadReferenceDataForAuthority = (callback)=>{
             	}
         	}
         	else{
-        		alert("System Failer Occur....! :-(");
-        	}
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
+			}
         	
 
     	},
         failure: function(errMsg) {
-            alert(errMsg);
+			DialogBox.openMsgBox(errMsg,'error');
         }
   });
 };
@@ -170,42 +169,34 @@ var loadAuthorityTable = ()=>{
                                 return JSON.stringify(createCommonDataTableRequset(d));
                     		}
                         },
+						paging: true,
+						lengthChange: false,
+						searching: true,
+						ordering: true,
+						info: true,
+						autoWidth: false,
                         processing: true,
                         serverSide: true,
-                        drawCallback: function( settings ) {
-                        	componentHandler.upgradeDom();
-                        },
-                        scrollY:        true,
-                        scrollX:        true,
-                        scrollCollapse: true,
-                        paging:         true,
-                        pagingType: "full_numbers",
+						scrollX:        true,
                         columns: [
-                            { data: "code"                ,name:"code"          ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "description"         ,name:"description"   ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "url"                 ,name:"url"           ,class:"mdl-data-table__cell--non-numeric"},             
-                            { data: "authCode"            ,name:"authCode"      ,class:"mdl-data-table__cell--non-numeric"},                            
-                            { data: "sectionDescription"  ,name:"section"       ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "statusDescription"   ,name:"status"        ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "createdBy"           ,name:"createdBy"     ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "createdOn"           ,name:"createdOn"     ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "updatedBy"           ,name:"updatedBy"     ,class:"mdl-data-table__cell--non-numeric"},
-                            { data: "updatedOn"           ,name:"updatedOn"     ,class:"mdl-data-table__cell--non-numeric"},
+                            { data: "code"                ,name:"code"          },
+                            { data: "description"         ,name:"description"   },
+                            { data: "url"                 ,name:"url"           },
+                            { data: "authCode"            ,name:"authCode"      },
+                            { data: "sectionDescription"  ,name:"section"       },
+                            { data: "statusDescription"   ,name:"status"        },
+                            { data: "createdBy"           ,name:"createdBy"     },
+                            { data: "createdOn"           ,name:"createdOn"     },
+                            { data: "updatedBy"           ,name:"updatedBy"     },
+                            { data: "updatedOn"           ,name:"updatedOn"     },
                             {
                             	data: "code",
-                            	class:"mdl-data-table__cell--non-numeric",
                             	render: function (data, type, full) {
-		                            		return `<button onClick="updateIconClickForAuthority('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-update-${data}" class="material-icons">create</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-update-${data}">
-														Update
-													  </div>
+											return `<button onClick="updateIconClickForAuthority('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
+														<i class="fa fa-pencil-alt"></i>
 													</button>
-													<button onClick="deleteIconClickForAuthority('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-delete-${data}" class="material-icons">delete</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-delete-${data}">
-														Delete
-													  </div>
+													<button onClick="deleteIconClickForAuthority('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
+														<i class="fa fa-trash-alt"></i>
 													</button>`;
 		                            	}
                     		}
@@ -227,12 +218,13 @@ var clearDataForAuthority = ()=>{
 
 	$("#formHeading").html("");
 
-	code[0].parentElement.MaterialTextfield.enable();
-	description[0].parentElement.MaterialTextfield.enable();
-	url[0].parentElement.MaterialTextfield.enable();
-	authCode[0].parentElement.MaterialTextfield.enable();
-	section[0].parentElement.MaterialSelectfield.enable();	
-	status[0].parentElement.MaterialSelectfield.enable();
+	code.prop("disabled",false);
+	description.prop("disabled",false);
+	url.prop("disabled",false);
+	authCode.prop("disabled",false);
+	status.prop("disabled",false);
+	section.prop("disabled",false);
+
 
 	InputsValidator.removeInlineValidation(code);
 	InputsValidator.removeInlineValidation(description);
@@ -241,16 +233,14 @@ var clearDataForAuthority = ()=>{
 	InputsValidator.removeInlineValidation(section);
 	InputsValidator.removeInlineValidation(status);
 
-	code[0].parentElement.MaterialTextfield.change("");
-	description[0].parentElement.MaterialTextfield.change("");
-	url[0].parentElement.MaterialTextfield.change("");
-	authCode[0].parentElement.MaterialTextfield.change("");
-	section.val("");
-	section[0].parentElement.MaterialSelectfield.change("");
+	code.val("");
+	description.val("");
+	url.val("");
+	authCode.val("");
 	status.val("");
-	status[0].parentElement.MaterialSelectfield.change("");
+	section.val("");
 
-	FormTransition.closeForm('#authorityForm','#authorityGrid');
+	FormTransition.closeModal('#authorityModal');
 	
 };
 
@@ -259,7 +249,7 @@ var clearDataForAuthority = ()=>{
 var clickAddForAuthority = ()=>{
 	clearDataForAuthority();
 	$("#formHeading").html("Add Authority");
-	FormTransition.openForm('#authorityForm','#authorityGrid');
+	FormTransition.openModal('#authorityModal');
 };
 
 var updateIconClickForAuthority = (code)=>{
@@ -268,9 +258,9 @@ var updateIconClickForAuthority = (code)=>{
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
 		populateFormForAuthority(data);
-		$("#code")[0].parentElement.MaterialTextfield.disable();
+		$("#code").prop("disabled",true);
 		$("#formHeading").html("Update Authority");
-		FormTransition.openForm('#authorityForm','#authorityGrid');
+		FormTransition.openModal('#authorityModal');
 	};
 	clearDataForAuthority();
 	findDetailByCodeForAuthority(code,_sF);
@@ -282,14 +272,14 @@ var deleteIconClickForAuthority = (code)=>{
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
 		populateFormForAuthority(data);
-		$("#code")[0].parentElement.MaterialTextfield.disable();
-		$("#description")[0].parentElement.MaterialTextfield.disable();
-		$("#url")[0].parentElement.MaterialTextfield.disable();
-		$("#authCode")[0].parentElement.MaterialTextfield.disable();
-		$("#section")[0].parentElement.MaterialSelectfield.disable();
-		$("#status")[0].parentElement.MaterialSelectfield.disable();
+		$("#code").prop("disabled",true);
+		$("#description").prop("disabled",true);
+		$("#url").prop("disabled",true);
+		$("#authCode").prop("disabled",true);
+		$("#status").prop("disabled",true);
+		$("#section").prop("disabled",true);
 		$("#formHeading").html("Delete Authority");
-		FormTransition.openForm('#authorityForm','#authorityGrid');
+		FormTransition.openModal('#authorityModal');
 	};
 	clearDataForAuthority();
 	findDetailByCodeForAuthority(code,_sF);
@@ -324,12 +314,8 @@ var evenBinderForAuthority = ()=>{
 /*-------------------------------- Document Ready ----------------------*/
 
 
-$(document).ready(()=>{	
-	
- 	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 	 		
-	};	
-	loadReferenceDataForAuthority(_callback_1);	 
+$(document).ready(()=>{
+	loadReferenceDataForAuthority();
 	loadAuthorityTable();
 	evenBinderForAuthority();
 
