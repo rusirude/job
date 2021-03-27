@@ -33,7 +33,7 @@ var loadMainMenu = (callback)=>{
 						for(let menu of section.menuDTOs){
 							menuList += `<li class="nav-item">
 											<a href="Javascript:loadPage('${menu.url}')" class="nav-link">
-												<i class="far fa-circle nav-icon"></i>
+												<i class="fa fa-chevron-right nav-icon"></i>
 												<p>${menu.description}</p>
 											</a>
 										</li>`;
