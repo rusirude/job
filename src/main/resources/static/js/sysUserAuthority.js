@@ -25,14 +25,14 @@ var loadReferenceDataForSysUserAuthority = (callback)=>{
             	}
         	}
         	else{
-        		alert("System Failer Occur....! :-(");
-        	}
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
+			}
         	
 
     	},
         failure: function(errMsg) {
-            alert(errMsg);
-        }
+			DialogBox.openMsgBox("errMsg",'error');
+		}
   });
 };
 
@@ -47,27 +47,31 @@ var loadDataTableByUsernameForSysUserAuthority = ()=>{
                 return JSON.stringify({username:($("#sysUser").val()||"")});
             },
             error: function (jqXHR, textStatus, errorThrown) {
-            	alert("System Failer Occur....! :-(");
-            }
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
+			}
         },
-        scrollY: true,
-        scrollX: true,
-        scrollCollapse: true,
-        drawCallback: function( settings ) {
-        	componentHandler.upgradeDom();
-        },
-        pagingType: "full_numbers",
+		paging: true,
+		lengthChange: false,
+		searching: true,
+		ordering: true,
+		info: true,
+		autoWidth: false,
+		drawCallback: function( settings ) {
+			$("input[data-bootstrap-switch]").each(function(){
+				$(this).bootstrapSwitch();
+			})
+		},
         columns: [
-            {data: "authorityDescription", class:"mdl-data-table__cell--non-numeric"},
-            {data: "username", class:"mdl-data-table__cell--non-numeric"},
+            {data: "authorityDescription"},
+            {data: "username"},
             {
             	data: null,
-            	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
-            		return `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-${data.authorityCode}">
-							  <input onChange="privilegeGrantOrRevorkForForSysUserAuthority(this,'${data.username}','${data.authorityCode}')" type="checkbox" id="switch-${data.authorityCode}" class="mdl-switch__input" ${(data.enable)?"checked":""}>
-							  <span class="mdl-switch__label"></span>
-							</label>`;
+					return `<input 
+							type="checkbox" id="switch-${data.authorityCode}" name="switch-${data.authorityCode}" 
+							data-bootstrap-switch data-off-color="danger" data-on-color="primary"
+							onChange="privilegeGrantOrRevorkForForSysUserAuthority(this,'${data.username}','${data.authorityCode}')"
+							${(data.enable)?"checked":""}>`;
             	}
     		}
         ]
@@ -76,12 +80,13 @@ var loadDataTableByUsernameForSysUserAuthority = ()=>{
 
 var successFunctionForSysUserAuthority = (data)=>{
 	if(data.code === Constant.CODE_FAIELD){
-		
+		DialogBox.openMsgBox(data.message,'error');
 	}
 };
 
 var failedFunctionForSysUserAuthority = (data)=>{
-	alert("Server Error");
+	DialogBox.openMsgBox("Server Error",'error');
+
 };
 
 var savePrivilageForSysUserAuthority = (username,authorityCode)=>{
@@ -136,7 +141,6 @@ var evenBinderForSysUserAuthority = ()=>{
 $(document).ready(()=>{	
 
  	let _callback_1 = ()=>{
- 		componentHandler.upgradeDom(); 	
  		loadDataTableByUsernameForSysUserAuthority();
 	};	
 	loadReferenceDataForSysUserAuthority(_callback_1); 

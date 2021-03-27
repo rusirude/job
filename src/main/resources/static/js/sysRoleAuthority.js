@@ -31,7 +31,7 @@ var loadReferenceDataForUserRoleAuthority = (callback)=>{
 
     	},
         failure: function(errMsg) {
-            alert(errMsg);
+			DialogBox.openMsgBox("errMsg",'error');
         }
   });
 };
@@ -47,8 +47,8 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
                 return JSON.stringify({code:($("#sysRole").val()||"")});
             },
             error: function (jqXHR, textStatus, errorThrown) {
-            	alert("System Failer Occur....! :-(");
-            }
+				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');
+			}
         },
 		paging: true,
 		lengthChange: false,
@@ -66,14 +66,12 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
             {data: "sysRoleDescription"},
             {
             	data: null,
-            	class:"mdl-data-table__cell--non-numeric",
             	render: function (data, type, full) {
 					return `<input 
 							type="checkbox" id="switch-${data.authorityCode}" name="switch-${data.authorityCode}" 
 							data-bootstrap-switch data-off-color="danger" data-on-color="primary"
 							onChange="privilegeGrantOrRevorkForForUserRoleAuthority(this,'${data.sysRoleCode}','${data.authorityCode}')"
-							${(data.enable)?"checked":""}
-							>`
+							${(data.enable)?"checked":""}>`;
 
             	}
     		}
@@ -83,12 +81,12 @@ var loadDataTableBySysRoleCodeForUserRoleAuthority = ()=>{
 
 var successFunctionForUserRoleAuthority = (data)=>{
 	if(data.code === Constant.CODE_FAIELD){
-		
+		DialogBox.openMsgBox(data.message,'error');
 	}
 };
 
 var failedFunctionForUserRoleAuthority = (data)=>{
-	alert("Server Error");
+	DialogBox.openMsgBox("Server Error",'error');
 };
 
 var savePrivilageForUserRoleAuthority = (sysRoleCode,authorityCode)=>{
