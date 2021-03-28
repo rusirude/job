@@ -13,8 +13,6 @@
                         <th>Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
-                        <th>Updated By</th>
-                        <th>Updated On</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -101,6 +99,7 @@
                                 </div>
                                 <div class="row body">
                                     <div class="form-group col-sm-9">
+                                        <input type="hidden" name="answers_id_0"/>
                                         <input type="text" name="answers_0" class="form-control form-control-sm" id="answers_0" aria-describedby="answers_0-error" aria-invalid="false"/>
                                         <span id="answers_0-error" class="error invalid-feedback"></span>
                                     </div>
@@ -119,7 +118,9 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                            <button type="button" class="btn btn-primary">Submit</button>
+                            <button id="btnSave" type="button" class="btn btn-primary">Save</button>
+                            <button id="btnUpdate" type="button" style="display: none;" class="btn btn-primary">Update</button>
+                            <button id="btnDelete" type="button" style="display: none;" class="btn btn-danger">Delete</button>
                         </div>
                     </div>
                 </div>

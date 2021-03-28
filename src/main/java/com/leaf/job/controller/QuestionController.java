@@ -64,7 +64,7 @@ public class QuestionController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_QUS')")
-	@RequestMapping(path = "/loadQuestionCategories", method = RequestMethod.POST)
+	@RequestMapping(path = "/loadQuestions", method = RequestMethod.POST)
 	@ResponseBody
 	public DataTableResponseDTO loadQuestionDataGrid(@RequestBody DataTableRequestDTO dataTableRequestDTO) {
 		return questionService.getQuestionsForDataTable(dataTableRequestDTO);

@@ -2,6 +2,7 @@ package com.leaf.job.dto;
 
 public class QuestionAnswerDTO {
     private Long id;
+    private Integer position;
     private String description;
     private String statusCode;
     private String statusDescription;
@@ -14,6 +15,14 @@ public class QuestionAnswerDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
     public String getDescription() {

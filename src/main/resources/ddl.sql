@@ -284,7 +284,7 @@ CREATE TABLE `exam`.`question_category` (
 CREATE TABLE `exam`.`question` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(10) NOT NULL,
-  `description` VARCHAR(50) NOT NULL,
+  `description` LONGTEXT NOT NULL,
   `status` INT NOT NULL,
   `created_by` VARCHAR(25) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -317,7 +317,8 @@ CREATE TABLE `exam`.`question_question_category` (
 
 CREATE TABLE `exam`.`question_answer` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `description` VARCHAR(50) NOT NULL,
+  `description` LONGTEXT NOT NULL,
+  `position` INT NOT NULL,
   `status` INT NOT NULL,
   `question` INT NOT NULL,
   `correct` BOOLEAN DEFAULT FALSE,

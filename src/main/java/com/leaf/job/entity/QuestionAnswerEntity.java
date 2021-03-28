@@ -10,6 +10,7 @@ public class QuestionAnswerEntity extends CommonEntity{
 	private String description;
     private StatusEntity statusEntity;
 	private QuestionEntity questionEntity;
+	private Integer position;
 	private boolean correct;
 
 
@@ -51,6 +52,15 @@ public class QuestionAnswerEntity extends CommonEntity{
 
 	public void setQuestionEntity(QuestionEntity questionEntity) {
 		this.questionEntity = questionEntity;
+	}
+
+	@Column(name = "position")
+	public Integer getPosition() {
+		return position;
+	}
+
+	public void setPosition(Integer position) {
+		this.position = position;
 	}
 
 	@Column(name = "correct")

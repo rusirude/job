@@ -80,6 +80,32 @@ public class QuestionAnswerDAOImpl implements QuestionAnswerDAO {
 		return qestionAnswerEntities;
 	}
 
+	@Override
+	public List<QuestionAnswerEntity> findAllQuestionAnswerEntitiesByQuestionAndNotInAnswers(long question, List<Long> answers) {
+		List<QuestionAnswerEntity> qestionAnswerEntities = null;
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<QuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionAnswerEntity.class);
+		Root<QuestionAnswerEntity> root = criteriaQuery.from(QuestionAnswerEntity.class);
+		criteriaQuery.select(root);
+		CriteriaBuilder.In<Long> idIn = criteriaBuilder.in(root.get(QuestionAnswerEntity_.id));
+		answers.forEach(idIn::value);
+		criteriaQuery.where(
+				criteriaBuilder.and(
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.questionEntity).get(QuestionEntity_.id), question),
+						criteriaBuilder.not(criteriaBuilder.in(idIn))
+
+				)
+		);
+
+		try {
+			qestionAnswerEntities = entityManager.createQuery(criteriaQuery).getResultList();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+
+		return qestionAnswerEntities;
+	}
+
 
 
 	

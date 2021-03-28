@@ -99,6 +99,7 @@ public class QuestionServiceImpl implements QuestionService {
 							questionAnswerEntity.setStatusEntity(statusEntity);
 							questionAnswerEntity.setDescription(questionAnswerDTO.getDescription());
 							questionAnswerEntity.setCorrect(questionAnswerDTO.isCorrect());
+							questionAnswerEntity.setPosition(questionAnswerDTO.getPosition());
 
 							commonMethod.getPopulateEntityWhenInsert(questionAnswerEntity);
 
@@ -163,7 +164,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 					});
 
-
+			List<Long> answers = new ArrayList<>();
 			questionDTO.getQuestionAnswers()
 					.forEach(questionAnswerDTO -> {
 						QuestionAnswerEntity questionAnswerEntity = Optional
@@ -171,7 +172,8 @@ public class QuestionServiceImpl implements QuestionService {
 								.orElse(new QuestionAnswerEntity());
 
 						questionAnswerEntity.setQuestionEntity(questionEntity);
-						questionAnswerEntity.setStatusEntity(questionAnswerDTO.isDelete()?deleteStatusEntity:activeStatusEntity);
+						questionAnswerEntity.setPosition(questionAnswerDTO.getPosition());
+						questionAnswerEntity.setStatusEntity(activeStatusEntity);
 						questionAnswerEntity.setDescription(questionAnswerDTO.getDescription());
 						questionAnswerEntity.setCorrect(questionAnswerDTO.isCorrect());
 
@@ -183,11 +185,20 @@ public class QuestionServiceImpl implements QuestionService {
 							commonMethod.getPopulateEntityWhenUpdate(questionAnswerEntity);
 							questionAnswerDAO.updateQuestionAnswerEntity(questionAnswerEntity);
 						}
-
-
-
+						answers.add(questionAnswerEntity.getId());
 
 					});
+
+			if(!answers.isEmpty()){
+				questionAnswerDAO.findAllQuestionAnswerEntitiesByQuestionAndNotInAnswers(questionEntity.getId(),answers)
+						.forEach(questionAnswerEntity -> {
+							questionAnswerEntity.setStatusEntity(deleteStatusEntity);
+							commonMethod.getPopulateEntityWhenUpdate(questionAnswerEntity);
+							questionAnswerDAO.updateQuestionAnswerEntity(questionAnswerEntity);
+						});
+			}
+
+
 
 
 

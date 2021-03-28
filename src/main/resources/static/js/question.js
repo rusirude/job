@@ -3,6 +3,7 @@
  */
 var stepper;
 var rowCount = 0;
+var questionTable;
 
 
 
@@ -10,6 +11,7 @@ var rowCreator = ()=>{
 	rowCount++;
 	return `<div class="row body">
 						<div class="form-group col-sm-9">
+							<input type="hidden" name="answers_${rowCount}"/>
 							<input type="text" name="answers_${rowCount}" class="form-control form-control-sm" id="answers_${rowCount}" aria-describedby="answers_${rowCount}-error" aria-invalid="false"/>
 							<span id="answers_${rowCount}-error" class="error invalid-feedback"></span>
 						</div>
@@ -42,8 +44,143 @@ function removeRow(ele){
 	$(ele).parent().parent().remove();
 }
 
+/*------------------------------------------- CRUD Functions ------------------*/
+
+var generateFinalObjectForQuestion = ()=>{
+	return {
+		code:$("#code").val()||"",
+		statusCode:$("#status").val()||"",
+		description:$("#description").val()||"",
+		questionCategories: $("#questionCategory").val().map(x=> ({code:x})),
+		authCode: $("#authCode").val()||"",
+		questionAnswers: generateAnswerObjects(),
+	}
+};
+
+var generateAnswerObjects = ()=>{
+	let _r = [];
+	let i =1;
+	for(let ele of $("#answerSection").find('.row.body')){
+		let o = {};
+		o.description = $(ele).find('input[type=text]').val()||'';
+		o.position = i++;
+		o.correct = $(ele).find('input[type=radio]').is(':checked');
+		_r.push(o);
+	}
+	return _r;
+};
+
+var successFunctionForQuestion = (data)=>{
+	if(data.code === Constant.CODE_SUCCESS){
+		DialogBox.openMsgBox(data.message,'success');
+		questionTable.ajax.reload();
+		clearDataForQuestion();
+	}
+	else{
+		DialogBox.openMsgBox(data.message,'error');
+	}
+};
+
+var failedFunctionForQuestion = (data)=>{
+	DialogBox.openMsgBox("Server Error",'error');
+};
+
+var validatorForQuestion = ()=>{
+	let isValid = true;
+
+	// let code = $("#code");
+	// let description = $("#description");
+	// let url = $("#url");
+	// let authCode = $("#authCode");
+	// let section = $("#section");
+	// let status = $("#status");
+	//
+	// if(! code.val()){
+	// 	InputsValidator.inlineEmptyValidation(code);
+	// 	isValid = false;
+	// }
+	// if(! description.val()){
+	// 	InputsValidator.inlineEmptyValidation(description);
+	// 	isValid = false;
+	// }
+	// if(! url.val()){
+	// 	InputsValidator.inlineEmptyValidation(url);
+	// 	isValid = false;
+	// }
+	// if(! authCode.val()){
+	// 	InputsValidator.inlineEmptyValidation(authCode);
+	// 	isValid = false;
+	// }
+	// if(! section.val()){
+	// 	InputsValidator.inlineEmptyValidationSelect(section);
+	// 	isValid = false;
+	// }
+	// if(! status.val()){
+	// 	InputsValidator.inlineEmptyValidationSelect(status);
+	// 	isValid = false;
+	// }
+	return isValid;
+};
+
+
+var saveForQuestion = ()=>{
+	if(validatorForQuestion()){
+		let url = "/question/save";
+		let method = "POST";
+
+		callToserver(url,method,generateFinalObjectForQuestion(),successFunctionForQuestion,failedFunctionForQuestion);
+	}
+
+};
+
+var updateForQuestion = ()=>{
+	if(validatorForQuestion()){
+		let url = "/question/update";
+		let method = "POST";
+
+		callToserver(url,method,generateFinalObjectForQuestion(),successFunctionForQuestion,failedFunctionForQuestion);
+	}
+};
+
+var deleteForQuestion = ()=>{
+	if(validatorForQuestion()){
+		let url = "/question/delete";
+		let method = "POST";
+
+		callToserver(url,method,generateFinalObjectForQuestion(),successFunctionForQuestion,failedFunctionForQuestion);
+	}
+};
+
+var findDetailByCodeForQuestion = (code,callback)=>{
+	let successFunction = (data)=>{
+		if(data.code === Constant.CODE_SUCCESS){
+			if(callback){
+				callback(data.data);
+			}
+		}
+		else{
+			DialogBox.openMsgBox(data.message,'error');
+		}
+	};
+	let failedFunction = (data)=>{
+		DialogBox.openMsgBox("Server Error",'error');
+	};
+	let url = "/question/loadQuestionByCode";
+	let method = "POST";
+	callToserver(url,method,{code:code},successFunction,failedFunction);
+
+};
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
-;
+var populateFormForQuestion = (data) => {
+	if(data){
+		$("#code").val(data.code || "");
+		$("#description").val(data.description || "");
+		$("#status").val(data.statusCode || "");
+		let cat = data.questionCategories.map(x=>(x.code));
+		$("#questionCategory").val(cat);
+		$("#questionCategory").select2();
+	}
+};
 
 var loadReferenceDataForQuestion = (callback)=>{
 	$.ajax({
@@ -77,13 +214,154 @@ var loadReferenceDataForQuestion = (callback)=>{
 	});
 };
 
+var loadQuestionTable = ()=>{
+	questionTable = $('#questionTable').DataTable( {
+		ajax: {
+			url : "/question/loadQuestions",
+			contentType:"application/json",
+			type:"POST",
+			data:function(d){
+				return JSON.stringify(createCommonDataTableRequset(d));
+			}
+		},
+		paging: true,
+		lengthChange: false,
+		searching: true,
+		ordering: true,
+		info: true,
+		autoWidth: false,
+		processing: true,
+		serverSide: true,
+		scrollX:        true,
+		columns: [
+			{ data: "code"                ,name:"code"          },
+			{ data: "description"         ,name:"description"   },
+			{ data: "statusDescription"   ,name:"status"        },
+			{ data: "createdBy"           ,name:"createdBy"     },
+			{ data: "createdOn"           ,name:"createdOn"     },
+			{
+				data: "code",
+				render: function (data, type, full) {
+					return `<button onClick="updateIconClickForQuestion('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
+														<i class="fa fa-pencil-alt"></i>
+													</button>
+													<button onClick="deleteIconClickForQuestion('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
+														<i class="fa fa-trash-alt"></i>
+													</button>`;
+				}
+			}
+		]
+	} );
+};
+
+var clearDataForQuestion = ()=>{
+	 let code = $("#code");
+	 let description = $("#description");
+	 let status = $("#status");
+	 let questionCategory =$("#questionCategory");
+
+	$("#btnSave").show();
+	$("#btnUpdate").hide();
+	$("#btnDelete").hide();
+
+	code.prop("disabled",false);
+	description.prop("disabled",false);
+    status.prop("disabled",false);
+    questionCategory.prop("disabled",false);
+
+    rowCount = 0;
+	$("#answerSection")
+		.find('.row.body').remove();
+
+	$("#answerSection").append(rowCreator());
+
+	InputsValidator.removeInlineValidation(code);
+	InputsValidator.removeInlineValidation(description);
+	InputsValidator.removeInlineValidation(status);
+
+	code.val("");
+	description.val("");
+	status.val("");
+	questionCategory.val([]);
+	questionCategory.select2();
+
+	// FormTransition.closeModal('#questionModal');
+
+};
+
+/*-------------------------------- Inline Event  ----------------------*/
+var clickAddForQuestion = ()=>{
+	clearDataForQuestion();
+	$("#formHeading").html("Add Question");
+	FormTransition.openModal('#questionModal');
+};
+
+var updateIconClickForQuestion = (code)=>{
+	let _sF = (data)=>{
+		$("#btnSave").hide();
+		$("#btnUpdate").show();
+		$("#btnDelete").hide();
+		populateFormForQuestion(data);
+		$("#code").prop("disabled",true);
+		$("#formHeading").html("Update Question");
+		FormTransition.openModal('#questionModal');
+	};
+	clearDataForQuestion();
+	findDetailByCodeForQuestion(code,_sF);
+};
+
+var deleteIconClickForQuestion = (code)=>{
+	let _sF = (data)=>{
+		$("#btnSave").hide();
+		$("#btnUpdate").hide();
+		$("#btnDelete").show();
+		populateFormForQuestion(data);
+		$("#code").prop("disabled",true);
+		$("#description").prop("disabled",true);
+		$("#url").prop("disabled",true);
+		$("#authCode").prop("disabled",true);
+		$("#status").prop("disabled",true);
+		$("#section").prop("disabled",true);
+		$("#formHeading").html("Delete Question");
+		FormTransition.openModal('#questionModal');
+	};
+	clearDataForQuestion();
+	findDetailByCodeForQuestion(code,_sF);
+};
+
+/*-------------------------------- Dynamic Event  ----------------------*/
+
+var evenBinderForQuestion = ()=>{
+	$("#btnQuestionAdd").off().on("click",function(){
+		clickAddForQuestion();
+	});
+
+	$("#btnSave").off().on("click",function(){
+		saveForQuestion();
+	});
+
+	$("#btnUpdate").off().on("click",function(){
+		updateForQuestion();
+	});
+
+	$("#btnDelete").off().on("click",function(){
+		deleteForQuestion();
+	});
+
+	$("#btnCancel").off().on("click",function(){
+		clearDataForQuestion();
+	});
+
+};
+
+
 /*-------------------------------- Document Ready ----------------------*/
 $(document).ready(()=>{
 	let _callback_1 = ()=>{
 		stepper = new Stepper($('.bs-stepper')[0]);
 		$('#questionCategory').select2();
 	};
-
-
-	loadReferenceDataForQuestion(_callback_1)
+	loadReferenceDataForQuestion(_callback_1);
+	loadQuestionTable();
+	evenBinderForQuestion();
 });
