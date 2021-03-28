@@ -6,6 +6,7 @@ public class SysUserDTO extends CommonDTO {
 	
 	private String username;
 	private String password;
+	private String newPassword;
 	private String titleCode;
 	private String titleDescription;
 	private String name;
@@ -24,6 +25,15 @@ public class SysUserDTO extends CommonDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
 	public String getTitleCode() {
 		return titleCode;
 	}

@@ -2,9 +2,8 @@
 
 var clearDataForForgotPassword = ()=>{
     let username = $("#username");
-    username[0].parentElement.MaterialTextfield.change("");
+    username.val("");
     InputsValidator.removeInlineValidation(username);
-    FormTransition.closeForm('#countryForm','#countryGrid');
 };
 
 var generateFinalObjectForForgotPassword = ()=>{
@@ -15,16 +14,16 @@ var generateFinalObjectForForgotPassword = ()=>{
 
 var successFunctionForForgotPassword = (data)=>{
     if(data.code === Constant.CODE_SUCCESS){
-        DialogBox.openSuccessMsgBox(data.message);
+        DialogBox.openMsgBox(data.message,'success');
     }
     else{
-        alert(data.message);
+        DialogBox.openMsgBox(data.message,'error');
     }
     clearDataForForgotPassword();
 };
 
 var failedFunctionForForgotPassword = (data)=>{
-    alert("Server Error");
+    DialogBox.openMsgBox("Server Error",'error');
 };
 
 

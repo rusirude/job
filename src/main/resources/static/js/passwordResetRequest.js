@@ -14,16 +14,16 @@ var generateFinalObjectForPasswordResetRequest = (id)=> {
 
 var successFunctionForPasswordResetRequest = (data)=> {
     if (data.code === Constant.CODE_SUCCESS) {
-        DialogBox.openSuccessMsgBox(data.message);
+        DialogBox.openMsgBox(data.message,'success');
         passwordResetRequestTable.ajax.reload();
     }
     else {
-        alert(data.message);
+        DialogBox.openMsgBox(data.message,'error');
     }
 };
 
 var failedFunctionForPasswordResetRequest = (data)=> {
-    alert("Server Error");
+    DialogBox.openMsgBox(data.message,'error');
 };
 
 
@@ -51,31 +51,25 @@ var loadPasswordResetRequestTable = ()=> {
                 return JSON.stringify(createCommonDataTableRequset(d));
             }
         },
+        paging: true,
+        lengthChange: false,
+        searching: true,
+        ordering: true,
+        info: true,
+        autoWidth: false,
         processing: true,
         serverSide: true,
-        drawCallback: function (settings) {
-            componentHandler.upgradeDom();
-        },
-        scrollY: true,
-        scrollX: true,
-        scrollCollapse: true,
-        paging: true,
-        pagingType: "full_numbers",
         columns: [
-            {data: "username", name: "username", class: "mdl-data-table__cell--non-numeric"},
-            {data: "titleDescription", name: "title", class: "mdl-data-table__cell--non-numeric"},
-            {data: "name", name: "name", class: "mdl-data-table__cell--non-numeric"},
-            {data: "statusDescription", name: "status", class: "mdl-data-table__cell--non-numeric"},
+            {data: "username",            name: "username"},
+            {data: "titleDescription",    name: "title"   },
+            {data: "name",                name: "name"    },
+            {data: "statusDescription",   name: "status"  },
             {
                 data: "id",
-                class: "mdl-data-table__cell--non-numeric",
                 render: function (data, type, full) {
-                    return `<button onClick="confirmIconClickForPasswordResetRequest('${data}')" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-													  <i id="icon-confirm-${data}" class="material-icons">thumb_up</i>
-													  <div class="mdl-tooltip" data-mdl-for="icon-confirm-${data}">
-														Reset Password
-													  </div>
-													</button>`;
+                    return `<button onClick="confirmIconClickForPasswordResetRequest('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Reset Password">
+                                <i class="fa fa-thumbs-up"></i>
+                            </button>`;
                 }
             }
         ]

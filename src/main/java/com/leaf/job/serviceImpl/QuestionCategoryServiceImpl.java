@@ -125,7 +125,7 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
 	@Transactional
 	public ResponseDTO<QuestionCategoryDTO> deleteQuestionCategory(QuestionCategoryDTO questionCategoryDTO) {
 		String code = ResponseCodeEnum.FAILED.getCode();
-		String description = "QuestionCategory Delete Faield";
+		String description = "Question Category Delete Faield";
 		try {
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());
 

@@ -17,21 +17,21 @@ public interface SectionService {
 	
 	/**
 	 * Update Section
-	 * @param SectionDTO
+	 * @param sectionDTO
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SectionDTO> updateSection(SectionDTO sectionDTO);
 	
 	/**
 	 * Delete Section
-	 * @param SectionDTO - code 
+	 * @param sectionDTO - code
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SectionDTO> deleteSection(SectionDTO sectionDTO);
 	
 	/**
 	 * Find Section By Code
-	 * @param SectionDTO - code 
+	 * @param sectionDTO - code
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SectionDTO> findSection(SectionDTO sectionDTO);
