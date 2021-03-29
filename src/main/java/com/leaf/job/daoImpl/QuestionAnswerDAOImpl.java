@@ -92,7 +92,7 @@ public class QuestionAnswerDAOImpl implements QuestionAnswerDAO {
 		criteriaQuery.where(
 				criteriaBuilder.and(
 						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.questionEntity).get(QuestionEntity_.id), question),
-						criteriaBuilder.not(criteriaBuilder.in(idIn))
+						criteriaBuilder.not(idIn)
 
 				)
 		);

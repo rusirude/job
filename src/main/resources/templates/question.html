@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" id="questionTableDiv">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -27,7 +27,7 @@
     <!-- /.col -->
 </div>
 
-<div class="row">
+<div class="row" id="questionFormDiv" style="display: none">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -83,6 +83,7 @@
                             </div>
 
                             <button class="btn btn-primary" onclick="stepper.next()">Next</button>
+                            <button class="btn btn-primary" onclick="cancelForm()">Cancel</button>
                         </div>
                         <div id="answers-part" class="content" role="tabpanel" aria-labelledby="answers-part-trigger">
                             <div id="answerSection">
@@ -118,6 +119,7 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                            <button class="btn btn-primary" onclick="cancelForm()">Cancel</button>
                             <button id="btnSave" type="button" class="btn btn-primary">Save</button>
                             <button id="btnUpdate" type="button" style="display: none;" class="btn btn-primary">Update</button>
                             <button id="btnDelete" type="button" style="display: none;" class="btn btn-danger">Delete</button>

@@ -177,7 +177,7 @@ public class QuestionServiceImpl implements QuestionService {
 						questionAnswerEntity.setDescription(questionAnswerDTO.getDescription());
 						questionAnswerEntity.setCorrect(questionAnswerDTO.isCorrect());
 
-						if(Objects.isNull(questionAnswerEntity)){
+						if(Objects.isNull(questionAnswerEntity.getId())){
 							commonMethod.getPopulateEntityWhenInsert(questionAnswerEntity);
 							questionAnswerDAO.saveQuestionAnswerEntity(questionAnswerEntity);
 						}

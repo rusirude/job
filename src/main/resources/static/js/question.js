@@ -62,6 +62,7 @@ var generateAnswerObjects = ()=>{
 	let i =1;
 	for(let ele of $("#answerSection").find('.row.body')){
 		let o = {};
+		o.id = $(ele).find('input[type=hidden]').val()||0;
 		o.description = $(ele).find('input[type=text]').val()||'';
 		o.position = i++;
 		o.correct = $(ele).find('input[type=radio]').is(':checked');
@@ -73,6 +74,8 @@ var generateAnswerObjects = ()=>{
 var successFunctionForQuestion = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
 		DialogBox.openMsgBox(data.message,'success');
+		$("#questionFormDiv").hide();
+		$("#questionTableDiv").show();
 		questionTable.ajax.reload();
 		clearDataForQuestion();
 	}
@@ -179,6 +182,22 @@ var populateFormForQuestion = (data) => {
 		let cat = data.questionCategories.map(x=>(x.code));
 		$("#questionCategory").val(cat);
 		$("#questionCategory").select2();
+		console.log('ddd');
+		if((data.questionAnswers||[]).length){
+			rowCount = 0;
+			$("#answerSection")
+				.find('.row.body').remove();
+
+			for(let e of data.questionAnswers){
+				let row = $(rowCreator());
+				row.find("input[type=hidden]").val(e.id);
+				row.find("input[type=text]").val(e.description);
+				row.find("input[type=radio]").prop('checked',e.correct);
+				$("#answerSection").append(row);
+			}
+		}
+
+
 	}
 };
 
@@ -284,6 +303,8 @@ var clearDataForQuestion = ()=>{
 	status.val("");
 	questionCategory.val([]);
 	questionCategory.select2();
+	stepper.previous();
+	stepper.previous();
 
 	// FormTransition.closeModal('#questionModal');
 
@@ -293,7 +314,8 @@ var clearDataForQuestion = ()=>{
 var clickAddForQuestion = ()=>{
 	clearDataForQuestion();
 	$("#formHeading").html("Add Question");
-	FormTransition.openModal('#questionModal');
+	$("#questionTableDiv").hide();
+	$("#questionFormDiv").show();
 };
 
 var updateIconClickForQuestion = (code)=>{
@@ -304,14 +326,17 @@ var updateIconClickForQuestion = (code)=>{
 		populateFormForQuestion(data);
 		$("#code").prop("disabled",true);
 		$("#formHeading").html("Update Question");
-		FormTransition.openModal('#questionModal');
+		$("#questionTableDiv").hide();
+		$("#questionFormDiv").show();
 	};
 	clearDataForQuestion();
 	findDetailByCodeForQuestion(code,_sF);
 };
 
 var deleteIconClickForQuestion = (code)=>{
+	console.log("ffffff");
 	let _sF = (data)=>{
+		console.log("ddd")
 		$("#btnSave").hide();
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
@@ -323,10 +348,17 @@ var deleteIconClickForQuestion = (code)=>{
 		$("#status").prop("disabled",true);
 		$("#section").prop("disabled",true);
 		$("#formHeading").html("Delete Question");
-		FormTransition.openModal('#questionModal');
+		$("#questionTableDiv").hide();
+		$("#questionFormDiv").show();
 	};
 	clearDataForQuestion();
 	findDetailByCodeForQuestion(code,_sF);
+};
+
+var cancelForm = ()=>{
+	clearDataForQuestion();
+	$("#questionFormDiv").hide();
+	$("#questionTableDiv").show();
 };
 
 /*-------------------------------- Dynamic Event  ----------------------*/
@@ -348,9 +380,6 @@ var evenBinderForQuestion = ()=>{
 		deleteForQuestion();
 	});
 
-	$("#btnCancel").off().on("click",function(){
-		clearDataForQuestion();
-	});
 
 };
 
