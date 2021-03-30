@@ -6,6 +6,8 @@ var generateFinalObjectForExamination = ()=>{
 		code:$("#code").val()||"",
 		description:$("#description").val()||"",
 		questionCategoryCode: $("#questionCategory").val()||"",
+		noQuestion: $("#noQuestion").val()||"",
+		duration: $("#duration").val()||"",
 		statusCode:$("#status").val()||"",
 		effectiveOn:$("#effectiveOn").val()||"",
 		expireOn:$("#expireOn").val()||"",
@@ -32,6 +34,8 @@ var validatorForExamination = ()=>{
 	console.log("k");
 	let code = $("#code");
 	let description = $("#description");
+	let noQuestion = $("#noQuestion");
+	let duration = $("#duration");
 	let questionCategory = $("#questionCategory");
 	let status = $("#status");
 	let effectiveOn = $("#effectiveOn");
@@ -43,6 +47,14 @@ var validatorForExamination = ()=>{
 	}
 	if(! description.val()){
 		InputsValidator.inlineEmptyValidation(description);
+		isValid = false;
+	}
+	if(! parseInt(noQuestion.val())){
+		InputsValidator.inlineEmptyValidation(noQuestion);
+		isValid = false;
+	}
+	if(! duration.val()){
+		InputsValidator.inlineEmptyValidation(duration);
 		isValid = false;
 	}
 	if(! effectiveOn.val()){
@@ -119,6 +131,8 @@ var populateFormForExamination = (data) => {
 	if(data){
 		$("#code").val(data.code || "");
 		$("#description").val(data.description || "");
+		$("#noQuestion").val(data.noQuestion || 0);
+		$("#duration").val(data.duration || "");
 		$("#questionCategory").val(data.questionCategoryCode || "");
 		$("#status").val(data.statusCode || "");
 		$("#effectiveOn").val(data.effectiveOn || "");
@@ -208,6 +222,8 @@ var clearDataForExamination = ()=>{
 	let code = $("#code");
 	let description = $("#description");
 	let questionCategory = $("#questionCategory");
+	let noQuestion = $("#noQuestion");
+	let duration = $("#duration");
 	let status = $("#status");
 	let effectiveOn = $("#effectiveOn");
 	let expireOn = $("#expireOn");
@@ -221,6 +237,8 @@ var clearDataForExamination = ()=>{
 	code.prop("disabled",false);
 	description.prop("disabled",false);
 	questionCategory.prop("disabled",false);
+	noQuestion.prop("disabled",false);
+	duration.prop("disabled",false);
 	status.prop("disabled",false);
 	effectiveOn.prop("disabled",false);
 	expireOn.prop("disabled",false);
@@ -229,6 +247,8 @@ var clearDataForExamination = ()=>{
 	InputsValidator.removeInlineValidation(code);
 	InputsValidator.removeInlineValidation(description);
 	InputsValidator.removeInlineValidation(questionCategory);
+	InputsValidator.removeInlineValidation(noQuestion);
+	InputsValidator.removeInlineValidation(duration);
 	InputsValidator.removeInlineValidation(status);
 	InputsValidator.removeInlineValidation(effectiveOn);
 	InputsValidator.removeInlineValidation(expireOn);
@@ -236,6 +256,8 @@ var clearDataForExamination = ()=>{
 	code.val("");
 	description.val("");
 	questionCategory.val("");
+	noQuestion.val(0);
+	duration.val("");
 	status.val("");
 	effectiveOn.val("");
 	expireOn.val("");
@@ -275,6 +297,8 @@ var deleteIconClickForExamination = (code)=>{
 		$("#code").prop("disabled",true);
 		$("#description").prop("disabled",true);
 		$("#questionCategory").prop("disabled",true);
+		$("#noQuestion").prop("disabled",true);
+		$("#duration").prop("disabled",true);
 		$("#status").prop("disabled",true);
 		$("#effectiveOn").prop("disabled",true);
 		$("#expireOn").prop("disabled",true);

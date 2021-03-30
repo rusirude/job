@@ -31,6 +31,12 @@ public interface StudentDAO {
      */
     void updateStudentEntity(StudentEntity studentEntity);
 
-
+    /**
+     * Getting Data For  Grid
+     *
+     * @param dataTableRequestDTO
+     * @return
+     */
+    <T> T getDataForGrid(DataTableRequestDTO dataTableRequestDTO, String type);
 
 }

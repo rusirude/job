@@ -71,8 +71,8 @@ public class StudentServiceImpl implements StudentService {
 		SysUserEntity sysUserEntity;
 		StudentEntity studentEntity;
 		try {
-			sysUserEntity = Optional.ofNullable(sysUserDAO.getSysUserEntityByUsername(studentDTO.getUsername())).orElse(new SysUserEntity());
-			studentEntity = Optional.ofNullable(studentDAO.getStudentEntityByUsername(studentDTO.getUsername())).orElse(new StudentEntity());
+			sysUserEntity = Optional.ofNullable(sysUserDAO.getSysUserEntityByUsername(studentDTO.getEmail())).orElse(new SysUserEntity());
+			studentEntity = Optional.ofNullable(studentDAO.getStudentEntityByUsername(studentDTO.getEmail())).orElse(new StudentEntity());
 			MasterDataEntity defaultPasswordMasterDataEntity = Optional.ofNullable(masterDataDAO.loadMasterDataEntity(MasterDataEnum.DEFAULT_PASSWORD.getCode())).orElse(new MasterDataEntity());
 			MasterDataEntity studentRoleMasterDataEntity = Optional.ofNullable(masterDataDAO.loadMasterDataEntity(MasterDataEnum.STUDENT_ROLE.getCode())).orElse(new MasterDataEntity());
 
@@ -80,13 +80,13 @@ public class StudentServiceImpl implements StudentService {
 				description = "Configure Student Role in master Data";
 			}
 			else {
-				if(sysUserEntity == null || DeleteStatusEnum.DELETE.getCode().equalsIgnoreCase(sysUserEntity.getStatusEntity().getCode())){
+				if(sysUserEntity.getUsername() == null || DeleteStatusEnum.DELETE.getCode().equalsIgnoreCase(sysUserEntity.getStatusEntity().getCode())){
 
 					TitleEntity titleEntity = titleDAO.findTitleEntityByCode(studentDTO.getTitleCode());
 					StatusEntity statusEntity = statusDAO.findStatusEntityByCode(studentDTO.getStatusCode());
 					SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(studentRoleMasterDataEntity.getValue());
 
-					sysUserEntity.setUsername(studentDTO.getUsername());
+					sysUserEntity.setUsername(studentDTO.getEmail());
 					sysUserEntity.setPassword(bCryptPasswordEncoder.encode(Optional.ofNullable(defaultPasswordMasterDataEntity.getValue()).orElse("")));
 					sysUserEntity.setTitleEntity(titleEntity);
 					sysUserEntity.setName(studentDTO.getName());
@@ -94,12 +94,12 @@ public class StudentServiceImpl implements StudentService {
 					sysUserEntity.setResetRequest(false);
 					sysUserEntity.setStudent(true);
 
-					studentEntity.setUsername(studentDTO.getUsername());
-					studentEntity.setDob(studentDTO.getDob());
+					studentEntity.setUsername(studentDTO.getEmail());
+					studentEntity.setInitialPassword(studentDTO.getPassword());
 					studentEntity.setEmail(studentDTO.getEmail());
 					studentEntity.setTelephone(studentDTO.getTelephone());
-					studentEntity.setEffectiveOn(studentDTO.getEffectiveOn());
-					studentEntity.setExpireOn(studentDTO.getExpireOn());
+					studentEntity.setAddress(studentDTO.getAddress());
+					studentEntity.setCompany(studentDTO.getCompany());
 
 					commonMethod.getPopulateEntityWhenInsert(sysUserEntity);
 					commonMethod.getPopulateEntityWhenInsert(studentEntity);
@@ -143,7 +143,7 @@ public class StudentServiceImpl implements StudentService {
 				}
 
 				else {
-					description = "Username is not Available in the System";
+					description = "Student is not Available in the System";
 				}
 			}
 
@@ -151,7 +151,7 @@ public class StudentServiceImpl implements StudentService {
 
 		}
 		catch(Exception e) {
-			System.err.println("Save Sys User Issue");
+			System.err.println("Save Student User Issue");
 		}
 		return new ResponseDTO<>(code,description);
 	}
@@ -169,19 +169,20 @@ public class StudentServiceImpl implements StudentService {
 			TitleEntity titleEntity = titleDAO.findTitleEntityByCode(studentDTO.getTitleCode());
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(studentDTO.getStatusCode());
 
-			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getUsername());
-			StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(studentDTO.getUsername());
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getEmail());
+			StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(studentDTO.getEmail());
 
 			sysUserEntity.setTitleEntity(titleEntity);
 			sysUserEntity.setName(studentDTO.getName());
 			sysUserEntity.setStatusEntity(statusEntity);
 
 
-			studentEntity.setDob(studentDTO.getDob());
 			studentEntity.setEmail(studentDTO.getEmail());
 			studentEntity.setTelephone(studentDTO.getTelephone());
-			studentEntity.setEffectiveOn(studentDTO.getEffectiveOn());
-			studentEntity.setExpireOn(studentDTO.getExpireOn());
+			studentEntity.setEmail(studentDTO.getEmail());
+			studentEntity.setTelephone(studentDTO.getTelephone());
+			studentEntity.setAddress(studentDTO.getAddress());
+			studentEntity.setCompany(studentDTO.getCompany());
 
 			commonMethod.getPopulateEntityWhenUpdate(sysUserEntity);
 			commonMethod.getPopulateEntityWhenUpdate(studentEntity);
@@ -209,10 +210,10 @@ public class StudentServiceImpl implements StudentService {
 		try {
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DeleteStatusEnum.DELETE.getCode());			
 
-			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getUsername());
-			StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(studentDTO.getUsername());
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getEmail());
+			StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(studentDTO.getEmail());
 		
-			sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUser(studentDTO.getUsername());
+			sysUserAuthorityDAO.deleteSysUserAuthorityEntityBySysUser(studentDTO.getEmail());
 			
 			sysUserEntity.setStatusEntity(statusEntity);
 
@@ -241,8 +242,8 @@ public class StudentServiceImpl implements StudentService {
 		StudentDTO dto = new StudentDTO();
 		try {
 
-			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getUsername());
-			StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(studentDTO.getUsername());
+			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getEmail());
+			StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(studentDTO.getEmail());
 
 			if (sysUserEntity != null
 					&& !DeleteStatusEnum.DELETE.getCode().equals(sysUserEntity.getStatusEntity().getCode())) {
@@ -254,11 +255,10 @@ public class StudentServiceImpl implements StudentService {
 				dto.setTitleCode(sysUserEntity.getTitleEntity().getCode());
 				dto.setTitleDescription(sysUserEntity.getTitleEntity().getDescription());
 				dto.setName(sysUserEntity.getName());
-				dto.setDob(studentEntity.getDob());
 				dto.setEmail(studentEntity.getEmail());
 				dto.setTelephone(studentEntity.getTelephone());
-				dto.setEffectiveOn(studentEntity.getEffectiveOn());
-				dto.setExpireOn(studentEntity.getExpireOn());
+				dto.setAddress(studentEntity.getAddress());
+				dto.setCompany(studentEntity.getCompany());
 				dto.setStatusCode(sysUserEntity.getStatusEntity().getCode());
 				dto.setStatusDescription(sysUserEntity.getStatusEntity().getDescription());
 				dto.setCreatedBy(sysUserEntity.getCreatedBy());
@@ -291,9 +291,13 @@ public class StudentServiceImpl implements StudentService {
 			List<DropDownDTO> title = titleDAO.findAllTitleEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream().map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
 					.collect(Collectors.toList());
+			List<DropDownDTO> examination = examinationDAO.findAllExaminationEntities(DefaultStatusEnum.ACTIVE.getCode())
+					.stream().map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
+					.collect(Collectors.toList());
 
 			map.put("status", status);
 			map.put("title", title);
+			map.put("examination", examination);
 
 			code = ResponseCodeEnum.SUCCESS.getCode();
 		} catch (Exception e) {
@@ -312,10 +316,10 @@ public class StudentServiceImpl implements StudentService {
 		DataTableResponseDTO responseDTO = new DataTableResponseDTO();
 		Long numOfRecord = Long.valueOf(0);
 		try {
-			list = sysUserDAO.<List<SysUserEntity>>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARCH_LIST)
+			list = studentDAO.<List<SysUserEntity>>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARCH_LIST)
 					.stream().map(entity -> {
 						StudentDTO dto = new StudentDTO();
-						dto.setUsername(entity.getUsername());						
+						dto.setEmail(entity.getUsername());
 						dto.setTitleDescription(entity.getTitleEntity().getDescription());
 						dto.setName(entity.getName());
 						dto.setStatusDescription(entity.getStatusEntity().getDescription());
@@ -326,7 +330,7 @@ public class StudentServiceImpl implements StudentService {
 						return dto;
 					}).collect(Collectors.toList());
 
-			numOfRecord = sysUserDAO.<Long>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARC_COUNT);
+			numOfRecord = studentDAO.<Long>getDataForGrid(dataTableRequestDTO, CommonConstant.GRID_SEARC_COUNT);
 
 			responseDTO.setData(list);
 			responseDTO.setRecordsTotal(numOfRecord);

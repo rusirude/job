@@ -12,6 +12,8 @@ public class ExaminationEntity extends CommonEntity{
 	private String description;
 	private QuestionCategoryEntity questionCategoryEntity;
 	private StatusEntity statusEntity;
+	private Integer noQuestion;
+	private String duration;
 	private Date effectiveOn;
 	private Date expireOn;
 
@@ -64,6 +66,23 @@ public class ExaminationEntity extends CommonEntity{
 		this.statusEntity = statusEntity;
 	}
 
+	@Column(name = "no_question")
+	public Integer getNoQuestion() {
+		return noQuestion;
+	}
+
+	public void setNoQuestion(Integer noQuestion) {
+		this.noQuestion = noQuestion;
+	}
+
+	@Column(name = "duration")
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "effective_on")
