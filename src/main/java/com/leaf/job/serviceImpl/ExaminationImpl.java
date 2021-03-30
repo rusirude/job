@@ -68,7 +68,8 @@ public class ExaminationImpl implements ExaminationService {
 				examinationEntity.setCode(examinationDTO.getCode());
 				examinationEntity.setDescription(examinationDTO.getDescription());
 				examinationEntity.setQuestionCategoryEntity(questionCategoryEntity);
-				examinationEntity.setStatusEntity(statusEntity);
+				examinationEntity.setNoQuestion(examinationDTO.getNoQuestion());
+				examinationEntity.setDuration(examinationDTO.getDuration());
 				examinationEntity.setEffectiveOn(examinationDTO.getEffectiveOn());
 				examinationEntity.setExpireOn(examinationDTO.getExpireOn());
 
@@ -103,6 +104,8 @@ public class ExaminationImpl implements ExaminationService {
 			examinationEntity.setCode(examinationDTO.getCode());
 			examinationEntity.setDescription(examinationDTO.getDescription());
 			examinationEntity.setQuestionCategoryEntity(questionCategoryEntity);
+			examinationEntity.setNoQuestion(examinationDTO.getNoQuestion());
+			examinationEntity.setDuration(examinationDTO.getDuration());
 			examinationEntity.setStatusEntity(statusEntity);
 			examinationEntity.setEffectiveOn(examinationDTO.getEffectiveOn());
 			examinationEntity.setExpireOn(examinationDTO.getExpireOn());
@@ -168,6 +171,8 @@ public class ExaminationImpl implements ExaminationService {
 				dto.setStatusDescription(examinationEntity.getStatusEntity().getDescription());
 				dto.setQuestionCategoryCode(examinationEntity.getQuestionCategoryEntity().getCode());
 				dto.setQuestionCategoryDescription(examinationEntity.getQuestionCategoryEntity().getDescription());
+				dto.setNoQuestion(examinationEntity.getNoQuestion());
+				dto.setDuration(examinationEntity.getDuration());
 				dto.setEffectiveOn(examinationEntity.getEffectiveOn());
 				dto.setExpireOn(examinationEntity.getExpireOn());
 				dto.setCreatedBy(examinationEntity.getCreatedBy());

@@ -25,7 +25,7 @@ public class StudentExaminationEntity extends CommonEntity{
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sys_user", nullable = false)
+    @JoinColumn(name = "student", nullable = false)
     public SysUserEntity getSysUserEntity() {
         return sysUserEntity;
     }

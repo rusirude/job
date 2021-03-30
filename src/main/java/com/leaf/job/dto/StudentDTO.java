@@ -1,30 +1,13 @@
 package com.leaf.job.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.leaf.job.utility.CommonConstant;
+public class StudentDTO extends SysUserDTO {
 
-import java.util.Date;
 
-public class StudentDTO extends SysUserDTO{
-
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
-    private Date dob;
     private String email;
     private String telephone;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
-    private Date effectiveOn;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
-    private Date expireOn;
+    private String address;
+    private String company;
     private String examCode;
-
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
 
     public String getEmail() {
         return email;
@@ -42,20 +25,20 @@ public class StudentDTO extends SysUserDTO{
         this.telephone = telephone;
     }
 
-    public Date getEffectiveOn() {
-        return effectiveOn;
+    public String getAddress() {
+        return address;
     }
 
-    public void setEffectiveOn(Date effectiveOn) {
-        this.effectiveOn = effectiveOn;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public Date getExpireOn() {
-        return expireOn;
+    public String getCompany() {
+        return company;
     }
 
-    public void setExpireOn(Date expireOn) {
-        this.expireOn = expireOn;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getExamCode() {

@@ -11,7 +11,6 @@
                     <tr>
                         <th>Title</th>
                         <th>Name</th>
-                        <th>Username</th>
                         <th>Email</th>
                         <th>Status</th>
                         <th>Created By</th>
@@ -42,36 +41,43 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="form-group col-sm-6">
-                        <label for="code">Code<span style="color: red">*</span></label>
-                        <input type="text" name="code" class="form-control form-control-sm" id="code" aria-describedby="code-error" aria-invalid="false"/>
-                        <span id="code-error" class="error invalid-feedback"></span>
+                        <label for="email">Email<span style="color: red">*</span></label>
+                        <input type="text" name="email" class="form-control form-control-sm" id="email" aria-describedby="email-error" aria-invalid="false"/>
+                        <span id="email-error" class="error invalid-feedback"></span>
                     </div>
                     <div class="form-group col-sm-6">
-                        <label for="description">Description<span style="color: red">*</span></label>
-                        <input type="text" name="description" class="form-control form-control-sm" id="description" aria-describedby="description-error" aria-invalid="false"/>
-                        <span id="description-error" class="error invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label for="url">URL<span style="color: red">*</span></label>
-                        <input type="text" name="url" class="form-control form-control-sm" id="url" aria-describedby="url-error" aria-invalid="false"/>
-                        <span id="url-error" class="error invalid-feedback"></span>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <label for="authCode">Auth Code<span style="color: red">*</span></label>
-                        <input type="text" name="authCode" class="form-control form-control-sm" id="authCode" aria-describedby="authCode-error" aria-invalid="false"/>
-                        <span id="authCode-error" class="error invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label for="status">Section</label>
-                        <select class="form-control form-control-sm" id="section">
+                        <label for="title">Title</label>
+                        <select class="form-control form-control-sm" id="title">
 
                         </select>
-                        <span id="section-error" class="error invalid-feedback"></span>
+                        <span id="title-error" class="error invalid-feedback"></span>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="name">Name<span style="color: red">*</span></label>
+                        <input type="text" name="name" class="form-control form-control-sm" id="name" aria-describedby="name-error" aria-invalid="false"/>
+                        <span id="name-error" class="error invalid-feedback"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="name">Address<span style="color: red">*</span></label>
+                        <input type="text" name="address" class="form-control form-control-sm" id="address" aria-describedby="address-error" aria-invalid="false"/>
+                        <span id="address-error" class="error invalid-feedback"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="name">Telephone<span style="color: red">*</span></label>
+                        <input type="text" name="telephone" class="form-control form-control-sm" id="telephone" aria-describedby="telephone-error" aria-invalid="false"/>
+                        <span id="telephone-error" class="error invalid-feedback"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="name">Company<span style="color: red">*</span></label>
+                        <input type="text" name="company" class="form-control form-control-sm" id="company" aria-describedby="company-error" aria-invalid="false"/>
+                        <span id="company-error" class="error invalid-feedback"></span>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="form-group col-sm-6">
                         <label for="status">Status</label>
                         <select class="form-control form-control-sm" id="status">
@@ -79,17 +85,32 @@
                         </select>
                         <span id="status-error" class="error invalid-feedback"></span>
                     </div>
+                    <div class="form-group col-sm-6 hideSection">
+                        <label for="password">Password<span style="color: red">*</span></label>
+                        <input type="text" name="password" class="form-control form-control-sm" id="password" aria-describedby="password-error" aria-invalid="false"/>
+                        <span id="password-error" class="error invalid-feedback"></span>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group col-sm-6 hideSection">
+                        <label for="status">Examination</label>
+                        <select class="form-control form-control-sm" id="examination">
+
+                        </select>
+                        <span id="examination-error" class="error invalid-feedback"></span>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">Save</button>
+                    <button id="btnUpdate" type="button" style="display: none;" class="btn btn-primary">Update</button>
+                    <button id="btnDelete" type="button" style="display: none;" class="btn btn-danger">Delete</button>
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">
-                <button id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="btnSave" type="button" class="btn btn-primary">Save</button>
-                <button id="btnUpdate" type="button" style="display: none;" class="btn btn-primary">Update</button>
-                <button id="btnDelete" type="button" style="display: none;" class="btn btn-danger">Delete</button>
-            </div>
-        </div>
         <!-- /.modal-content -->
-    </div>
+        </div>
     <!-- /.modal-dialog -->
+    </div>
 </div>
-<!--<script src="/js/student.js"></script>-->
+<script src="/js/student.js"></script>

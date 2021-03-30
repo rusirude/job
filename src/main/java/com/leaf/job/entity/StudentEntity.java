@@ -7,11 +7,11 @@ import java.util.Date;
 @Table(name="student")
 public class StudentEntity extends CommonEntity{
     private String username;
-    private Date dob;
+    private String initialPassword;
     private String email;
     private String telephone;
-    private Date effectiveOn;
-    private Date expireOn;
+    private String address;
+    private String company;
 
     @Id
     @Column(name  = "username", length = 25 , nullable = false , unique = true)
@@ -23,14 +23,13 @@ public class StudentEntity extends CommonEntity{
         this.username = username;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "dob")
-    public Date getDob() {
-        return dob;
+    @Column(name = "initial_password")
+    public String getInitialPassword() {
+        return initialPassword;
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
+    public void setInitialPassword(String initialPassword) {
+        this.initialPassword = initialPassword;
     }
 
     @Column(name  = "email")
@@ -51,23 +50,21 @@ public class StudentEntity extends CommonEntity{
         this.telephone = telephone;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "effective_on")
-    public Date getEffectiveOn() {
-        return effectiveOn;
+    @Column(name  = "address")
+    public String getAddress() {
+        return address;
     }
 
-    public void setEffectiveOn(Date effectiveOn) {
-        this.effectiveOn = effectiveOn;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "expier_on")
-    public Date getExpireOn() {
-        return expireOn;
+    @Column(name  = "company")
+    public String getCompany() {
+        return company;
     }
 
-    public void setExpireOn(Date expireOn) {
-        this.expireOn = expireOn;
+    public void setCompany(String company) {
+        this.company = company;
     }
 }
