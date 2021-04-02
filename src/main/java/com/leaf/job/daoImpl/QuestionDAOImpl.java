@@ -17,11 +17,10 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-;
 
 @Repository
 public class QuestionDAOImpl implements QuestionDAO {
-	
+
 	@Autowired
 	private EntityManager entityManager;
 
@@ -102,12 +101,12 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (Exception e) {
             System.err.println(e);
         }
-        
+
         return countryEntities;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -127,8 +126,30 @@ public class QuestionDAOImpl implements QuestionDAO {
         } catch (Exception e) {
             System.err.println(e);
         }
-        
+
         return countryEntities;
+	}
+
+	@Override
+	public List<QuestionEntity> findAllQuestionEntitiesRandomly(long status, int limit, long category) {
+		String sql = "SELECT " +
+						"q.* " +
+					  "FROM " +
+						"question_question_category qqc inner join " +
+					    "question q " +
+				        "on qqc.question = q.id " +
+				      "WHERE " +
+				        "qqc.question_category = :category AND " +
+				        "q.status = :status " +
+				      "ORDER BY " +
+				        "RAND() " +
+				      "LIMIT :limit";
+		List<QuestionEntity> result = entityManager.createNativeQuery(sql,QuestionEntity.class)
+				.setParameter("category",category)
+				.setParameter("status",status)
+				.setParameter("limit",limit)
+				.getResultList();
+		return result;
 	}
 
 	/**
@@ -147,11 +168,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         				criteriaBuilder.notEqual(root.get(QuestionEntity_.statusEntity).get(StatusEntity_.code), DeleteStatusEnum.DELETE.getCode()),
                 		criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]))
         		)
-        		
+
         );
 
         criteriaQuery.orderBy(createSortOrder(dataTableRequestDTO.getSortColumnName(), dataTableRequestDTO.getSortOrder(), criteriaBuilder, root));
-        
+
 
         if (CommonConstant.GRID_SEARC_COUNT.equals(type)) {
             long count = entityManager.createQuery(criteriaQuery).getResultList().size();
@@ -161,9 +182,9 @@ public class QuestionDAOImpl implements QuestionDAO {
             typedQuery.setFirstResult(dataTableRequestDTO.getStart());
             typedQuery.setMaxResults(dataTableRequestDTO.getLength());
             return (T) typedQuery.getResultList();
-        }	
+        }
 	}
-	
+
 	private List<Predicate> createSearchPredicate(String searchValue,CriteriaBuilder cb,Root<QuestionEntity> root) {
 		List<Predicate> predicates = new ArrayList<>();
 		if(!searchValue.isEmpty()) {
@@ -172,19 +193,19 @@ public class QuestionDAOImpl implements QuestionDAO {
 			predicates.add(cb.like(root.get(QuestionEntity_.statusEntity).get(StatusEntity_.description),"%"+searchValue+"%"));
 			predicates.add(cb.like(root.get(QuestionEntity_.createdBy),"%"+searchValue+"%"));
 			predicates.add(cb.like(root.get(QuestionEntity_.updatedBy),"%"+searchValue+"%"));
-		}		
+		}
 		else {
 			predicates.add(cb.conjunction());
 		}
 		return predicates;
 	}
-	
+
 	private List<Order> createSortOrder(String sortColumnName,String sortOrder, CriteriaBuilder cb,Root<QuestionEntity> root){
-		List<Order> orders = new ArrayList<>();		
+		List<Order> orders = new ArrayList<>();
 
 		Expression<?> ex = root.get(SysRoleEntity_.updatedOn);
-		
-		
+
+
 		if("code".equals(sortColumnName)) {
 			ex = root.get(QuestionEntity_.code);
 		}
@@ -202,10 +223,10 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}
 		else if("updatedBy".equals(sortColumnName)) {
 			ex = root.get(QuestionEntity_.updatedBy);
-		}		
-		
-		orders.add(("asc".equals(sortOrder))? cb.asc(ex):cb.desc(ex));		
-		
+		}
+
+		orders.add(("asc".equals(sortOrder))? cb.asc(ex):cb.desc(ex));
+
 		return orders;
 	}
 

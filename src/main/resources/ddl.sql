@@ -391,6 +391,7 @@ CREATE TABLE `student_examination` (
   `status` INT NOT NULL,
   `start_on` DATETIME NULL,
   `end_on` DATETIME NULL,
+  `final_mark` DECIMAL(4,2) DEFAULT 0,
   `created_by` VARCHAR(25) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(25) NOT NULL,
@@ -412,6 +413,37 @@ CREATE TABLE `student_examination` (
   CONSTRAINT `fk_student_examination_status`
     FOREIGN KEY (`status`)
     REFERENCES `status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
+
+CREATE TABLE `student_examination_question_answer` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `seq` INT,
+  `student_examination` INT NOT NULL,
+  `question` INT NOT NULL,
+  `question_answer` INT NULL,
+  `correct` BOOLEAN DEFAULT FALSE,
+  `created_by` VARCHAR(25) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_student_examination_question_answer_student_examination_idx` (`student_examination` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_student_examination`
+    FOREIGN KEY (`student_examination`)
+    REFERENCES `student_examination` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_question_answer_question_idx` (`question` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_question`
+    FOREIGN KEY (`question`)
+    REFERENCES `question` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_question_answer_question_answer_idx` (`question_answer` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_question_answer`
+    FOREIGN KEY (`question_answer`)
+    REFERENCES `question_answer` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 

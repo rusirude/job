@@ -29,7 +29,7 @@ public interface QuestionQuestionCategoryDAO {
 	/**
 	 * Select - *
 	 * From - QuestionQuestionCategoryEntity
-	 * Where - Question Category STATUS = ACTIVE and Question =  SYS_ROLE_ID
+	 * Where - Question Category STATUS = ACTIVE and Question =  questionId
 	 *
 	 * Select all QuestionQuestionCategoryEntity for Question Entity and Question Category  Status is ACTIVE
 	 * @param questionId

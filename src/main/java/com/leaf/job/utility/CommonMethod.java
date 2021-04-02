@@ -5,12 +5,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Component
 public class CommonMethod {
     public Date getSystemDate() {
         return new Date();
+    }
+
+    public Date addHoursAndMinutesToDate(Date date,int hour,int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR,hour);
+        calendar.add(Calendar.MINUTE,minute);
+        return calendar.getTime();
     }
 
     public String getUsername() {

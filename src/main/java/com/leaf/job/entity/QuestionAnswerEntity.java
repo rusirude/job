@@ -71,4 +71,6 @@ public class QuestionAnswerEntity extends CommonEntity{
 	public void setCorrect(boolean correct) {
 		this.correct = correct;
 	}
+
+
 }

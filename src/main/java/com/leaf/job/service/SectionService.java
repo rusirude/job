@@ -10,7 +10,7 @@ import com.leaf.job.dto.common.ResponseDTO;
 public interface SectionService {
 	/**
 	 * Save Section
-	 * @param SectionDTO
+	 * @param sectionDTO
 	 * @return {@link ResponseDTO}
 	 */
 	ResponseDTO<SectionDTO> saveSection(SectionDTO sectionDTO);

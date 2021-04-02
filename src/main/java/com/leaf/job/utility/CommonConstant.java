@@ -26,6 +26,7 @@ public class CommonConstant {
 
     public static final String EXAM_STATUS_PENDING = "PENDING";
     public static final String EXAM_STATUS_START = "START";
+    public static final String EXAM_STATUS_CLOSED = "CLOSED";
 
 
     /*------------ Password reset Request Status Code -------------------*/

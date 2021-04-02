@@ -171,10 +171,10 @@ var loadSectionTable = ()=>{
 			{
 				data: "code",
 				render: function (data, type, full) {
-					return `<button onClick="updateIconClickForSection('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" section="Update">
+					return `<button onClick="updateIconClickForSection('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
 														<i class="fa fa-pencil-alt"></i>
 													</button>
-													<button onClick="deleteIconClickForSection('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" section="Delete">
+													<button onClick="deleteIconClickForSection('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
 														<i class="fa fa-trash-alt"></i>
 													</button>`;
 				}
