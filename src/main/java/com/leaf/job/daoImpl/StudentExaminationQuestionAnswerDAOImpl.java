@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminationQuestionAnswerDAO {
@@ -51,6 +52,38 @@ public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminati
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StudentExaminationQuestionAnswerEntity findFirstStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(long studentExam){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<StudentExaminationQuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationQuestionAnswerEntity.class);
+        Root<StudentExaminationQuestionAnswerEntity> root = criteriaQuery.from(StudentExaminationQuestionAnswerEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(StudentExaminationQuestionAnswerEntity_.studentExaminationEntity).get(StudentExaminationEntity_.id), studentExam),
+                        criteriaBuilder.isNull(root.get(StudentExaminationQuestionAnswerEntity_.questionAnswerEntity))
+                ));
+        return entityManager.createQuery(criteriaQuery).setMaxResults(1).getSingleResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<StudentExaminationQuestionAnswerEntity> findStudentExaminationQuestionAnswerEntityByStudentExamination(long studentExam) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<StudentExaminationQuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationQuestionAnswerEntity.class);
+        Root<StudentExaminationQuestionAnswerEntity> root = criteriaQuery.from(StudentExaminationQuestionAnswerEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.equal(root.get(StudentExaminationQuestionAnswerEntity_.studentExaminationEntity).get(StudentExaminationEntity_.id), studentExam)
+        );
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
 
     /**
      * {@inheritDoc}

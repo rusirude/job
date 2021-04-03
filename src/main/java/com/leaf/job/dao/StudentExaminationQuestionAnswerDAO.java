@@ -2,6 +2,8 @@ package com.leaf.job.dao;
 
 import com.leaf.job.entity.StudentExaminationQuestionAnswerEntity;
 
+import java.util.List;
+
 public interface StudentExaminationQuestionAnswerDAO {
     /**
      * Load Reference Entity
@@ -24,6 +26,20 @@ public interface StudentExaminationQuestionAnswerDAO {
      * @return {@link StudentExaminationQuestionAnswerEntity}
      */
     StudentExaminationQuestionAnswerEntity findStudentExaminationQuestionAnswerEntityByStudentExaminationAndSeq(long studentExam,int seq);
+
+    /**
+     * Find Entity from DB By Id
+     * @param studentExam
+     * @return {@link StudentExaminationQuestionAnswerEntity}
+     */
+    StudentExaminationQuestionAnswerEntity findFirstStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(long studentExam);
+
+    /**
+     * Find Entity from DB By Id
+     * @param studentExam
+     * @return {@link StudentExaminationQuestionAnswerEntity}
+     */
+    List<StudentExaminationQuestionAnswerEntity> findStudentExaminationQuestionAnswerEntityByStudentExamination(long studentExam);
 
 
     /**

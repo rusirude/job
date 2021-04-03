@@ -1,19 +1,20 @@
 package com.leaf.job.controller;
 
-import com.leaf.job.dto.AnswerDTO;
-import com.leaf.job.dto.CountryDTO;
-import com.leaf.job.dto.SectionDTO;
+import com.leaf.job.dto.*;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.service.CountryService;
 import com.leaf.job.service.StartExaminationService;
+import com.leaf.job.utility.CommonConstant;
+import com.leaf.job.utility.ReportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 @Controller
@@ -21,10 +22,12 @@ import java.util.HashMap;
 public class StartExaminationController {
 
 	private StartExaminationService startExaminationService;
+	private ReportUtil reportUtil;
 
 	@Autowired
-	public StartExaminationController(StartExaminationService startExaminationService) {
+	public StartExaminationController(StartExaminationService startExaminationService, ReportUtil reportUtil) {
 		this.startExaminationService = startExaminationService;
+		this.reportUtil = reportUtil;
 	}
 
 	@PreAuthorize("hasRole('ROLE_STUEXAM')")
@@ -46,11 +49,20 @@ public class StartExaminationController {
 	@PreAuthorize("hasRole('ROLE_STUEXAM')")
 	@RequestMapping(path = "/start/{id}", method = RequestMethod.GET)
 	public ModelAndView viewStudentStartNoe(@PathVariable Long id) {
-		startExaminationService.setupQuestionForExam(id);
+		ResponseDTO<Integer> responseDTO = startExaminationService.setupQuestionForExam(id);
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("startExams");
-		mv.addObject("id",id);
-		mv.addObject("current",1);
+		if(responseDTO.getData()>0){
+			mv.setViewName("startExams");
+			mv.addObject("id",id);
+			mv.addObject("current",responseDTO.getData());
+		}
+		else {
+			ResponseDTO<FinalResultDTO> dto = startExaminationService.getFinalResult(id);
+			mv.addObject("id",id);
+			mv.addObject("data",dto.getData());
+			mv.setViewName("finalResult");
+		}
+
 		return mv;
 	}
 
@@ -66,5 +78,20 @@ public class StartExaminationController {
 	@ResponseBody
 	public ResponseDTO<?> saveSection(@RequestBody AnswerDTO answerDTO) {
 		return startExaminationService.saveAnswer(answerDTO);
+	}
+
+	@PreAuthorize("hasRole('ROLE_STUEXAM')")
+	@RequestMapping(value = "generateReport/{studentExams}", method = RequestMethod.GET)
+	public void generateAnswerList(HttpServletResponse response, @PathVariable long studentExams) {
+
+		try {
+			ReportDTO reportDTO = new ReportDTO();
+			reportDTO.setReportName("answer.jrxml");
+			reportDTO.setDownloadName("answers");
+			reportDTO.setReportPath(CommonConstant.REPORT_PATH);
+			reportUtil.createReportDownload(response, reportDTO);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

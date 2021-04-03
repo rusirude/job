@@ -14,6 +14,7 @@ var loadMainMenu = (callback)=>{
 		success: function(data){
 
 			let menuList = '';
+			let _mid = 0;
 
 			if(data.menuSectionDTOs && (data.menuSectionDTOs).length){
 				for(let section of data.menuSectionDTOs){
@@ -31,10 +32,11 @@ var loadMainMenu = (callback)=>{
 					if(section.menuDTOs && (section.menuDTOs).length){
 						menuList += '<ul class="nav nav-treeview">';
 						for(let menu of section.menuDTOs){
+							_mid++;
 							menuList += `<li class="nav-item">
-											<a href="Javascript:loadPage('${menu.url}')" class="nav-link">
+											<a href="Javascript:loadPageMenu('${menu.url}','m_${_mid}')" class="nav-link">
 												<i class="fa fa-chevron-right nav-icon"></i>
-												<p>${menu.description}</p>
+												<p id="m_${_mid}">${menu.description}</p>
 											</a>
 										</li>`;
 						}
