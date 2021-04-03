@@ -39,7 +39,7 @@ public class DashboardServiceImpl implements DashboardService {
         this.sysUserDAO = sysUserDAO;
     }
 
-    public MainMenuDTO loadMainMenu(){
+    public MainMenuDTO loadMainMenu() {
 
         Map<String, Set<AuthorityEntity>> menuMap = new HashMap<>();
 
@@ -50,8 +50,8 @@ public class DashboardServiceImpl implements DashboardService {
                 .forEach(sysUserSysRole -> {
                     sysRoles.add(sysUserSysRole.getSysRoleEntity());
                 });
-        if (! sysRoles.isEmpty()) {
-            sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRolesAndAnuthorityStatusAndSysRoleStatus(sysRoles, DefaultStatusEnum.ACTIVE.getCode(),DefaultStatusEnum.ACTIVE.getCode())
+        if (!sysRoles.isEmpty()) {
+            sysRoleAuthorityDAO.getSysRoleAuthorityEntitiesBySysRolesAndAnuthorityStatusAndSysRoleStatus(sysRoles, DefaultStatusEnum.ACTIVE.getCode(), DefaultStatusEnum.ACTIVE.getCode())
                     .stream()
                     .filter(sysRoleAuthorityEntity -> DefaultStatusEnum.ACTIVE.getCode().equalsIgnoreCase(sysRoleAuthorityEntity.getAuthorityEntity().getSectionEntity().getStatusEntity().getCode()))
                     .forEach(roleAuthority -> {
@@ -91,19 +91,22 @@ public class DashboardServiceImpl implements DashboardService {
 
 
         List<MenuSectionDTO> sectionDTOs = menuMap.entrySet()
-                    .stream()
-                    .map(stringSetEntry -> {
-                        MenuSectionDTO section = new MenuSectionDTO();
-                        section.setDescription(stringSetEntry.getKey().split("-")[1]);
-                        List<MenuDTO> menu = stringSetEntry.getValue().stream().map(authorityEntity -> {
-                            MenuDTO menuItem = new MenuDTO();
-                            menuItem.setDescription(authorityEntity.getDescription());
-                            menuItem.setUrl(authorityEntity.getUrl());
-                            return menuItem;
-                        }).collect(Collectors.toList());
-                        section.setMenuDTOs(menu);
-                        return section;
-                    }).collect(Collectors.toList());
+                .stream()
+                .map(stringSetEntry -> {
+                    MenuSectionDTO section = new MenuSectionDTO();
+                    section.setDescription(stringSetEntry.getKey().split("-")[1]);
+                    List<MenuDTO> menu = stringSetEntry.getValue()
+                            .stream()
+                            .sorted(Comparator.comparing(AuthorityEntity::getDescription))
+                            .map(authorityEntity -> {
+                                MenuDTO menuItem = new MenuDTO();
+                                menuItem.setDescription(authorityEntity.getDescription());
+                                menuItem.setUrl(authorityEntity.getUrl());
+                                return menuItem;
+                            }).collect(Collectors.toList());
+                    section.setMenuDTOs(menu);
+                    return section;
+                }).collect(Collectors.toList());
 
         return new MainMenuDTO(sectionDTOs);
     }

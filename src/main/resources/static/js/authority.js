@@ -259,6 +259,8 @@ var updateIconClickForAuthority = (code)=>{
 		$("#btnDelete").hide();
 		populateFormForAuthority(data);
 		$("#code").prop("disabled",true);
+		$("#authCode").prop("disabled",true);
+		$("#url").prop("disabled",true);
 		$("#formHeading").html("Update Authority");
 		FormTransition.openModal('#authorityModal');
 	};
