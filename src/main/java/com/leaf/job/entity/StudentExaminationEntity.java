@@ -13,6 +13,7 @@ public class StudentExaminationEntity extends CommonEntity{
     private StatusEntity statusEntity;
     private Date startOn;
     private Date endOn;
+    private Double finalMark;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,5 +73,14 @@ public class StudentExaminationEntity extends CommonEntity{
 
     public void setEndOn(Date endOn) {
         this.endOn = endOn;
+    }
+
+    public Double getFinalMark() {
+        return finalMark;
+    }
+
+    @Column(name = "final_mark")
+    public void setFinalMark(Double finalMark) {
+        this.finalMark = finalMark;
     }
 }

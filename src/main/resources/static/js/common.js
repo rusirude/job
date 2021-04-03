@@ -38,7 +38,7 @@ var createCommonDataTableRequset = (inputObj)=>{
 
 var FormTransition = (function () {
 	function openModal(formId){
-		$(formId).modal('show');
+		$(formId).modal({'backdrop':true},'show');
 	}
 	function closeModal(formId,tableId){
 		$(formId).modal('hide');

@@ -27,9 +27,9 @@ CREATE TABLE `sys_role` (
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -45,9 +45,9 @@ CREATE TABLE `title` (
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -60,16 +60,16 @@ CREATE TABLE `title` (
 
 
 CREATE TABLE `sys_user` (
-  `username` VARCHAR(25) NOT NULL,
+  `username` VARCHAR(100) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `title` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `status` INT NOT NULL,
   `student` BOOLEAN DEFAULT FALSE,
   `reset_password` TINYINT NOT NULL DEFAULT 0,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`username`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
@@ -92,9 +92,9 @@ CREATE TABLE `section` (
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `sectioncol_UNIQUE` (`code` ASC),
@@ -115,9 +115,9 @@ CREATE TABLE `authority` (
   `url` VARCHAR(80) NULL,
   `section` INT NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -137,7 +137,7 @@ CREATE TABLE `authority` (
 );
 
 CREATE TABLE `sys_user_sys_role` (
-  `sys_user` VARCHAR(25) NOT NULL,
+  `sys_user` VARCHAR(100) NOT NULL,
   `sys_role` INT NOT NULL,
   PRIMARY KEY (`sys_user`, `sys_role`),
   INDEX `fk_sys_user_sys_role_sys_role_idx` (`sys_role` ASC),
@@ -172,14 +172,14 @@ CREATE TABLE `sys_role_authoriry` (
 CREATE TABLE `master_data` (
   `code` VARCHAR(150) NOT NULL,
   `value` VARCHAR(255) NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`code`));
 
 CREATE TABLE `sys_user_authority` (
-  `sys_user` VARCHAR(25) NOT NULL,
+  `sys_user` VARCHAR(100) NOT NULL,
   `authority` INT(11) NOT NULL,
   `is_grant` INT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`sys_user`, `authority`),
@@ -200,9 +200,9 @@ CREATE TABLE `country` (
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -223,9 +223,9 @@ CREATE TABLE `password_policy` (
   `no_of_invalid_attempt` INT NOT NULL DEFAULT 0,
   `no_of_history_password` INT NOT NULL DEFAULT 0,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_password_policy_status_idx` (`status` ASC),
@@ -240,11 +240,11 @@ CREATE TABLE `password_policy` (
 
 CREATE TABLE `password_reset_request` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `sys_user` VARCHAR(25) NOT NULL,
+  `sys_user` VARCHAR(100) NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_password_reset_request_status_idx` (`status` ASC),
@@ -268,9 +268,9 @@ CREATE TABLE `question_category` (
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -286,9 +286,9 @@ CREATE TABLE `question` (
   `code` VARCHAR(10) NOT NULL,
   `description` LONGTEXT NOT NULL,
   `status` INT NOT NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -322,9 +322,9 @@ CREATE TABLE `question_answer` (
   `status` INT NOT NULL,
   `question` INT NOT NULL,
   `correct` BOOLEAN DEFAULT FALSE,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_question_answer_status_idx` (`status` ASC),
@@ -351,9 +351,9 @@ CREATE TABLE `examination` (
   `status` INT NOT NULL,
   `effective_on` DATETIME NULL,
   `expier_on` DATETIME  NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
@@ -372,28 +372,29 @@ CREATE TABLE `examination` (
 
 
 CREATE TABLE `student` (
-  `username` VARCHAR(25) NOT NULL,
-  `email` VARCHAR(25) NOT NULL,
+  `username` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
   `initial_password` VARCHAR(100) NULL,
-  `telephone` VARCHAR(100) NULL,
+  `telephone` VARCHAR(50) NULL,
   `address` VARCHAR(100) NULL,
   `company` VARCHAR(100) NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`username`));
 
 CREATE TABLE `student_examination` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `student` VARCHAR(25) NOT NULL,
+  `student` VARCHAR(100) NOT NULL,
   `examination` INT NOT NULL,
   `status` INT NOT NULL,
   `start_on` DATETIME NULL,
   `end_on` DATETIME NULL,
-  `created_by` VARCHAR(25) NOT NULL,
+  `final_mark` DECIMAL(4,2) DEFAULT 0,
+  `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` VARCHAR(25) NOT NULL,
+  `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_student_examination_student_idx` (`student` ASC),
@@ -412,6 +413,37 @@ CREATE TABLE `student_examination` (
   CONSTRAINT `fk_student_examination_status`
     FOREIGN KEY (`status`)
     REFERENCES `status` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
+
+CREATE TABLE `student_examination_question_answer` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `seq` INT,
+  `student_examination` INT NOT NULL,
+  `question` INT NOT NULL,
+  `question_answer` INT NULL,
+  `correct` BOOLEAN DEFAULT FALSE,
+  `created_by` VARCHAR(100) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(100) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_student_examination_question_answer_student_examination_idx` (`student_examination` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_student_examination`
+    FOREIGN KEY (`student_examination`)
+    REFERENCES `student_examination` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_question_answer_question_idx` (`question` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_question`
+    FOREIGN KEY (`question`)
+    REFERENCES `question` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_question_answer_question_answer_idx` (`question_answer` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_question_answer`
+    FOREIGN KEY (`question_answer`)
+    REFERENCES `question_answer` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 

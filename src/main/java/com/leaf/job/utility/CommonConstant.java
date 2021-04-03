@@ -26,6 +26,7 @@ public class CommonConstant {
 
     public static final String EXAM_STATUS_PENDING = "PENDING";
     public static final String EXAM_STATUS_START = "START";
+    public static final String EXAM_STATUS_CLOSED = "CLOSED";
 
 
     /*------------ Password reset Request Status Code -------------------*/
@@ -43,5 +44,8 @@ public class CommonConstant {
     public static final String SYSTEM_DATE_FORMAT = "dd/MM/yyyy";
     public static final String SYSTEM_DATE_TIME_FORMAT = "dd/MM/yyyy hh:mm a";
     public static final String DATE_TIMEZONE_JACKSON = "Asia/Colombo";
+
+    /**Report JRXML path*/
+    public static final String REPORT_PATH = "/reports/";
     
 }

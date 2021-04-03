@@ -5,6 +5,7 @@ import com.leaf.job.utility.CommonConstant;
 public enum ExamStatusEnum {
 
     PENDING(CommonConstant.EXAM_STATUS_PENDING),
+    CLOSED(CommonConstant.EXAM_STATUS_CLOSED),
     START(CommonConstant.EXAM_STATUS_START);
 
 
@@ -22,6 +23,8 @@ public enum ExamStatusEnum {
         switch (code){
             case CommonConstant.EXAM_STATUS_START:
                 return START;
+            case CommonConstant.EXAM_STATUS_CLOSED:
+                return CLOSED;
             default:
                 return PENDING;
         }

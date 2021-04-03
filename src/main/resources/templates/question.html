@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="code">Code<span style="color: red">*</span></label>
-                                    <input type="text" name="code" class="form-control form-control-sm" id="code" aria-describedby="code-error" aria-invalid="false"/>
+                                    <input maxlength="10" type="text" name="code" class="form-control form-control-sm" id="code" aria-describedby="code-error" aria-invalid="false"/>
                                     <span id="code-error" class="error invalid-feedback"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" onclick="stepper.next()">Next</button>
+                            <button class="btn btn-primary" onclick="clickNext()">Next</button>
                             <button class="btn btn-primary" onclick="cancelForm()">Cancel</button>
                         </div>
                         <div id="answers-part" class="content" role="tabpanel" aria-labelledby="answers-part-trigger">
