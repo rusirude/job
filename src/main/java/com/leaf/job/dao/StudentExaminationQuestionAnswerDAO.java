@@ -17,6 +17,14 @@ public interface StudentExaminationQuestionAnswerDAO {
      */
     StudentExaminationQuestionAnswerEntity findStudentExaminationQuestionAnswerEntity(long id);
 
+    /**
+     * Find Entity from DB By Id
+     * @param studentExam
+     * @param seq
+     * @return {@link StudentExaminationQuestionAnswerEntity}
+     */
+    StudentExaminationQuestionAnswerEntity findStudentExaminationQuestionAnswerEntityByStudentExaminationAndSeq(long studentExam,int seq);
+
 
     /**
      * Save StudentExaminationQuestionAnswer Entity

@@ -1,11 +1,15 @@
 package com.leaf.job.daoImpl;
 
 import com.leaf.job.dao.StudentExaminationQuestionAnswerDAO;
-import com.leaf.job.entity.StudentExaminationQuestionAnswerEntity;
+import com.leaf.job.entity.*;
+import com.leaf.job.enums.DefaultStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 @Repository
 public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminationQuestionAnswerDAO {
@@ -27,6 +31,24 @@ public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminati
     @Override
     public StudentExaminationQuestionAnswerEntity findStudentExaminationQuestionAnswerEntity(long id) {
         return entityManager.find(StudentExaminationQuestionAnswerEntity.class, id);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StudentExaminationQuestionAnswerEntity findStudentExaminationQuestionAnswerEntityByStudentExaminationAndSeq(long studentExam,int seq){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<StudentExaminationQuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationQuestionAnswerEntity.class);
+        Root<StudentExaminationQuestionAnswerEntity> root = criteriaQuery.from(StudentExaminationQuestionAnswerEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(StudentExaminationQuestionAnswerEntity_.studentExaminationEntity).get(StudentExaminationEntity_.id), studentExam),
+                        criteriaBuilder.equal(root.get(StudentExaminationQuestionAnswerEntity_.seq),seq)
+                ));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
 

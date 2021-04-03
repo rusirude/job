@@ -1,6 +1,8 @@
 package com.leaf.job.controller;
 
+import com.leaf.job.dto.AnswerDTO;
 import com.leaf.job.dto.CountryDTO;
+import com.leaf.job.dto.SectionDTO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
@@ -48,6 +50,21 @@ public class StartExaminationController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("startExams");
 		mv.addObject("id",id);
+		mv.addObject("current",1);
 		return mv;
+	}
+
+	@PreAuthorize("hasRole('ROLE_STUEXAM')")
+	@RequestMapping(path = "/question/{studentExam}/{seq}", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> getQuestion(@PathVariable Long studentExam,@PathVariable Integer seq) {
+		return startExaminationService.getQuestionsForExamination(studentExam,seq);
+	}
+
+	@PreAuthorize("hasRole('ROLE_STUEXAM')")
+	@RequestMapping(path = "/saveAnswer", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> saveSection(@RequestBody AnswerDTO answerDTO) {
+		return startExaminationService.saveAnswer(answerDTO);
 	}
 }

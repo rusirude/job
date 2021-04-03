@@ -1,14 +1,11 @@
 package com.leaf.job.serviceImpl;
 
-import com.leaf.job.dao.QuestionDAO;
-import com.leaf.job.dao.StatusDAO;
-import com.leaf.job.dao.StudentExaminationDAO;
-import com.leaf.job.dao.StudentExaminationQuestionAnswerDAO;
-import com.leaf.job.dto.QuestionDTO;
-import com.leaf.job.dto.StudentExaminationDTO;
+import com.leaf.job.dao.*;
+import com.leaf.job.dto.*;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.entity.QuestionAnswerEntity;
 import com.leaf.job.entity.StatusEntity;
 import com.leaf.job.entity.StudentExaminationEntity;
 import com.leaf.job.entity.StudentExaminationQuestionAnswerEntity;
@@ -32,14 +29,16 @@ public class StartExaminationServiceImpl implements StartExaminationService {
     private StudentExaminationDAO studentExaminationDAO;
     private StatusDAO statusDAO;
     private QuestionDAO questionDAO;
+    private QuestionAnswerDAO questionAnswerDAO;
     private StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO;
     private CommonMethod commonMethod;
 
     @Autowired
-    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, CommonMethod commonMethod) {
+    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, CommonMethod commonMethod) {
         this.studentExaminationDAO = studentExaminationDAO;
         this.statusDAO = statusDAO;
         this.questionDAO = questionDAO;
+        this.questionAnswerDAO = questionAnswerDAO;
         this.studentExaminationQuestionAnswerDAO = studentExaminationQuestionAnswerDAO;
         this.commonMethod = commonMethod;
     }
@@ -90,7 +89,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
             StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(id);
             StatusEntity statusEntity = statusDAO.findStatusEntityByCode(DefaultStatusEnum.ACTIVE.getCode());
             StatusEntity startExamStatusEntity = statusDAO.findStatusEntityByCode(ExamStatusEnum.START.getCode());
-            if(ExamStatusEnum.PENDING.getCode().equals(studentExaminationEntity.getStatusEntity().getCode())){
+            if (ExamStatusEnum.PENDING.getCode().equals(studentExaminationEntity.getStatusEntity().getCode())) {
                 questionDAO.findAllQuestionEntitiesRandomly(statusEntity.getId(), studentExaminationEntity.getExaminationEntity().getNoQuestion(), studentExaminationEntity.getExaminationEntity().getQuestionCategoryEntity().getId())
                         .forEach(questionEntity -> {
                             StudentExaminationQuestionAnswerEntity questionAnswerEntity = new StudentExaminationQuestionAnswerEntity();
@@ -104,8 +103,8 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                         });
 
                 Date startDateTime = commonMethod.getSystemDate();
-                String[] duration =  studentExaminationEntity.getExaminationEntity().getDuration().split(":");
-                Date endDateTime = commonMethod.addHoursAndMinutesToDate(startDateTime,Integer.parseInt(duration[0]),Integer.parseInt(duration[1]));
+                String[] duration = studentExaminationEntity.getExaminationEntity().getDuration().split(":");
+                Date endDateTime = commonMethod.addHoursAndMinutesToDate(startDateTime, Integer.parseInt(duration[0]), Integer.parseInt(duration[1]));
 
 
                 studentExaminationEntity.setStatusEntity(startExamStatusEntity);
@@ -114,9 +113,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
 
                 commonMethod.getPopulateEntityWhenUpdate(studentExaminationEntity);
                 studentExaminationDAO.updateStudentExaminationEntity(studentExaminationEntity);
-            }
-            else{
-                System.out.println("nn");
+            } else {
             }
 
         } catch (Exception e) {
@@ -128,16 +125,60 @@ public class StartExaminationServiceImpl implements StartExaminationService {
 
     @Override
     @Transactional
-    public ResponseDTO<List<QuestionDTO>> getQuestionsForExamination(Long id) {
-        List<QuestionDTO> list = new ArrayList<>();
+    public ResponseDTO<ExamQuestionDTO> getQuestionsForExamination(Long studentExam, Integer seq) {
+        String code = ResponseCodeEnum.FAILED.getCode();
+        QuestionDTO questionDTO = null;
+        ExamQuestionDTO examQuestionDTO = null;
+        try {
+            StudentExaminationQuestionAnswerEntity studentQuestionAnswerEntity = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExaminationAndSeq(studentExam, seq);
+            questionDTO = new QuestionDTO();
+            questionDTO.setCode(studentQuestionAnswerEntity.getQuestionEntity().getCode());
+            questionDTO.setDescription(studentQuestionAnswerEntity.getQuestionEntity().getDescription());
+
+            List<QuestionAnswerDTO> questionAnswerDTOs = questionAnswerDAO.findAllQuestionAnswerEntitiesByQuestion(studentQuestionAnswerEntity.getQuestionEntity().getId(),DefaultStatusEnum.ACTIVE.getCode())
+                    .stream()
+                    .sorted(Comparator.comparing(QuestionAnswerEntity::getPosition))
+                    .map(questionAnswerEntity -> {
+                        QuestionAnswerDTO questionAnswerDTO = new QuestionAnswerDTO();
+                        questionAnswerDTO.setId(questionAnswerEntity.getId());
+                        questionAnswerDTO.setDescription(questionAnswerEntity.getDescription());
+                        boolean isMark = Objects.nonNull(studentQuestionAnswerEntity.getQuestionAnswerEntity()) && (studentQuestionAnswerEntity.getQuestionAnswerEntity().getId().equals(questionAnswerEntity.getId()));
+                        questionAnswerDTO.setMark(isMark);
+                        return questionAnswerDTO;
+                    })
+                    .collect(Collectors.toList());
+
+            questionDTO.setQuestionAnswers(questionAnswerDTOs);
+
+            examQuestionDTO = new ExamQuestionDTO();
+            examQuestionDTO.setQuestion(questionDTO);
+            examQuestionDTO.setDuration(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getDuration());
+            examQuestionDTO.setTotal(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getNoQuestion());
+            examQuestionDTO.setStartTime(studentQuestionAnswerEntity.getStudentExaminationEntity().getStartOn());
+            examQuestionDTO.setCurrentTime(commonMethod.getSystemDate());
+            code = ResponseCodeEnum.SUCCESS.getCode();
+        } catch (Exception e) {
+            System.err.println("Getting Question for examination");
+        }
+        return new ResponseDTO<>(code,examQuestionDTO);
+    }
+
+    @Override
+    @Transactional
+    public ResponseDTO<?> saveAnswer(AnswerDTO answerDTO) {
         String code = ResponseCodeEnum.FAILED.getCode();
         try {
+            StudentExaminationQuestionAnswerEntity studentQuestionAnswerEntity = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExaminationAndSeq(answerDTO.getStudentExamination(), answerDTO.getSeq());
+            QuestionAnswerEntity questionAnswerEntity = questionAnswerDAO.loadQuestionAnswerEntity(answerDTO.getAnswer());
+            studentQuestionAnswerEntity.setQuestionAnswerEntity(questionAnswerEntity);
 
+            commonMethod.getPopulateEntityWhenUpdate(studentQuestionAnswerEntity);
+            studentExaminationQuestionAnswerDAO.updateStudentExaminationQuestionAnswerEntity(studentQuestionAnswerEntity);
 
+            code = ResponseCodeEnum.SUCCESS.getCode();
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("Getting Question for examination");
         }
-
-        return new ResponseDTO<>(code, list);
+        return new ResponseDTO<>(code);
     }
 }

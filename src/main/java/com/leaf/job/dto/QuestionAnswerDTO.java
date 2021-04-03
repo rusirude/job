@@ -7,7 +7,7 @@ public class QuestionAnswerDTO {
     private String statusCode;
     private String statusDescription;
     private boolean correct;
-    private boolean delete;
+    private boolean mark;
 
     public Long getId() {
         return id;
@@ -57,11 +57,11 @@ public class QuestionAnswerDTO {
         this.correct = correct;
     }
 
-    public boolean isDelete() {
-        return delete;
+    public boolean isMark() {
+        return mark;
     }
 
-    public void setDelete(boolean delete) {
-        this.delete = delete;
+    public void setMark(boolean mark) {
+        this.mark = mark;
     }
 }
