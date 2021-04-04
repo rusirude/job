@@ -88,6 +88,7 @@ public class SysUserDAOImpl implements SysUserDAO {
         criteriaQuery.where(
                 criteriaBuilder.and(
                         criteriaBuilder.notEqual(root.get(SysUserEntity_.statusEntity).get(StatusEntity_.code), DeleteStatusEnum.DELETE.getCode()),
+                        criteriaBuilder.equal(root.get(SysUserEntity_.student), false),
                         criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]))
                 )
 

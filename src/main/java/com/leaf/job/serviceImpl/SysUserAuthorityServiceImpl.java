@@ -129,6 +129,7 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 			
 			List<DropDownDTO> sysUser = sysUserDAO.findAllSysUsereEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream()
+					.filter(sysUserEntity -> !Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))
 					.map(ra-> new DropDownDTO(ra.getUsername(),ra.getUsername())).collect(Collectors.toList());
 			
 			
