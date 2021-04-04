@@ -1,9 +1,6 @@
 package com.leaf.job.serviceImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +92,7 @@ public class SysUserSysRoleServiceImpl implements SysUserSysRoleService {
 			
 			List<DropDownDTO> sysUser = sysUserDAO.findAllSysUsereEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream()
+					.filter(sysUserEntity -> !Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))
 					.map(su-> new DropDownDTO(su.getUsername(),su.getUsername())).collect(Collectors.toList());
 
 			map.put("sysUser", sysUser);
