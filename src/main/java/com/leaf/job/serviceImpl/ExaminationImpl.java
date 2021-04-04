@@ -68,6 +68,7 @@ public class ExaminationImpl implements ExaminationService {
 				examinationEntity.setCode(examinationDTO.getCode());
 				examinationEntity.setDescription(examinationDTO.getDescription());
 				examinationEntity.setQuestionCategoryEntity(questionCategoryEntity);
+				examinationEntity.setStatusEntity(statusEntity);
 				examinationEntity.setNoQuestion(examinationDTO.getNoQuestion());
 				examinationEntity.setDuration(examinationDTO.getDuration());
 				examinationEntity.setEffectiveOn(examinationDTO.getEffectiveOn());

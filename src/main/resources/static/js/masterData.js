@@ -9,8 +9,8 @@ var loadReferenceDataForMasterData = (callback)=>{
 		success: function(data){
 
 			if(data.code === Constant.CODE_SUCCESS){
-				for(let c of data.data.countries){
-					$("#DEFAULT_COUNTRY").append(`<option value="${c.code}">${c.description}</option>`);
+				for(let c of data.data.sysRole){
+					$("#STUDENT_ROLE").append(`<option value="${c.code}">${c.description}</option>`);
 				}
 
 				if(callback){
@@ -36,7 +36,6 @@ var findExsistingDataForMasterData = ()=>{
 			for(let _o of data.data || []){
 				$("#"+_o.code).val(_o.value || "");
 			}
-			componentHandler.upgradeDom(); 
 		}
 		else{
 			alert(data.message);
@@ -55,19 +54,18 @@ var saveDataForMasterData = ()=>{
 	if(validatorForMasterData()){
 		let successFunction = (data)=>{
 			if(data.code === Constant.CODE_SUCCESS){			
-				DialogBox.openSuccessMsgBox(data.message);
+				DialogBox.openMsgBox(data.message,'success');
 			}
 			else{
-				alert(data.message);
+				DialogBox.openMsgBox(data.message,'error');
 			}
 		};
 		let failedFunction = (data)=>{
-			alert("Server Error");
+			DialogBox.openMsgBox("Server Error",'error');
 		};
 		let data = [
 					{code:"DEFAULT_PASSWORD",value:$("#DEFAULT_PASSWORD").val()||""},
-					{code:"COMPANY_NAME",value:$("#COMPANY_NAME").val()||""},
-					{code:"DEFAULT_COUNTRY",value:$("#DEFAULT_COUNTRY").val()||""}
+					{code:"STUDENT_ROLE",value:$("#STUDENT_ROLE").val()||""}
 					];
 		let url = "/masterData/save";
 		let method = "POST";
@@ -77,23 +75,17 @@ var saveDataForMasterData = ()=>{
 
 var validatorForMasterData = ()=>{
 	let isValid = true;
-//	
-//	let code = $("#code");
-//	let description = $("#description");
-//	let status = $("#status");
-//	
-//	if(! code.val()){		
-//		//code.prop("required",true);		
-//		return isValid = false;
-//	}
-//	if(! description.val()){
-//		//description.prop("required",true);		
-//		return isValid = false;
-//	}
-//	if(! status.val()){
-//		//status.prop("required",true);
-//		return isValid = false;
-//	}
+
+	let DEFAULT_PASSWORD = $("#DEFAULT_PASSWORD");
+	let STUDENT_ROLE = $("#STUDENT_ROLE");
+	if(! DEFAULT_PASSWORD.val()){
+		InputsValidator.inlineEmptyValidation(DEFAULT_PASSWORD);
+		isValid = false;
+	}
+	if(! STUDENT_ROLE.val()){
+		InputsValidator.inlineEmptyValidationSelect(STUDENT_ROLE);
+		isValid = false;
+	}
 	return isValid;
 };
 

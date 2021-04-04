@@ -25,6 +25,13 @@ public interface StudentExaminationDAO {
 
 
     /**
+     * Find Entity from DB By Id
+     * @param id
+     * @return {@link StudentExaminationEntity}
+     */
+    void deleteStudentExaminationEntity(long id);
+
+    /**
      * Save StudentExaminationEntity Entity
      *
      * @param studentExaminationEntity
@@ -42,7 +49,16 @@ public interface StudentExaminationDAO {
      * @param dataTableRequestDTO
      * @return
      */
-    <T> T getDataForGridForStudent(DataTableRequestDTO dataTableRequestDTO, String type, List<String> status, Date systemDate);
+    <T> T getDataForGridForStudentBetweenSystemDate(DataTableRequestDTO dataTableRequestDTO, String type, List<String> status, Date systemDate);
+
+    /**
+     * Getting Data For  Grid
+     * @param dataTableRequestDTO
+     * @return
+     */
+    <T> T getDataForGridForStudent(DataTableRequestDTO dataTableRequestDTO, String type);
+
+
 
 
 }

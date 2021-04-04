@@ -3,6 +3,7 @@ package com.leaf.job.dto;
 public class StudentExaminationDTO {
     private Long id;
     private String student;
+    private String studentName;
     private String examinationCode;
     private String examinationDescription;
     private Integer noQuestion;
@@ -24,6 +25,14 @@ public class StudentExaminationDTO {
 
     public void setStudent(String student) {
         this.student = student;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public String getExaminationCode() {

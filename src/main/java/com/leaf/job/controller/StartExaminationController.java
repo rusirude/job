@@ -48,7 +48,7 @@ public class StartExaminationController {
 
 	@PreAuthorize("hasRole('ROLE_STUEXAM')")
 	@RequestMapping(path = "/start/{id}", method = RequestMethod.GET)
-	public ModelAndView viewStudentStartNoe(@PathVariable Long id) {
+	public ModelAndView viewStudentStartExams(@PathVariable Long id) {
 		ResponseDTO<Integer> responseDTO = startExaminationService.setupQuestionForExam(id);
 		ModelAndView mv = new ModelAndView();
 		if(responseDTO.getData()>0){
@@ -81,6 +81,18 @@ public class StartExaminationController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_STUEXAM')")
+	@RequestMapping(path = "/end/{id}", method = RequestMethod.GET)
+	public ModelAndView viewStudentEndExam(@PathVariable Long id) {
+		startExaminationService.saveFinalAnswerCalculation(id);
+		ModelAndView mv = new ModelAndView();
+		ResponseDTO<FinalResultDTO> dto = startExaminationService.getFinalResult(id);
+		mv.addObject("id",id);
+		mv.addObject("data",dto.getData());
+		mv.setViewName("finalResult");
+
+		return mv;
+	}
+	@PreAuthorize("hasAnyRole('ROLE_STUEXAM','ROLE_STUEXAMADD')")
 	@RequestMapping(value = "generateReport/{studentExams}", method = RequestMethod.GET)
 	public void generateAnswerList(HttpServletResponse response, @PathVariable long studentExams) {
 

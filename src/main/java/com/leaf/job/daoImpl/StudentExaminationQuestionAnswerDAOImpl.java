@@ -1,5 +1,6 @@
 package com.leaf.job.daoImpl;
 
+import com.leaf.job.dao.ExaminationDAO;
 import com.leaf.job.dao.StudentExaminationQuestionAnswerDAO;
 import com.leaf.job.entity.*;
 import com.leaf.job.enums.DefaultStatusEnum;
@@ -66,7 +67,13 @@ public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminati
                         criteriaBuilder.equal(root.get(StudentExaminationQuestionAnswerEntity_.studentExaminationEntity).get(StudentExaminationEntity_.id), studentExam),
                         criteriaBuilder.isNull(root.get(StudentExaminationQuestionAnswerEntity_.questionAnswerEntity))
                 ));
-        return entityManager.createQuery(criteriaQuery).setMaxResults(1).getSingleResult();
+        try{
+            return entityManager.createQuery(criteriaQuery).setMaxResults(1).getSingleResult();
+        }
+        catch (Exception e){
+            return null;
+        }
+
     }
 
     /**

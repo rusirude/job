@@ -89,13 +89,6 @@ var InputsValidator = (function(){
 		});
 
 	}
-	function removeInlineValidation(element){
-		let _element = $(element);
-		_element.parent().find("span.error").html("");
-		_element.removeClass('is-invalid');
-		_element.off("keypress");
-		_element.off("change");
-	}
 	function inlineEmptyValidation(element){
 		let _element = $(element);
 		_element.parent().find("span.error").html("Can't be Empty");
@@ -104,16 +97,35 @@ var InputsValidator = (function(){
 			_element.removeClass('is-invalid');
 		});
 	}
+	function inlineEmptyValidationNumber(element){
+		let _element = $(element);
+		_element.parent().find("span.error").html("Invalid Input");
+		_element.addClass('is-invalid');
+		_element.off("keypress").on("keypress",()=>{
+			_element.removeClass('is-invalid');
+		});
+	}
+	function removeInlineValidation(element){
+		let _element = $(element);
+		_element.parent().find("span.error").html("");
+		_element.removeClass('is-invalid');
+		_element.off("keypress");
+		_element.off("change");
+	}
 	return{
 		inlineEmptyValidationSelect: function(element){
 			inlineEmptyValidationSelect(element)
 		},
-		removeInlineValidation: function(element){
-			removeInlineValidation(element);
-		},
 		inlineEmptyValidation: function(element){
 			inlineEmptyValidation(element);
+		},
+		inlineEmptyValidationNumber: function(element){
+			inlineEmptyValidationNumber(element);
+		},
+		removeInlineValidation: function(element){
+			removeInlineValidation(element);
 		}
+
 	}
 })();
 

@@ -188,7 +188,7 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 				sysUserAuthorityEntity.setAuthorityEntity(authorityEntity);
 				sysUserAuthorityEntity.setIsGrant(new Long(1));
 				
-				sysUserAuthorityDAO.saveSysUserAuthorityentity(sysUserAuthorityEntity);				
+				sysUserAuthorityDAO.saveSysUserAuthorityEntity(sysUserAuthorityEntity);
 				
 			}
 			
@@ -243,7 +243,7 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 				sysUserAuthorityEntity.setAuthorityEntity(authorityEntity);
 				sysUserAuthorityEntity.setIsGrant(new Long(0));
 				
-				sysUserAuthorityDAO.saveSysUserAuthorityentity(sysUserAuthorityEntity);	
+				sysUserAuthorityDAO.saveSysUserAuthorityEntity(sysUserAuthorityEntity);
 				
 			}
 			

@@ -96,7 +96,7 @@ public class SysUserAuthorityDAOImpl implements SysUserAuthorityDAO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveSysUserAuthorityentity(SysUserAuthorityEntity sysUserAuthorityEntity) {
+	public void saveSysUserAuthorityEntity(SysUserAuthorityEntity sysUserAuthorityEntity) {
 		entityManager.persist(sysUserAuthorityEntity);		
 	}
 
