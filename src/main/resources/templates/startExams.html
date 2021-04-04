@@ -10,12 +10,12 @@
                             <div class="row">
                                 <div class="col-9">
                                     <div class="progress">
-                                        <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            70%
+                                        <div id="timer" class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                            0%
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div id="timerVal" class="col-3">
                                     <h5>05:20</h5>
                                 </div>
                             </div>
@@ -43,10 +43,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-outline-info" onclick="clickPreviousBtn()">Previous</button>
-                                <button type="button" class="btn btn-outline-info">Save and Previous</button>
-                                <button type="button" class="btn btn-outline-info" onclick="clickNextAndSaveBtn()">Save and Next</button>
-                                <button type="button" class="btn btn-outline-info" onclick="clickNextBtn()">Next</button>
+                                <button id="previous" type="button" class="btn btn-outline-info" onclick="clickPreviousBtn()">Previous</button>
+                                <button id="savePrevious" type="button" class="btn btn-outline-info" onclick="clickPreviousAndSaveBtn()">Save and Previous</button>
+                                <button id="saveNext" type="button" class="btn btn-outline-info" onclick="clickNextAndSaveBtn()">Save and Next</button>
+                                <button id="next" type="button" class="btn btn-outline-info" onclick="clickNextBtn()">Next</button>
+                                <button type="button" class="btn btn-outline-info" onclick="finalSubmit()">Submit Result</button>
                             </div>
                         </div>
                     </div>
@@ -58,6 +59,21 @@
         <!-- /.card -->
     </div>
     <!-- /.col -->
+</div>
+
+<div class="modal fade" id="stopAlert">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Examination Time is exceeded</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button onclick="finishExam()" type="button" class="btn btn-primary">Finish</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
 
 <script src="/js/startExams.js"></script>

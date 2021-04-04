@@ -2,6 +2,7 @@ package com.leaf.job.dao;
 
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.entity.StudentEntity;
+import com.leaf.job.entity.SysUserEntity;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public interface StudentDAO {
      * @param studentEntity
      */
     void updateStudentEntity(StudentEntity studentEntity);
+
+
+    List<SysUserEntity> findStudents(String statusCode);
 
     /**
      * Getting Data For  Grid

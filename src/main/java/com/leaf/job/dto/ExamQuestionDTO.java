@@ -7,9 +7,11 @@ import java.util.Date;
 
 public class ExamQuestionDTO {
     private QuestionDTO question;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_2_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
     private Date startTime;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_2_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
+    private Date endTime;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_2_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
     private Date currentTime;
     private String duration;
     private Integer total;
@@ -29,6 +31,14 @@ public class ExamQuestionDTO {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Date getCurrentTime() {

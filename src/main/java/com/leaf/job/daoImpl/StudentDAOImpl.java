@@ -47,6 +47,23 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
+    public List<SysUserEntity> findStudents(String statusCode) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SysUserEntity> criteriaQuery = criteriaBuilder.createQuery(SysUserEntity.class);
+        Root<SysUserEntity> root = criteriaQuery.from(SysUserEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(SysUserEntity_.student),true),
+                        criteriaBuilder.equal(root.get(SysUserEntity_.statusEntity).get(StatusEntity_.code), statusCode)
+                )
+
+        );
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
+
+    @Override
     public <T> T getDataForGrid(DataTableRequestDTO dataTableRequestDTO, String type) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

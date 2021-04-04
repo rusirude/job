@@ -15,7 +15,7 @@ public interface SysUserAuthorityDAO {
 	 * 
 	 * Select all SysUserAuthorityEntity for SYSUSER (username)
 	 * @param username
-	 * @return {@link List<SysRoleAuthorityEntity>]
+	 * @return {@link List<SysUserAuthorityEntity>]
 	 */
 	List<SysUserAuthorityEntity> getSysUserAuthorityEntitiesBySysUser(String username);
 	
@@ -47,6 +47,6 @@ public interface SysUserAuthorityDAO {
 	 * Save SysUserAuthority Entity
 	 * @param sysUserAuthorityEntity
 	 */
-	void saveSysUserAuthorityentity(SysUserAuthorityEntity sysUserAuthorityEntity);
+	void saveSysUserAuthorityEntity(SysUserAuthorityEntity sysUserAuthorityEntity);
 
 }

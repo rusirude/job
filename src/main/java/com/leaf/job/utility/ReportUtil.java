@@ -3,14 +3,10 @@ package com.leaf.job.utility;
 import com.leaf.job.dto.ReportDTO;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -60,7 +56,6 @@ public class ReportUtil implements ServletContextAware {
 
             // Set parameters
             Map<String, Object> parameters = new HashMap<>();
-
 
 
             // Fill report

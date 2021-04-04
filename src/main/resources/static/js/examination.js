@@ -49,8 +49,8 @@ var validatorForExamination = ()=>{
 		InputsValidator.inlineEmptyValidation(description);
 		isValid = false;
 	}
-	if(! parseInt(noQuestion.val())){
-		InputsValidator.inlineEmptyValidation(noQuestion);
+	if(! parseInt(noQuestion.val()||0)){
+		InputsValidator.inlineEmptyValidationNumber(noQuestion);
 		isValid = false;
 	}
 	if(! duration.val()){
@@ -339,6 +339,7 @@ var evenBinderForExamination = ()=>{
 
 
 $(document).ready(()=>{
+	$('[data-mask]').inputmask();
 	$('#expireOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
 	$('#effectiveOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
 	loadReferenceDataForExamination();
