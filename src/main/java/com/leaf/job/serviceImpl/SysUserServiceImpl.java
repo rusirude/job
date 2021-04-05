@@ -88,6 +88,8 @@ public class SysUserServiceImpl implements SysUserService {
 				sysUserEntity.setName(sysUserDTO.getName());
 				sysUserEntity.setStatusEntity(statusEntity);
 				sysUserEntity.setResetRequest(false);
+				sysUserEntity.setStudent(false);
+
 				
 				commonMethod.getPopulateEntityWhenInsert(sysUserEntity);
 				
