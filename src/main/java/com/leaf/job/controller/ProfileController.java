@@ -4,6 +4,7 @@ import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.service.PasswordResetRequestService;
 import com.leaf.job.service.ProfileService;
+import com.leaf.job.utility.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,16 +24,20 @@ public class ProfileController {
 
 
     private ProfileService profileService;
+    private CommonMethod commonMethod;
+
 
     @Autowired
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(ProfileService profileService, CommonMethod commonMethod) {
         this.profileService = profileService;
+        this.commonMethod = commonMethod;
     }
 
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
     public ModelAndView profile() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("profile");
+        mv.addObject("user",commonMethod.getUsername());
         return mv;
     }
 
@@ -42,7 +47,7 @@ public class ProfileController {
         return profileService.getReferenceDataForProfile();
     }
 
-    @RequestMapping(path = "/saveProfile", method = RequestMethod.POST)
+    @RequestMapping(path = "/profile/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDTO<?> saveProfile(@RequestBody SysUserDTO sysUserDTO) {
         return profileService.saveProfile(sysUserDTO);

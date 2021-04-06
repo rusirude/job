@@ -15,6 +15,7 @@ import com.leaf.job.utility.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -39,6 +40,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    @Transactional
     public ResponseDTO<HashMap<String, Object>> getReferenceDataForProfile() {
         HashMap<String, Object> map = new HashMap<>();
         String code = ResponseCodeEnum.FAILED.getCode();
@@ -54,6 +56,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    @Transactional
     public ResponseDTO<?> saveProfile(SysUserDTO sysUserDTO) {
         String code = ResponseCodeEnum.FAILED.getCode();
         String description = "Password Change is Faild";
@@ -61,13 +64,12 @@ public class ProfileServiceImpl implements ProfileService {
         try {
             sysUserEntity = sysUserDAO.getSysUserEntityByUsername(commonMethod.getUsername());
 
-            if(sysUserEntity.getPassword().equals(bCryptPasswordEncoder.encode(sysUserDTO.getPassword()))){
-                sysUserEntity = new SysUserEntity();
+            if(bCryptPasswordEncoder.matches(sysUserDTO.getPassword(),sysUserEntity.getPassword())){
                 sysUserEntity.setPassword(bCryptPasswordEncoder.encode(sysUserDTO.getNewPassword()));
 
                 commonMethod.getPopulateEntityWhenUpdate(sysUserEntity);
 
-                sysUserDAO.saveSysUserEntity(sysUserEntity);
+                sysUserDAO.updateSysUserEntity(sysUserEntity);
 
                 code = ResponseCodeEnum.SUCCESS.getCode();
                 description = "Password is changed Successfully";
@@ -81,6 +83,6 @@ public class ProfileServiceImpl implements ProfileService {
         catch(Exception e) {
             System.err.println("Profile Change Issue");
         }
-        return new ResponseDTO<SysUserDTO>(code,description);
+        return new ResponseDTO<>(code,description);
     }
 }

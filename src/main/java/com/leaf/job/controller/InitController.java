@@ -1,5 +1,10 @@
 package com.leaf.job.controller;
 
+import com.leaf.job.dto.SysUserDTO;
+import com.leaf.job.dto.common.ResponseDTO;
+import com.leaf.job.service.SysUserService;
+import com.leaf.job.utility.CommonMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -7,6 +12,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class InitController {
+	@Autowired
+	private SysUserService sysUserService;
+	@Autowired
+	private CommonMethod commonMethod;
+
 	@RequestMapping(path={"/", "/login"}, method = RequestMethod.GET)	
 	public ModelAndView init() {
 		ModelAndView  mv = new  ModelAndView(); 
@@ -16,7 +26,11 @@ public class InitController {
 	
 	@RequestMapping(path="/home", method = RequestMethod.GET)	
 	public ModelAndView home() {
-		ModelAndView  mv = new  ModelAndView(); 
+		SysUserDTO sysUserDTO = new SysUserDTO();
+		sysUserDTO.setUsername(commonMethod.getUsername());
+		ResponseDTO<SysUserDTO> sysUser = sysUserService.findSysUser(sysUserDTO);
+		ModelAndView  mv = new  ModelAndView();
+		mv.addObject("user",(!sysUser.getData().getTitleCode().equals("CODE_NONE"))?sysUser.getData().getTitleDescription()+" ":""+sysUser.getData().getName());
 		mv.setViewName("home");
 		return mv;		
 	}
