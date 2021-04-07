@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -34,6 +34,11 @@
 		<!-- Right navbar links -->
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item">
+				<a class="nav-link" href="javascript: app.next('/profile')" role="button">
+					<i class="fa fa-key"></i>
+				</a>
+			</li>
+			<li class="nav-item">
 				<a class="nav-link" data-widget="fullscreen" href="#" role="button">
 					<i class="fas fa-expand-arrows-alt"></i>
 				</a>
@@ -61,10 +66,10 @@
 			<!-- Sidebar user panel (optional) -->
 			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 				<div class="image">
-<!--					<img src="#" class="img-circle elevation-2" alt="User Image"/>-->
+					<img src="/images/profile.png" class="img-circle elevation-2" alt="User Image"/>
 				</div>
 				<div class="info">
-					<a href="#" class="d-block">Devid</a>
+					<a href="#" class="d-block" th:text="${user}"></a>
 				</div>
 			</div>
 

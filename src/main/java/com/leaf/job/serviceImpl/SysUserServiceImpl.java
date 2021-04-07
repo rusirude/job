@@ -87,7 +87,7 @@ public class SysUserServiceImpl implements SysUserService {
 				sysUserEntity.setTitleEntity(titleEntity);
 				sysUserEntity.setName(sysUserDTO.getName());
 				sysUserEntity.setStatusEntity(statusEntity);
-				sysUserEntity.setResetRequest(false);
+				sysUserEntity.setResetRequest(false);;
 				sysUserEntity.setStudent(false);
 
 				
@@ -204,7 +204,7 @@ public class SysUserServiceImpl implements SysUserService {
 			}
 
 		} catch (Exception e) {
-			System.err.println("User Role Find Issue");
+			System.err.println("User Find Issue");
 		}
 		return new ResponseDTO<SysUserDTO>(code, description, dto);
 	}
