@@ -3,7 +3,6 @@ package com.leaf.job.daoImpl;
 import com.leaf.job.dao.StudentExaminationDAO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.entity.*;
-import com.leaf.job.enums.DeleteStatusEnum;
 import com.leaf.job.utility.CommonConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,7 +42,7 @@ public class StudentExaminationDAOImpl implements StudentExaminationDAO {
         CriteriaDelete<StudentExaminationEntity> criteriaQuery = criteriaBuilder.createCriteriaDelete(StudentExaminationEntity.class);
         Root<StudentExaminationEntity> root = criteriaQuery.from(StudentExaminationEntity.class);
         criteriaQuery.where(
-                criteriaBuilder.equal(root.get(StudentExaminationEntity_.id),id)
+                criteriaBuilder.equal(root.get(StudentExaminationEntity_.id), id)
         );
 
         entityManager.createQuery(criteriaQuery).executeUpdate();
@@ -107,7 +106,7 @@ public class StudentExaminationDAOImpl implements StudentExaminationDAO {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<StudentExaminationEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationEntity.class);
         Root<StudentExaminationEntity> root = criteriaQuery.from(StudentExaminationEntity.class);
-        List<Predicate> predicates = createSearchPredicate(dataTableRequestDTO.getSearch(),criteriaBuilder,root);
+        List<Predicate> predicates = createSearchPredicate(dataTableRequestDTO.getSearch(), criteriaBuilder, root);
         criteriaQuery.select(root);
         criteriaQuery.where(
                 criteriaBuilder.and(

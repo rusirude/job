@@ -87,7 +87,9 @@ public class StudentServiceImpl implements StudentService {
 					SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(studentRoleMasterDataEntity.getValue());
 
 					sysUserEntity.setUsername(studentDTO.getEmail());
-					sysUserEntity.setPassword(bCryptPasswordEncoder.encode(Optional.ofNullable(defaultPasswordMasterDataEntity.getValue()).orElse("")));
+					sysUserEntity.setPassword(bCryptPasswordEncoder.encode(Optional.ofNullable(studentDTO.getPassword())
+							.orElse(Optional.ofNullable(defaultPasswordMasterDataEntity.getValue())
+									.orElse(""))));
 					sysUserEntity.setTitleEntity(titleEntity);
 					sysUserEntity.setName(studentDTO.getName());
 					sysUserEntity.setStatusEntity(statusEntity);
