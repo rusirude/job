@@ -42,7 +42,7 @@ public class CommonConstant {
     /*------------ Date Format and Time Zone -------------------*/
     
     public static final String SYSTEM_DATE_FORMAT = "dd/MM/yyyy";
-    public static final String SYSTEM_DATE_TIME_FORMAT = "dd/MM/yyyy hh:mm a";
+    public static final String SYSTEM_DATE_TIME_FORMAT = "MM/dd/yyyy hh:mm a";
     public static final String SYSTEM_DATE_TIME_2_FORMAT = "MM/dd/yyyy hh:mm a";
     //public static final String DATE_TIMEZONE_JACKSON = "Asia/Colombo";
     public static final String DATE_TIMEZONE_JACKSON = "Europe/Brussels";
