@@ -1,7 +1,8 @@
 package com.leaf.job.utility;
 
 public class CommonConstant {
-	
+    /*------------ SYSTEM USER AND ROLE -------------------*/
+    public static String SYSTEM = "SYSTEM";
 	/*------------ Response Code -------------------*/
 
     public static final String RESPONSE_SUCCESS = "SUCCESS";

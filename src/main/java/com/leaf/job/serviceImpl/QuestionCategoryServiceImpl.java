@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -190,7 +191,8 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
 		String code = ResponseCodeEnum.FAILED.getCode();
 		try {
 			List<DropDownDTO> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
-					.getStatusEntities().stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.getStatusEntities().stream()
+					.sorted(Comparator.comparing(StatusEntity::getDescription)).map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 
 			map.put("status", status);

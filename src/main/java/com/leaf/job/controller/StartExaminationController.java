@@ -4,7 +4,6 @@ import com.leaf.job.dto.*;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
-import com.leaf.job.service.CountryService;
 import com.leaf.job.service.StartExaminationService;
 import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.ReportUtil;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 
 @Controller
 @RequestMapping(path = "/studentExams")

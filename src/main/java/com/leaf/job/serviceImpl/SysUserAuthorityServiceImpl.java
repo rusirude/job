@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.leaf.job.utility.CommonConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,6 +131,7 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService {
 			List<DropDownDTO> sysUser = sysUserDAO.findAllSysUsereEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream()
 					.filter(sysUserEntity -> !Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))
+					.filter(sysUserEntity -> !CommonConstant.SYSTEM.equals(sysUserEntity.getUsername()))
 					.map(ra-> new DropDownDTO(ra.getUsername(),ra.getUsername())).collect(Collectors.toList());
 			
 			

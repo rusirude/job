@@ -8,6 +8,10 @@ public class StudentDTO extends SysUserDTO {
     private String address;
     private String company;
     private String examCode;
+    private String zipCode;
+    private String cityCode;
+    private String cityDescription;
+    private String vat;
 
     public String getEmail() {
         return email;
@@ -47,5 +51,37 @@ public class StudentDTO extends SysUserDTO {
 
     public void setExamCode(String examCode) {
         this.examCode = examCode;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCityDescription() {
+        return cityDescription;
+    }
+
+    public void setCityDescription(String cityDescription) {
+        this.cityDescription = cityDescription;
+    }
+
+    public String getVat() {
+        return vat;
+    }
+
+    public void setVat(String vat) {
+        this.vat = vat;
     }
 }

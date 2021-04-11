@@ -13,6 +13,10 @@ public class ExaminationEntity extends CommonEntity{
 	private QuestionCategoryEntity questionCategoryEntity;
 	private StatusEntity statusEntity;
 	private Integer noQuestion;
+	private Date dateOn;
+	private String location;
+	private String type;
+	private Double passMark;
 	private String duration;
 	private Date effectiveOn;
 	private Date expireOn;
@@ -73,6 +77,43 @@ public class ExaminationEntity extends CommonEntity{
 
 	public void setNoQuestion(Integer noQuestion) {
 		this.noQuestion = noQuestion;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_on")
+	public Date getDateOn() {
+		return dateOn;
+	}
+
+	public void setDateOn(Date dateOn) {
+		this.dateOn = dateOn;
+	}
+
+	@Column(name = "location")
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Column(name = "type")
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	@Column(name = "pass_mark")
+	public Double getPassMark() {
+		return passMark;
+	}
+
+	public void setPassMark(Double passMark) {
+		this.passMark = passMark;
 	}
 
 	@Column(name = "duration")

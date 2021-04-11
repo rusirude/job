@@ -2,12 +2,12 @@
  * @author: rusiru
  */
 
-var countryTable;
+var cityTable;
 
 
 /*------------------------------------------- CRUD Functions ------------------*/
 
-var generateFinalObjectForCountry = ()=>{
+var generateFinalObjectForCity = ()=>{
 	return {
 		code:$("#code").val()||"",
 		description:$("#description").val()||"",
@@ -15,22 +15,22 @@ var generateFinalObjectForCountry = ()=>{
 	}
 };
 
-var successFunctionForCountry = (data)=>{
+var successFunctionForCity = (data)=>{
 	if(data.code === Constant.CODE_SUCCESS){
 		DialogBox.openMsgBox(data.message,'success');
-		countryTable.ajax.reload();
-		clearDataForCountry();
+		cityTable.ajax.reload();
+		clearDataForCity();
 	}
 	else{
 		DialogBox.openMsgBox(data.message,'error');
 	}
 };
 
-var failedFunctionForCountry = (data)=>{
+var failedFunctionForCity = (data)=>{
 	DialogBox.openMsgBox("Server Error",'error');
 };
 
-var validatorForCountry = ()=>{
+var validatorForCity = ()=>{
 	let isValid = true;
 
 	let code = $("#code");
@@ -52,35 +52,35 @@ var validatorForCountry = ()=>{
 	return isValid;
 };
 
-var saveForCountry = ()=>{
-	if(validatorForCountry()){
-		let url = "/country/save";
+var saveForCity = ()=>{
+	if(validatorForCity()){
+		let url = "/city/save";
 		let method = "POST";
 
-		callToserver(url,method,generateFinalObjectForCountry(),successFunctionForCountry,failedFunctionForCountry);
+		callToserver(url,method,generateFinalObjectForCity(),successFunctionForCity,failedFunctionForCity);
 	}
 
 };
 
-var updateForCountry = ()=>{
-	if(validatorForCountry()){
-		let url = "/country/update";
+var updateForCity = ()=>{
+	if(validatorForCity()){
+		let url = "/city/update";
 		let method = "POST";
 
-		callToserver(url,method,generateFinalObjectForCountry(),successFunctionForCountry,failedFunctionForCountry);
+		callToserver(url,method,generateFinalObjectForCity(),successFunctionForCity,failedFunctionForCity);
 	}
 };
 
-var deleteForCountry = ()=>{
-	if(validatorForCountry()){
-		let url = "/country/delete";
+var deleteForCity = ()=>{
+	if(validatorForCity()){
+		let url = "/city/delete";
 		let method = "POST";
 
-		callToserver(url,method,generateFinalObjectForCountry(),successFunctionForCountry,failedFunctionForCountry);
+		callToserver(url,method,generateFinalObjectForCity(),successFunctionForCity,failedFunctionForCity);
 	}
 };
 
-var findDetailByCodeForCountry = (code,callback)=>{
+var findDetailByCodeForCity = (code,callback)=>{
 	let successFunction = (data)=>{
 		if(data.code === Constant.CODE_SUCCESS){
 			if(callback){
@@ -94,7 +94,7 @@ var findDetailByCodeForCountry = (code,callback)=>{
 	let failedFunction = (data)=>{
 		DialogBox.openMsgBox("Server Error",'error');
 	};
-	let url = "/country/loadCountryByCode";
+	let url = "/city/loadCityByCode";
 	let method = "POST";
 	callToserver(url,method,{code:code},successFunction,failedFunction);
 
@@ -103,7 +103,7 @@ var findDetailByCodeForCountry = (code,callback)=>{
 
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 
-var populateFormForCountry = (data) => {
+var populateFormForCity = (data) => {
 	if(data){
 		$("#code").val(data.code || "");
 		$("#description").val(data.description || "");
@@ -111,10 +111,10 @@ var populateFormForCountry = (data) => {
 	}
 };
 
-var loadReferenceDataForCountry = (callback)=>{
+var loadReferenceDataForCity = (callback)=>{
 	$.ajax({
 		type: "POST",
-		url: "/country/loadRefDataForCountry",
+		url: "/city/loadRefDataForCity",
 		contentType: "application/json",
 		dataType: "json",
 		success: function(data){
@@ -141,10 +141,10 @@ var loadReferenceDataForCountry = (callback)=>{
 };
 
 
-var loadCountryTable = ()=>{
-	countryTable = $('#countryTable').DataTable( {
+var loadCityTable = ()=>{
+	cityTable = $('#cityTable').DataTable( {
 		ajax: {
-			url : "/country/loadCountries",
+			url : "/city/loadCities",
 			contentType:"application/json",
 			type:"POST",
 			data:function(d){
@@ -171,10 +171,10 @@ var loadCountryTable = ()=>{
 			{
 				data: "code",
 				render: function (data, type, full) {
-					return `<button onClick="updateIconClickForCountry('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
+					return `<button onClick="updateIconClickForCity('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update">
 														<i class="fa fa-pencil-alt"></i>
 													</button>
-													<button onClick="deleteIconClickForCountry('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
+													<button onClick="deleteIconClickForCity('${data}')" type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete">
 														<i class="fa fa-trash-alt"></i>
 													</button>`;
 				}
@@ -183,7 +183,7 @@ var loadCountryTable = ()=>{
 	} );
 }
 
-var clearDataForCountry = ()=>{
+var clearDataForCity = ()=>{
 	let code = $("#code");
 	let description = $("#description");
 	let status = $("#status");
@@ -206,71 +206,71 @@ var clearDataForCountry = ()=>{
 	description.val("");
 	status.val("");
 
-	FormTransition.closeModal('#countryModal');
+	FormTransition.closeModal('#cityModal');
 
 };
 
 
 /*-------------------------------- Inline Event  ----------------------*/
-var clickAddForCountry = ()=>{
-	clearDataForCountry();
-	$("#formHeading").html("Add Country");
-	FormTransition.openModal('#countryModal');
+var clickAddForCity = ()=>{
+	clearDataForCity();
+	$("#formHeading").html("Add City");
+	FormTransition.openModal('#cityModal');
 };
 
-var updateIconClickForCountry = (code)=>{
+var updateIconClickForCity = (code)=>{
 	console.log(code);
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").show();
 		$("#btnDelete").hide();
-		populateFormForCountry(data);
+		populateFormForCity(data);
 		$("#code").prop("disabled",true);
-		$("#formHeading").html("Update Country");
-		FormTransition.openModal('#countryModal');
+		$("#formHeading").html("Update City");
+		FormTransition.openModal('#cityModal');
 	};
-	clearDataForCountry();
-	findDetailByCodeForCountry(code,_sF);
+	clearDataForCity();
+	findDetailByCodeForCity(code,_sF);
 };
 
-var deleteIconClickForCountry = (code)=>{
+var deleteIconClickForCity = (code)=>{
 	let _sF = (data)=>{
 		$("#btnSave").hide();
 		$("#btnUpdate").hide();
 		$("#btnDelete").show();
-		populateFormForCountry(data);
+		populateFormForCity(data);
 		$("#code").prop("disabled",true);
 		$("#description").prop("disabled",true);
 		$("#status").prop("disabled",true);
-		$("#formHeading").html("Delete Country");
-		FormTransition.openModal('#countryModal');
+		$("#formHeading").html("Delete City");
+		FormTransition.openModal('#cityModal');
 	};
-	clearDataForCountry();
-	findDetailByCodeForCountry(code,_sF);
+	clearDataForCity();
+	findDetailByCodeForCity(code,_sF);
 };
 
 
 /*-------------------------------- Dynamic Event  ----------------------*/
 
-var evenBinderForCountry = ()=>{
-	$("#btnCountryAdd").off().on("click",function(){
-		clickAddForCountry();
+var evenBinderForCity = ()=>{
+	$("#btnCityAdd").off().on("click",function(){
+		clickAddForCity();
 	});
 
 	$("#btnSave").off().on("click",function(){
-		saveForCountry();
+		saveForCity();
 	});
 
 	$("#btnUpdate").off().on("click",function(){
-		updateForCountry();
+		updateForCity();
 	});
 
 	$("#btnDelete").off().on("click",function(){
-		deleteForCountry();
+		deleteForCity();
 	});
 
 	$("#btnCancel").off().on("click",function(){
-		clearDataForCountry();
+		clearDataForCity();
 	});
 
 };
@@ -279,7 +279,7 @@ var evenBinderForCountry = ()=>{
 
 
 $(document).ready(()=>{
-	loadReferenceDataForCountry();
-	evenBinderForCountry();
-	loadCountryTable();
+	loadReferenceDataForCity();
+	evenBinderForCity();
+	loadCityTable();
 });

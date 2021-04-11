@@ -15,6 +15,11 @@ public class ExaminationDTO extends CommonDTO {
     private String statusCode;
     private String statusDescription;
     private Integer noQuestion;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
+    private Date dateOn;
+    private String location;
+    private String type;
+    private Double passMark;
     private String duration;
     @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
     private Date effectiveOn;
@@ -75,6 +80,38 @@ public class ExaminationDTO extends CommonDTO {
 
     public void setNoQuestion(Integer noQuestion) {
         this.noQuestion = noQuestion;
+    }
+
+    public Date getDateOn() {
+        return dateOn;
+    }
+
+    public void setDateOn(Date dateOn) {
+        this.dateOn = dateOn;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getPassMark() {
+        return passMark;
+    }
+
+    public void setPassMark(Double passMark) {
+        this.passMark = passMark;
     }
 
     public String getDuration() {

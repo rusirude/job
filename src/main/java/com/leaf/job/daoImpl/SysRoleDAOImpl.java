@@ -124,6 +124,7 @@ public class SysRoleDAOImpl implements SysRoleDAO {
         criteriaQuery.select(root);
         criteriaQuery.where(
         		criteriaBuilder.and(
+						criteriaBuilder.notEqual(root.get(SysRoleEntity_.code),CommonConstant.SYSTEM),
         				criteriaBuilder.notEqual(root.get(SysRoleEntity_.statusEntity).get(StatusEntity_.code), DeleteStatusEnum.DELETE.getCode()),
                 		criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]))
         		)

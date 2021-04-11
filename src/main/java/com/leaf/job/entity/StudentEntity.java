@@ -12,6 +12,9 @@ public class StudentEntity extends CommonEntity{
     private String telephone;
     private String address;
     private String company;
+    private CityEntity cityEntity;
+    private String zipCode;
+    private String vat;
 
     @Id
     @Column(name  = "username", length = 25 , nullable = false , unique = true)
@@ -66,5 +69,33 @@ public class StudentEntity extends CommonEntity{
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name =  "city" , nullable = false)
+    public CityEntity getCityEntity() {
+        return cityEntity;
+    }
+
+    public void setCityEntity(CityEntity cityEntity) {
+        this.cityEntity = cityEntity;
+    }
+
+    @Column(name  = "zip_code")
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    @Column(name  = "vat")
+    public String getVat() {
+        return vat;
+    }
+
+    public void setVat(String vat) {
+        this.vat = vat;
     }
 }

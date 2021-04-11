@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.leaf.job.utility.CommonConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +101,7 @@ public class SysRoleAuthorityServiceImpl implements SysRoleAuthorityService {
 			
 			List<DropDownDTO> sysRole = sysRoleDAO.findAllSysRoleEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream()
+					.filter(sysRoleEntity -> !CommonConstant.SYSTEM.equals(sysRoleEntity.getCode()))
 					.map(ra-> new DropDownDTO(ra.getCode(),ra.getDescription())).collect(Collectors.toList());
 
 			map.put("sysRole", sysRole);

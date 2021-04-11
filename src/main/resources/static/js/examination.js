@@ -9,6 +9,10 @@ var generateFinalObjectForExamination = ()=>{
 		noQuestion: $("#noQuestion").val()||"",
 		duration: $("#duration").val()||"",
 		statusCode:$("#status").val()||"",
+		dateOn:$("#dateOn").val()||"",
+		location:$("#location").val()||"",
+		type:$("#type").val()||"",
+		passMark:$("#passMark").val()||"",
 		effectiveOn:$("#effectiveOn").val()||"",
 		expireOn:$("#expireOn").val()||"",
 	}
@@ -38,6 +42,10 @@ var validatorForExamination = ()=>{
 	let duration = $("#duration");
 	let questionCategory = $("#questionCategory");
 	let status = $("#status");
+	let dateOn = $("#dateOn");
+	let location=$("#location");
+	let type = $("#type");
+	let passMark = $("#passMark");
 	let effectiveOn = $("#effectiveOn");
 	let expireOn = $("#expireOn");
 
@@ -55,6 +63,22 @@ var validatorForExamination = ()=>{
 	}
 	if(! duration.val()){
 		InputsValidator.inlineEmptyValidation(duration);
+		isValid = false;
+	}
+	if(! dateOn.val()){
+		InputsValidator.inlineEmptyValidation(dateOn);
+		isValid = false;
+	}
+	if(! location.val()){
+		InputsValidator.inlineEmptyValidation(location);
+		isValid = false;
+	}
+	if(! type.val()){
+		InputsValidator.inlineEmptyValidation(type);
+		isValid = false;
+	}
+	if(! parseInt(passMark.val()||0)){
+		InputsValidator.inlineEmptyValidation(passMark);
 		isValid = false;
 	}
 	if(! effectiveOn.val()){
@@ -128,6 +152,7 @@ var findDetailByCodeForExamination = (code,callback)=>{
 /*-------------------------------- Reference Data , Data Table and Common --------------------*/
 
 var populateFormForExamination = (data) => {
+
 	if(data){
 		$("#code").val(data.code || "");
 		$("#description").val(data.description || "");
@@ -135,6 +160,10 @@ var populateFormForExamination = (data) => {
 		$("#duration").val(data.duration || "");
 		$("#questionCategory").val(data.questionCategoryCode || "");
 		$("#status").val(data.statusCode || "");
+		$("#dateOn").val(data.dateOn || "");
+		$("#location").val(data.location || "");
+		$("#type").val(data.type || "");
+		$("#passMark").val(data.passMark || "");
 		$("#effectiveOn").val(data.effectiveOn || "");
 		$("#expireOn").val(data.expireOn || "");
 	}
@@ -227,6 +256,10 @@ var clearDataForExamination = ()=>{
 	let status = $("#status");
 	let effectiveOn = $("#effectiveOn");
 	let expireOn = $("#expireOn");
+	let dateOn = $("#dateOn");
+	let location=$("#location");
+	let type = $("#type");
+	let passMark = $("#passMark");
 
 	$("#btnSave").show();
 	$("#btnUpdate").hide();
@@ -240,6 +273,10 @@ var clearDataForExamination = ()=>{
 	noQuestion.prop("disabled",false);
 	duration.prop("disabled",false);
 	status.prop("disabled",false);
+	dateOn.prop("disabled",false);
+	location.prop("disabled",false);
+	type.prop("disabled",false);
+	passMark.prop("disabled",false);
 	effectiveOn.prop("disabled",false);
 	expireOn.prop("disabled",false);
 
@@ -250,6 +287,10 @@ var clearDataForExamination = ()=>{
 	InputsValidator.removeInlineValidation(noQuestion);
 	InputsValidator.removeInlineValidation(duration);
 	InputsValidator.removeInlineValidation(status);
+	InputsValidator.removeInlineValidation(dateOn);
+	InputsValidator.removeInlineValidation(location);
+	InputsValidator.removeInlineValidation(type);
+	InputsValidator.removeInlineValidation(passMark);
 	InputsValidator.removeInlineValidation(effectiveOn);
 	InputsValidator.removeInlineValidation(expireOn);
 
@@ -259,6 +300,10 @@ var clearDataForExamination = ()=>{
 	noQuestion.val(0);
 	duration.val("");
 	status.val("");
+	dateOn.val("");
+	location.val("");
+	type.val("");
+	passMark.val(0.00);
 	effectiveOn.val("");
 	expireOn.val("");
 
@@ -300,6 +345,10 @@ var deleteIconClickForExamination = (code)=>{
 		$("#noQuestion").prop("disabled",true);
 		$("#duration").prop("disabled",true);
 		$("#status").prop("disabled",true);
+		$("#dateOn").prop("disabled",true);
+		$("#location").prop("disabled",true);
+		$("#type").prop("disabled",true);
+		$("#passMark").prop("disabled",true);
 		$("#effectiveOn").prop("disabled",true);
 		$("#expireOn").prop("disabled",true);
 		$("#formHeading").html("Delete Examination");
@@ -342,6 +391,7 @@ $(document).ready(()=>{
 	$('[data-mask]').inputmask();
 	$('#expireOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
 	$('#effectiveOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
+	$('#dateOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
 	loadReferenceDataForExamination();
 	loadExaminationTable();
 	evenBinderForExamination();

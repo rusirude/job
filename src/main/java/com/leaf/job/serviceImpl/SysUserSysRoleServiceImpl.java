@@ -3,6 +3,7 @@ package com.leaf.job.serviceImpl;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.leaf.job.utility.CommonConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,7 @@ public class SysUserSysRoleServiceImpl implements SysUserSysRoleService {
 			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(sysUserDTO.getUsername());
 
 			sysRoleDAO.findAllSysRoleEntities(DefaultStatusEnum.ACTIVE.getCode()).stream()
+					.filter(sysRoleEntity -> !CommonConstant.SYSTEM.equals(sysRoleEntity.getCode()))
 					.forEach(sysRoleEntity -> {
 						SysUserSysRoleDTO sysUserSysRoleDTO = new SysUserSysRoleDTO();
 						sysUserSysRoleDTO.setUsername(sysUserEntity.getUsername());
@@ -93,6 +95,7 @@ public class SysUserSysRoleServiceImpl implements SysUserSysRoleService {
 			List<DropDownDTO> sysUser = sysUserDAO.findAllSysUsereEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream()
 					.filter(sysUserEntity -> !Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))
+					.filter(sysUserEntity -> !CommonConstant.SYSTEM.equals(sysUserEntity.getUsername()))
 					.map(su-> new DropDownDTO(su.getUsername(),su.getUsername())).collect(Collectors.toList());
 
 			map.put("sysUser", sysUser);

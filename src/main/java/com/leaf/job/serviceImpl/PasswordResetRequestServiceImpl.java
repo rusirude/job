@@ -156,6 +156,7 @@ public class PasswordResetRequestServiceImpl implements PasswordResetRequestServ
                         dto.setUsername(entity.getSysUserEntity().getUsername());
                         dto.setTitleDescription(entity.getSysUserEntity().getTitleEntity().getDescription());
                         dto.setName(entity.getSysUserEntity().getName());
+                        dto.setStatusCode(entity.getStatusEntity().getCode());
                         dto.setStatusDescription(entity.getStatusEntity().getDescription());
                         dto.setCreatedBy(entity.getCreatedBy());
                         dto.setCreatedOn(entity.getCreatedOn());

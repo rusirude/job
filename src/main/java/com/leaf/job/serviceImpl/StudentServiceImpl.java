@@ -18,10 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +28,7 @@ public class StudentServiceImpl implements StudentService {
 	private SysRoleDAO sysRoleDAO;
 	private StatusDAO statusDAO;
 	private TitleDAO titleDAO;
+	private CityDAO cityDAO;
 	private StatusCategoryDAO statusCategoryDAO;
 	private MasterDataDAO masterDataDAO;
 	private SysUserAuthorityDAO sysUserAuthorityDAO;
@@ -44,11 +42,12 @@ public class StudentServiceImpl implements StudentService {
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	public StudentServiceImpl(SysUserDAO sysUserDAO, SysRoleDAO sysRoleDAO, StatusDAO statusDAO, TitleDAO titleDAO, StatusCategoryDAO statusCategoryDAO, MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, StudentDAO studentDAO, StudentExaminationDAO studentExaminationDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public StudentServiceImpl(SysUserDAO sysUserDAO, SysRoleDAO sysRoleDAO, StatusDAO statusDAO, TitleDAO titleDAO, CityDAO cityDAO, StatusCategoryDAO statusCategoryDAO, MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, StudentDAO studentDAO, StudentExaminationDAO studentExaminationDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.sysUserDAO = sysUserDAO;
 		this.sysRoleDAO = sysRoleDAO;
 		this.statusDAO = statusDAO;
 		this.titleDAO = titleDAO;
+		this.cityDAO = cityDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
 		this.masterDataDAO = masterDataDAO;
 		this.sysUserAuthorityDAO = sysUserAuthorityDAO;
@@ -83,6 +82,7 @@ public class StudentServiceImpl implements StudentService {
 				if(sysUserEntity.getUsername() == null || DeleteStatusEnum.DELETE.getCode().equalsIgnoreCase(sysUserEntity.getStatusEntity().getCode())){
 
 					TitleEntity titleEntity = titleDAO.findTitleEntityByCode(studentDTO.getTitleCode());
+					CityEntity cityEntity = cityDAO.findCityEntityByCode(studentDTO.getCityCode());
 					StatusEntity statusEntity = statusDAO.findStatusEntityByCode(studentDTO.getStatusCode());
 					SysRoleEntity sysRoleEntity = sysRoleDAO.findSysRoleEntityByCode(studentRoleMasterDataEntity.getValue());
 
@@ -102,6 +102,9 @@ public class StudentServiceImpl implements StudentService {
 					studentEntity.setTelephone(studentDTO.getTelephone());
 					studentEntity.setAddress(studentDTO.getAddress());
 					studentEntity.setCompany(studentDTO.getCompany());
+					studentEntity.setCityEntity(cityEntity);
+					studentEntity.setZipCode(studentDTO.getZipCode());
+					studentEntity.setVat(studentDTO.getVat());
 
 					commonMethod.getPopulateEntityWhenInsert(sysUserEntity);
 					commonMethod.getPopulateEntityWhenInsert(studentEntity);
@@ -169,6 +172,7 @@ public class StudentServiceImpl implements StudentService {
 		String description = "Student Update Failed";
 		try {
 			TitleEntity titleEntity = titleDAO.findTitleEntityByCode(studentDTO.getTitleCode());
+			CityEntity cityEntity = cityDAO.findCityEntityByCode(studentDTO.getCityCode());
 			StatusEntity statusEntity = statusDAO.findStatusEntityByCode(studentDTO.getStatusCode());
 
 			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(studentDTO.getEmail());
@@ -185,6 +189,9 @@ public class StudentServiceImpl implements StudentService {
 			studentEntity.setTelephone(studentDTO.getTelephone());
 			studentEntity.setAddress(studentDTO.getAddress());
 			studentEntity.setCompany(studentDTO.getCompany());
+			studentEntity.setCityEntity(cityEntity);
+			studentEntity.setZipCode(studentDTO.getZipCode());
+			studentEntity.setVat(studentDTO.getVat());
 
 			commonMethod.getPopulateEntityWhenUpdate(sysUserEntity);
 			commonMethod.getPopulateEntityWhenUpdate(studentEntity);
@@ -261,6 +268,10 @@ public class StudentServiceImpl implements StudentService {
 				dto.setTelephone(studentEntity.getTelephone());
 				dto.setAddress(studentEntity.getAddress());
 				dto.setCompany(studentEntity.getCompany());
+				dto.setCityCode(studentEntity.getCityEntity().getCode());
+				dto.setCityDescription(studentEntity.getCityEntity().getDescription());
+				dto.setZipCode(studentEntity.getZipCode());
+				dto.setVat(studentEntity.getVat());
 				dto.setStatusCode(sysUserEntity.getStatusEntity().getCode());
 				dto.setStatusDescription(sysUserEntity.getStatusEntity().getDescription());
 				dto.setCreatedBy(sysUserEntity.getCreatedBy());
@@ -287,7 +298,8 @@ public class StudentServiceImpl implements StudentService {
 		String code = ResponseCodeEnum.FAILED.getCode();
 		try {
 			List<DropDownDTO> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
-					.getStatusEntities().stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.getStatusEntities().stream()
+					.sorted(Comparator.comparing(StatusEntity::getDescription)).map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 			
 			List<DropDownDTO> title = titleDAO.findAllTitleEntities(DefaultStatusEnum.ACTIVE.getCode())
@@ -296,10 +308,17 @@ public class StudentServiceImpl implements StudentService {
 			List<DropDownDTO> examination = examinationDAO.findAllExaminationEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream().map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
 					.collect(Collectors.toList());
+			List<DropDownDTO> city = cityDAO.findAllCityEntities(DefaultStatusEnum.ACTIVE.getCode())
+					.stream()
+					.sorted(Comparator.comparing(CityEntity::getDescription))
+					.map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
+					.collect(Collectors.toList());
+
 
 			map.put("status", status);
 			map.put("title", title);
 			map.put("examination", examination);
+			map.put("city", city);
 
 			code = ResponseCodeEnum.SUCCESS.getCode();
 		} catch (Exception e) {

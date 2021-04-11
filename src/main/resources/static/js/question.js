@@ -93,6 +93,7 @@ var validatorForQuestionStepOne = () => {
     let code = $("#code");
     let description = $("#description");
     let status = $("#status");
+    let category = $("#questionCategory");
 
     if (!code.val()) {
         InputsValidator.inlineEmptyValidation(code);
@@ -104,6 +105,10 @@ var validatorForQuestionStepOne = () => {
     }
     if (!status.val()) {
         InputsValidator.inlineEmptyValidationSelect(status);
+        isValid = false;
+    }
+    if (!(category.val().map(x => ({code: x}))).length) {
+        InputsValidator.inlineEmptyValidationSelect2(category);
         isValid = false;
     }
     return isValid;
@@ -295,23 +300,29 @@ var clearDataForQuestion = () => {
     code.prop("disabled", false);
     description.prop("disabled", false);
     status.prop("disabled", false);
-    questionCategory.prop("disabled", false);
 
     rowCount = 0;
     $("#answerSection")
         .find('.row.body').remove();
 
+
     $("#answerSection").append(rowCreator());
+
+    $("#answerSection")
+        .find('.row.body:first')
+        .find('button:has(i.fa-minus)').remove();
 
     InputsValidator.removeInlineValidation(code);
     InputsValidator.removeInlineValidation(description);
     InputsValidator.removeInlineValidation(status);
+    InputsValidator.removeEmptyValidationSelect2(questionCategory);
 
     code.val("");
     description.val("");
     status.val("");
     questionCategory.val([]);
     questionCategory.select2();
+    $('#questionCategory').select2("enable");
     stepper.previous();
     stepper.previous();
 
@@ -349,10 +360,8 @@ var deleteIconClickForQuestion = (code) => {
         populateFormForQuestion(data);
         $("#code").prop("disabled", true);
         $("#description").prop("disabled", true);
-        $("#url").prop("disabled", true);
-        $("#authCode").prop("disabled", true);
         $("#status").prop("disabled", true);
-        $("#section").prop("disabled", true);
+        $('#questionCategory').select2("enable",true);
         $("#formHeading").html("Delete Question");
         $("#questionTableDiv").hide();
         $("#questionFormDiv").show();
@@ -400,6 +409,11 @@ $(document).ready(() => {
     let _callback_1 = () => {
         stepper = new Stepper($('.bs-stepper')[0]);
         $('#questionCategory').select2();
+        $('#questionCategory').on('select2:select', function (e) {
+            let _element = $(this);
+            _element.removeClass('is-invalid');
+            _element.parent().find("span.error").html("");
+        });
     };
     loadReferenceDataForQuestion(_callback_1);
     loadQuestionTable();

@@ -82,11 +82,17 @@ var DialogBox = (function () {
 var InputsValidator = (function(){
 	function inlineEmptyValidationSelect(element){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Can't bsse Empty");
+		_element.parent().find("span.error").html("Can't be Empty");
 		_element.addClass('is-invalid');
 		_element.off("change").on("change",()=>{
 			_element.removeClass('is-invalid');
 		});
+
+	}
+	function inlineEmptyValidationSelect2(element){
+		let _element = $(element);
+		_element.parent().find("span.error").html("Can't be Empty");
+		_element.addClass('is-invalid');
 
 	}
 	function inlineEmptyValidation(element){
@@ -112,9 +118,18 @@ var InputsValidator = (function(){
 		_element.off("keypress");
 		_element.off("change");
 	}
+	function removeEmptyValidationSelect2(element){
+		let _element = $(element);
+		_element.removeClass('is-invalid');
+		_element.parent().find("span.error").html("");
+
+	}
 	return{
 		inlineEmptyValidationSelect: function(element){
 			inlineEmptyValidationSelect(element)
+		},
+		inlineEmptyValidationSelect2: function(element){
+			inlineEmptyValidationSelect2(element)
 		},
 		inlineEmptyValidation: function(element){
 			inlineEmptyValidation(element);
@@ -124,6 +139,9 @@ var InputsValidator = (function(){
 		},
 		removeInlineValidation: function(element){
 			removeInlineValidation(element);
+		},
+		removeEmptyValidationSelect2: function(element){
+			removeEmptyValidationSelect2(element);
 		}
 
 	}

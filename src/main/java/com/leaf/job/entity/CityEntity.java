@@ -3,8 +3,8 @@ package com.leaf.job.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "country")
-public class CountryEntity extends CommonEntity{
+@Table(name = "city")
+public class CityEntity extends CommonEntity{
 	
 	private Long id;
     private String code;

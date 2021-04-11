@@ -12,7 +12,10 @@ var generateFinalObjectForStudent = ()=>{
 		telephone:$("#telephone").val()||"",
 		company:$("#company").val()||"",
 		statusCode:$("#status").val()||"",
-		examCode:$("#examination").val()||""
+		examCode:$("#examination").val()||"",
+		zipCode:$("#zipCode").val()||"",
+		cityCode:$("#city").val()||"",
+		vat:$("#vat").val()||""
 	}
 };
 
@@ -41,7 +44,10 @@ var validatorForStudent = ()=>{
 	let address = $("#address");
 	let telephone = $("#telephone");
 	let status = $("#status");
-	
+	let zipCode = $("#zipCode");
+	let city = $("#city");
+	let vat = $("#vat");
+
 	if(! email.val()){
 		InputsValidator.inlineEmptyValidation(email);
 		isValid = false;
@@ -68,8 +74,20 @@ var validatorForStudent = ()=>{
 		InputsValidator.inlineEmptyValidationSelect(title);
 		isValid = false;
 	}
+	if(! zipCode.val()){
+		InputsValidator.inlineEmptyValidation(zipCode);
+		isValid = false;
+	}
+	if(! vat.val()){
+		InputsValidator.inlineEmptyValidation(vat);
+		isValid = false;
+	}
 	if(! status.val()){
 		InputsValidator.inlineEmptyValidationSelect(status);
+		isValid = false;
+	}
+	if(! city.val()){
+		InputsValidator.inlineEmptyValidationSelect(city);
 		isValid = false;
 	}
 	return isValid;
@@ -136,6 +154,9 @@ var populateFormForStudent = (data) => {
 		$("#telephone").val(data.telephone || "");
 		$("#company").val(data.company || "");
 		$("#status").val(data.statusCode || "");
+		$("#zipCode").val(data.zipCode || "");
+		$("#city").val(data.cityCode || "");
+		$("#vat").val(data.vat || "");
 	}
 };
 
@@ -154,7 +175,10 @@ var loadReferenceDataForStudent = (callback)=>{
             	for(let sc of data.data.title||[]){
             		$("#title").append(`<option value="${sc.code}">${sc.description}</option>`);
             	}
-				$("#examination").append(`<option value=""></option>`)
+				for(let c of data.data.city||[]){
+					$("#city").append(`<option value="${c.code}">${c.description}</option>`);
+				}
+				// $("#examination").append(`<option value=""></option>`);
 				for(let sc of data.data.examination||[]){
 					$("#examination").append(`<option value="${sc.code}">${sc.description}</option>`);
 				}
@@ -229,6 +253,9 @@ var clearDataForStudent = ()=>{
 	let telephone = $("#telephone");
 	let status = $("#status");
 	let examination = $("#examination");
+	let zipCode = $("#zipCode");
+	let city = $("#city");
+	let vat = $("#vat");
 
 	isAdd = true;
 	$("#btnSave").show();
@@ -247,6 +274,9 @@ var clearDataForStudent = ()=>{
 	telephone.prop("disabled",false);
 	status.prop("disabled",false);
 	examination.prop("disabled",false);
+	zipCode.prop("disabled",false);
+	city.prop("disabled",false);
+	vat.prop("disabled",false);
 
 
 	InputsValidator.removeInlineValidation(email);
@@ -257,6 +287,9 @@ var clearDataForStudent = ()=>{
 	InputsValidator.removeInlineValidation(telephone);
 	InputsValidator.removeInlineValidation(status);
 	InputsValidator.removeInlineValidation(examination);
+	InputsValidator.removeInlineValidation(zipCode);
+	InputsValidator.removeInlineValidation(city);
+	InputsValidator.removeInlineValidation(vat);
 
 	email.val("");
 	title.val("");
@@ -266,9 +299,16 @@ var clearDataForStudent = ()=>{
 	telephone.val("");
 	status.val("");
 	examination.val("");
+	zipCode.val("");
+	city.val("");
+	vat.val("");
 
 	FormTransition.closeModal('#studentModal');
 	
+};
+
+var generatePassword = ()=>{
+	$("#password").val( Math.random().toString(36).slice(-8));
 };
 
 
@@ -311,6 +351,9 @@ var deleteIconClickForStudent = (code)=>{
 		$("#company").prop("disabled",true);
 		$("#status").prop("disabled",true);
 		$("#examination").prop("disabled",true);
+		$("#zipCode").prop("disabled",true);
+		$("#city").prop("disabled",true);
+		$("#vat").prop("disabled",true);
 		$("#formHeading").html("Delete Student");
 
 		isAdd = false;
@@ -334,18 +377,21 @@ var evenBinderForStudent = ()=>{
 	});
 	
 	$("#btnUpdate").off().on("click",function(){
-		console.log("gggg");
 		updateForStudent();
 	});
 	
 	$("#btnDelete").off().on("click",function(){
-		console.log("gggg");
 		deleteForStudent();
 	});
 	
 	$("#btnCancel").off().on("click",function(){
 		clearDataForStudent();
 	});
+	$("#btnGeneratePassword").off().on("click",function(){
+		generatePassword();
+	});
+
+
 
 };
 
