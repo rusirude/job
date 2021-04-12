@@ -1,9 +1,6 @@
 package com.leaf.job.serviceImpl;
 
-import com.leaf.job.dao.ExaminationDAO;
-import com.leaf.job.dao.QuestionCategoryDAO;
-import com.leaf.job.dao.StatusCategoryDAO;
-import com.leaf.job.dao.StatusDAO;
+import com.leaf.job.dao.*;
 import com.leaf.job.dto.ExaminationDTO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
@@ -35,15 +32,17 @@ public class ExaminationImpl implements ExaminationService {
 	private ExaminationDAO examinationDAO;
 	private StatusDAO statusDAO;
 	private QuestionCategoryDAO questionCategoryDAO;
+	private QuestionQuestionCategoryDAO questionQuestionCategoryDAO;
 	private StatusCategoryDAO statusCategoryDAO;
 
 	private CommonMethod commonMethod;
 
 	@Autowired
-	public ExaminationImpl(ExaminationDAO examinationDAO, StatusDAO statusDAO, QuestionCategoryDAO questionCategoryDAO, StatusCategoryDAO statusCategoryDAO, CommonMethod commonMethod) {
+	public ExaminationImpl(ExaminationDAO examinationDAO, StatusDAO statusDAO, QuestionCategoryDAO questionCategoryDAO, QuestionQuestionCategoryDAO questionQuestionCategoryDAO, StatusCategoryDAO statusCategoryDAO, CommonMethod commonMethod) {
 		this.examinationDAO = examinationDAO;
 		this.statusDAO = statusDAO;
 		this.questionCategoryDAO = questionCategoryDAO;
+		this.questionQuestionCategoryDAO = questionQuestionCategoryDAO;
 		this.statusCategoryDAO = statusCategoryDAO;
 		this.commonMethod = commonMethod;
 	}
@@ -213,12 +212,18 @@ public class ExaminationImpl implements ExaminationService {
 		String code = ResponseCodeEnum.FAILED.getCode();
 		try {
 			List<DropDownDTO> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
-					.getStatusEntities().stream()
-					.sorted(Comparator.comparing(StatusEntity::getDescription)).map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.getStatusEntities()
+					.stream()
+					.sorted(Comparator.comparing(StatusEntity::getDescription))
+					.map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 
 			List<DropDownDTO> questionCategory = questionCategoryDAO.findAllQuestionCategoryEntities(DefaultStatusEnum.ACTIVE.getCode())
-					.stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.stream()
+					.map(s -> {
+						Long count = questionQuestionCategoryDAO.getQuestionEntityCountByQuestionCategoryAndStatus(s.getCode(),DefaultStatusEnum.ACTIVE.getCode());
+						return new DropDownDTO<>(s.getCode(), s.getDescription(),count);
+					})
 					.collect(Collectors.toList());
 
 			map.put("status", status);

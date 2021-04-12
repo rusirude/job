@@ -80,32 +80,32 @@ var DialogBox = (function () {
 
 /*  Inputs Validations    */
 var InputsValidator = (function(){
-	function inlineEmptyValidationSelect(element){
+	function inlineEmptyValidationSelect(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Can't be Empty");
+		_element.parent().find("span.error").html(msg||"Can't be Empty");
 		_element.addClass('is-invalid');
 		_element.off("change").on("change",()=>{
 			_element.removeClass('is-invalid');
 		});
 
 	}
-	function inlineEmptyValidationSelect2(element){
+	function inlineEmptyValidationSelect2(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Can't be Empty");
+		_element.parent().find("span.error").html(msg||"Can't be Empty");
 		_element.addClass('is-invalid');
 
 	}
-	function inlineEmptyValidation(element){
+	function inlineEmptyValidation(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Can't be Empty");
+		_element.parent().find("span.error").html(msg||"Can't be Empty");
 		_element.addClass('is-invalid');
 		_element.off("keypress").on("keypress",()=>{
 			_element.removeClass('is-invalid');
 		});
 	}
-	function inlineEmptyValidationNumber(element){
+	function inlineEmptyValidationNumber(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Invalid Input");
+		_element.parent().find("span.error").html(msg||"Invalid Input");
 		_element.addClass('is-invalid');
 		_element.off("keypress").on("keypress",()=>{
 			_element.removeClass('is-invalid');
@@ -125,17 +125,17 @@ var InputsValidator = (function(){
 
 	}
 	return{
-		inlineEmptyValidationSelect: function(element){
-			inlineEmptyValidationSelect(element)
+		inlineEmptyValidationSelect: function(element,msg){
+			inlineEmptyValidationSelect(element,msg)
 		},
-		inlineEmptyValidationSelect2: function(element){
-			inlineEmptyValidationSelect2(element)
+		inlineEmptyValidationSelect2: function(element,msg){
+			inlineEmptyValidationSelect2(element,msg)
 		},
-		inlineEmptyValidation: function(element){
-			inlineEmptyValidation(element);
+		inlineEmptyValidation: function(element,msg){
+			inlineEmptyValidation(element,msg);
 		},
-		inlineEmptyValidationNumber: function(element){
-			inlineEmptyValidationNumber(element);
+		inlineEmptyValidationNumber: function(element,msg){
+			inlineEmptyValidationNumber(element,msg);
 		},
 		removeInlineValidation: function(element){
 			removeInlineValidation(element);

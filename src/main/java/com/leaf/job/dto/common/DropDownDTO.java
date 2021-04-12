@@ -1,9 +1,10 @@
 package com.leaf.job.dto.common;
 
-public class DropDownDTO {
+public class DropDownDTO<T> {
 	
 	private String code;
 	private String description;
+	private T data;
 	
 	
 	
@@ -11,7 +12,13 @@ public class DropDownDTO {
 		this.code = code;
 		this.description = description;
 	}
-	
+
+	public DropDownDTO(String code, String description, T data) {
+		this.code = code;
+		this.description = description;
+		this.data = data;
+	}
+
 	public String getCode() {
 		return code;
 	}
@@ -24,6 +31,13 @@ public class DropDownDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
 }

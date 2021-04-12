@@ -35,7 +35,6 @@ var failedFunctionForExamination = (data)=>{
 
 var validatorForExamination = ()=>{
 	let isValid = true;
-	console.log("k");
 	let code = $("#code");
 	let description = $("#description");
 	let noQuestion = $("#noQuestion");
@@ -48,7 +47,6 @@ var validatorForExamination = ()=>{
 	let passMark = $("#passMark");
 	let effectiveOn = $("#effectiveOn");
 	let expireOn = $("#expireOn");
-
 	if(! code.val()){
 		InputsValidator.inlineEmptyValidation(code);
 		isValid = false;
@@ -93,9 +91,44 @@ var validatorForExamination = ()=>{
 		InputsValidator.inlineEmptyValidationSelect(questionCategory);
 		isValid = false;
 	}
+	if(questionCategory.val() && parseInt(questionCategory.find("option:selected").data('count')||0) < parseInt(noQuestion.val()||0)){
+		InputsValidator.inlineEmptyValidation(noQuestion,"Invalid No. of Question");
+		isValid = false;
+	}
 	if(! status.val()){
 		InputsValidator.inlineEmptyValidationSelect(status);
 		isValid = false;
+	}
+	if(($("#effectiveOn").val() && $("#expireOn").val() && $("#dateOn").val() && $("#duration").val())){
+		let d = $("#duration").val().split(":");
+		let eff = new Date($("#effectiveOn").val());
+		let effA = moment(new Date($("#effectiveOn").val())).add(parseInt(d[0]),'h').add(parseInt(d[1]),'m').toDate();
+		let exp = new Date($("#expireOn").val());
+		let expM = moment(new Date($("#expireOn").val())).add(-1*(parseInt(d[0])),'h').add(-1*(parseInt(d[1])),'m').toDate();
+		let date = new Date($("#dateOn").val());
+
+		if(exp <= eff){
+			InputsValidator.inlineEmptyValidation(effectiveOn,"Invalid Effective Date");
+			isValid = false;
+		}
+		if(exp <= effA){
+			InputsValidator.inlineEmptyValidation(expireOn,"Not enough for Exam Duration");
+			isValid = false;
+		}
+		if(expM < eff){
+			InputsValidator.inlineEmptyValidation(effectiveOn,"Not enough for Exam Duration");
+			isValid = false;
+		}
+		if(date < eff){
+			InputsValidator.inlineEmptyValidation(dateOn,"Can't be less than to Effective Date");
+			isValid = false;
+		}
+		if(expM < date){
+			InputsValidator.inlineEmptyValidation(dateOn,"Not enough for Complete Exam");
+			isValid = false;
+		}
+
+
 	}
 	return isValid;
 };
@@ -182,7 +215,7 @@ var loadReferenceDataForExamination = (callback)=>{
             		$("#status").append(`<option value="${s.code}">${s.description}</option>`);
             	}
             	for(let sc of data.data.questionCategory||[]){
-            		$("#questionCategory").append(`<option value="${sc.code}">${sc.description}</option>`);
+            		$("#questionCategory").append(`<option data-count="${sc.data}" value="${sc.code}">${sc.description}</option>`);
             	}
 
             	if(callback){
@@ -392,6 +425,11 @@ $(document).ready(()=>{
 	$('#expireOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
 	$('#effectiveOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
 	$('#dateOnDiv').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+	$("#expireOnDiv,#effectiveOnDiv,#dateOnDiv").on("change.datetimepicker", ({date, oldDate}) => {
+		InputsValidator.removeInlineValidation($("#expireOn,#effectiveOn,#dateOn"));
+	});
+
 	loadReferenceDataForExamination();
 	loadExaminationTable();
 	evenBinderForExamination();

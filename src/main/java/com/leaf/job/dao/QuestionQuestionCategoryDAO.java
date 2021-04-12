@@ -36,6 +36,16 @@ public interface QuestionQuestionCategoryDAO {
 	 * @return {@link List<QuestionQuestionCategoryEntity>}
 	 */
 	List<QuestionQuestionCategoryEntity> getQuestionQuestionCategoryEntity(long questionId);
+
+	/**
+	 * select - count(*)
+	 * From - Question
+	 * where - STATUS = statusCode and Category
+	 *
+	 * Find Question Entities Count By Status Code and Question Category
+	 * @return {@link Integer}
+	 */
+	Long getQuestionEntityCountByQuestionCategoryAndStatus(String categoryCode, String statusCode);
 	
 	
 }
