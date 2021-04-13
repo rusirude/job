@@ -14,7 +14,8 @@ var setNoQuestion = ()=>{
         let percentage = parseFloat(((done/total)*100).toFixed(2));
         $("#noDone").css("width",`${percentage}%`);
         $("#noDone").html(percentage);
-        $("#noDoneQnt").html(`${done}/${total} %`);
+        console.log("ssss");
+        $("#noDoneQnt").html(`${done}/${total}`);
     }
 };
 
@@ -25,11 +26,11 @@ var setTimer = ()=>{
     let e = moment(new Date(endTime));
     let c = moment(new Date(currentTime));
     let percentage = parseFloat(((c.diff(s)/e.diff(s))*100).toFixed(2));
-    let clazz = (percentage >= 90)? 'bg-danger' :(percentage >= 5 ?'bg-warning':'bg-primary');
+    let clazz = (percentage >= 90)? 'bg-danger' :(percentage >= 75 ?'bg-warning':'bg-primary');
     t.removeClass('bg-primary','bg-warning','bg-danger');
     t.addClass(clazz);
     t.css("width",`${percentage}%`);
-    t.html(percentage);
+    t.html(percentage + ' %');
 
     if(percentage >= 100){
         clearInterval(interval);
@@ -62,10 +63,10 @@ var createAnswer = (data)=>{
     return _a;
 };
 
-var setQuestionView = (data)=>{
+var setQuestionView = (data,key)=>{
     let _q = `<div class="card">
                     <div class="card-body">
-                        <h5 data-code="${data.code}">${data.description}</h5>
+                        <h5 data-code="${data.code}">Vraag ${key} : ${data.description}</h5>
                     </div>
                 </div>
                 <div class="card">
@@ -89,11 +90,12 @@ var findQuestionForExam = (questionKey,callback)=>{
     let successFunction = (data)=>{
         if(data.code === Constant.CODE_SUCCESS) {
             if(!data.data.closed){
-                setQuestionView(data.data.question);
+                setQuestionView(data.data.question,questionKey);
                 total = data.data.total||0;
+                done = data.data.done||0;
                 startTime = data.data.startTime;
                 endTime = data.data.endTime;
-                currentTime = data.data.currentTime;
+                //currentTime = data.data.currentTime;
             }
             else{
                 $("#stopAlert").modal({'backdrop':true},'show');
@@ -152,11 +154,15 @@ var changeButton = (seq)=>{
     let saveNext = $("#saveNext");
     let next = $("#next");
     if(seq===1){
+        saveNext.show();
+        next.show();
         previous.hide();
         savePrevious.hide();
 
     }
     else if(seq === total){
+        previous.show();
+        savePrevious.show();
         saveNext.hide();
         next.hide();
     }
@@ -171,16 +177,15 @@ var changeButton = (seq)=>{
 var clickNextBtn = () =>{
     let  seq = parseInt($("#current").val()||'1');
     $("#current").val(++seq);
-    findQuestionForExam(seq);
+    findQuestionForExam(seq,setNoQuestion);
     changeButton(seq);
 };
 var clickNextAndSaveBtn = () =>{
     let _f = ()=>{
         done = (!aan)?++done:done;
-        setNoQuestion();
         let  seq = parseInt($("#current").val()||'1');
         $("#current").val(++seq);
-        findQuestionForExam(seq);
+        findQuestionForExam(seq,setNoQuestion);
         changeButton(seq);
     };
 
@@ -189,10 +194,9 @@ var clickNextAndSaveBtn = () =>{
 var clickPreviousAndSaveBtn = () =>{
     let _f = ()=>{
         done = (!aan)?++done:done;
-        setNoQuestion();
         let  seq = parseInt($("#current").val()||'1');
         $("#current").val(--seq);
-        findQuestionForExam(seq);
+        findQuestionForExam(seq,setNoQuestion);
         changeButton(seq);
     };
 
@@ -202,7 +206,7 @@ var clickPreviousAndSaveBtn = () =>{
 var clickPreviousBtn = () =>{
     let  seq = parseInt($("#current").val()||'1');
     $("#current").val(--seq);
-    findQuestionForExam(seq);
+    findQuestionForExam(seq,setNoQuestion);
     changeButton(seq);
 };
 var finalSubmit = () =>{
@@ -215,12 +219,15 @@ var finalSubmit = () =>{
 $(document).ready(()=>{
     let seq =  parseInt($("#current").val()||'1')||1;
     let _f = ()=>{
+        currentTime = new Date();
         setTimer();
+        setNoQuestion();
+        changeButton(seq);
         interval = setInterval(()=>{
             incrementTime();
         },1000)
     };
     findQuestionForExam(seq,_f);
-    changeButton(seq);
+
 
 });

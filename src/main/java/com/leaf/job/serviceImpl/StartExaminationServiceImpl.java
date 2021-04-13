@@ -167,6 +167,8 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         try {
             Date systemDate = commonMethod.getSystemDate();
             StudentExaminationQuestionAnswerEntity studentQuestionAnswerEntity = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExaminationAndSeq(studentExam, seq);
+            Integer notAnswer = Optional.ofNullable(studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(studentExam))
+                    .orElse(Collections.emptyList()).size();
             StudentExaminationEntity studentExaminationEntity = studentQuestionAnswerEntity.getStudentExaminationEntity();
             StatusEntity closedExamStatusEntity = statusDAO.findStatusEntityByCode(ExamStatusEnum.CLOSED.getCode());
 
@@ -199,6 +201,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                 examQuestionDTO.setQuestion(questionDTO);
                 examQuestionDTO.setDuration(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getDuration());
                 examQuestionDTO.setTotal(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getNoQuestion());
+                examQuestionDTO.setDone(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getNoQuestion()-notAnswer);
                 examQuestionDTO.setStartTime(studentQuestionAnswerEntity.getStudentExaminationEntity().getStartOn());
                 examQuestionDTO.setEndTime(studentQuestionAnswerEntity.getStudentExaminationEntity().getEndOn());
                 examQuestionDTO.setCurrentTime(systemDate);

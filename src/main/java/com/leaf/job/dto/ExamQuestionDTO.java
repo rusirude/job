@@ -15,6 +15,7 @@ public class ExamQuestionDTO {
     private Date currentTime;
     private String duration;
     private Integer total;
+    private Integer done;
     private boolean closed;
 
     public QuestionDTO getQuestion() {
@@ -63,6 +64,14 @@ public class ExamQuestionDTO {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public Integer getDone() {
+        return done;
+    }
+
+    public void setDone(Integer done) {
+        this.done = done;
     }
 
     public boolean isClosed() {

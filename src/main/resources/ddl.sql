@@ -457,12 +457,16 @@ CREATE TABLE `student_examination_question_answer` (
 INSERT INTO `status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
 INSERT INTO `status_category` (`code`,`description`) VALUES ('DELETE','Delete');
 INSERT INTO `status_category` (`code`,`description`) VALUES ('PASREREQ','Password Reset Request');
+INSERT INTO `status_category` (`code`,`description`) VALUES ('EXAM','Examination');
 
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('ACTIVE','Active',1);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('INACTIVE','Inactive',1);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('DELETE','Delete',2);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('REQUEST','Requested',3);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('PRESET','Password Reset',3);
+INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('PENDING','Pending',4);
+INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('START','Started',4);
+INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('CLOSED','Closed',4);
 
 INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('USER_MGT_S','System Management',1,'SYSTEM','SYSTEM');
 INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('REF_MGT_S','Reference Data',1,'SYSTEM','SYSTEM');
