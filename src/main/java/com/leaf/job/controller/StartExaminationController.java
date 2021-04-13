@@ -95,10 +95,7 @@ public class StartExaminationController {
 	public void generateAnswerList(HttpServletResponse response, @PathVariable long studentExams) {
 
 		try {
-			ReportDTO reportDTO = new ReportDTO();
-			reportDTO.setReportName("answer.jrxml");
-			reportDTO.setDownloadName("answers");
-			reportDTO.setReportPath(CommonConstant.REPORT_PATH);
+			ReportDTO reportDTO = startExaminationService.generateAnswerDetailReportDetails(studentExams);
 			reportUtil.createReportDownload(response, reportDTO);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

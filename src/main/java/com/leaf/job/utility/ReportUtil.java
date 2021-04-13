@@ -51,11 +51,15 @@ public class ReportUtil implements ServletContextAware {
             JRDataSource jRdataSource = new JREmptyDataSource();
 
             if (reportDTO.getDtoList() != null) {
-                jRdataSource = new JRBeanCollectionDataSource(reportDTO.getDtoList());
+                jRdataSource = new JRBeanCollectionDataSource(reportDTO.getDtoList(),false);
             }
 
             // Set parameters
             Map<String, Object> parameters = new HashMap<>();
+
+            if (reportDTO.getReportParams() != null) {
+                parameters = reportDTO.getReportParams();
+            }
 
 
             // Fill report

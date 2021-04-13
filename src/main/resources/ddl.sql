@@ -398,6 +398,8 @@ CREATE TABLE `student_examination` (
   `start_on` DATETIME NULL,
   `end_on` DATETIME NULL,
   `final_mark` DECIMAL(4,2) DEFAULT 0,
+  `is_pass` BOOLEAN DEFAULT FALSE,
+  `pass_mark` DECIMAL(4,2) DEFAULT 0,
   `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(100) NOT NULL,

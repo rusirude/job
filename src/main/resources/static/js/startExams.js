@@ -83,6 +83,8 @@ var setQuestionView = (data,key)=>{
 };
 
 var finishExam = ()=>{
+    $("#stopAlert").modal('hide');
+    $("#submitAlert").modal('hide');
     app.next('/studentExams/end/'+$("#studentExam").val());
 };
 
@@ -188,8 +190,14 @@ var clickNextAndSaveBtn = () =>{
         findQuestionForExam(seq,setNoQuestion);
         changeButton(seq);
     };
+    if($("input[name='answer']:checked").val()){
+        saveQuestionAnswer(_f);
+    }
+    else{
+        DialogBox.openMsgBox("Need to Select Answer",'error');
+    }
 
-    saveQuestionAnswer(_f);
+
 };
 var clickPreviousAndSaveBtn = () =>{
     let _f = ()=>{
@@ -199,8 +207,12 @@ var clickPreviousAndSaveBtn = () =>{
         findQuestionForExam(seq,setNoQuestion);
         changeButton(seq);
     };
-
-    saveQuestionAnswer(_f);
+    if($("input[name='answer']:checked").val()){
+        saveQuestionAnswer(_f);
+    }
+    else{
+        DialogBox.openMsgBox("Need to Select Answer",'error');
+    }
 };
 
 var clickPreviousBtn = () =>{
@@ -210,9 +222,18 @@ var clickPreviousBtn = () =>{
     changeButton(seq);
 };
 var finalSubmit = () =>{
-    $("#stopAlert").modal('hide');
-    saveQuestionAnswer(finishExam);
+    if($("input[name='answer']:checked").val()){
+        let _f = ()=>{
+            $("#submitAlert").modal({'backdrop':true},'show');
+        };
+        saveQuestionAnswer(_f);
+    }
+    else{
+        $("#submitAlert").modal({'backdrop':true},'show');
+    }
+
 };
+
 
 /*-------------------------------- Document Ready ----------------------*/
 

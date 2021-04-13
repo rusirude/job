@@ -43,11 +43,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div>
-                                <button id="previous" type="button" class="btn btn-outline-primary" onclick="clickPreviousBtn()">Previous</button>
-                                <button id="savePrevious" type="button" class="btn btn-outline-primary" onclick="clickPreviousAndSaveBtn()">Save and Previous</button>
-                                <button id="saveNext" type="button" class="btn btn-outline-primary" onclick="clickNextAndSaveBtn()">Save and Next</button>
-                                <button id="next" type="button" class="btn btn-outline-primary" onclick="clickNextBtn()">Next</button>
-                                <button type="button" class="btn btn-outline-success" onclick="finalSubmit()" style="float: right">Submit Result</button>
+                                <button id="previous" type="button" class="btn btn-primary" onclick="clickPreviousBtn()">Previous</button>
+                                <button id="savePrevious" type="button" class="btn btn-primary" onclick="clickPreviousAndSaveBtn()">Save and Previous</button>
+                                <button id="saveNext" type="button" class="btn btn-primary" onclick="clickNextAndSaveBtn()">Save and Next</button>
+                                <button id="next" type="button" class="btn btn-primary" onclick="clickNextBtn()">Next</button>
+                                <button type="button" class="btn btn-success" onclick="finalSubmit()" style="float: right">Submit Result</button>
                             </div>
                         </div>
                     </div>
@@ -69,6 +69,22 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button onclick="finishExam()" type="button" class="btn btn-primary">Finish</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="submitAlert">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>U staat op het punt uw examen in te dienen, waardoor u uw examen beëindigd. Bent u zeker ?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Nee, ik wil mijn examen verderzetten</button>
+                <button onclick="finishExam()" type="button" class="btn btn-primary">Ja, ik wil mijn examen indienen</button>
             </div>
         </div>
         <!-- /.modal-content -->
