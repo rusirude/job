@@ -13,6 +13,7 @@ import com.leaf.job.service.StudentService;
 import com.leaf.job.service.SysUserService;
 import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.CommonMethod;
+import com.leaf.job.utility.MailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
+
+	private final static String STUDENT_REGISTRATION = "Student Registration";
 
 	private SysUserDAO sysUserDAO;
 	private SysRoleDAO sysRoleDAO;
@@ -36,13 +39,14 @@ public class StudentServiceImpl implements StudentService {
 	private StudentDAO studentDAO;
 	private StudentExaminationDAO studentExaminationDAO;
 	private ExaminationDAO examinationDAO;
+	private MailSenderService mailSenderService;
 
 	private CommonMethod commonMethod;
 
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	public StudentServiceImpl(SysUserDAO sysUserDAO, SysRoleDAO sysRoleDAO, StatusDAO statusDAO, TitleDAO titleDAO, CityDAO cityDAO, StatusCategoryDAO statusCategoryDAO, MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, StudentDAO studentDAO, StudentExaminationDAO studentExaminationDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public StudentServiceImpl(SysUserDAO sysUserDAO, SysRoleDAO sysRoleDAO, StatusDAO statusDAO, TitleDAO titleDAO, CityDAO cityDAO, StatusCategoryDAO statusCategoryDAO, MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, StudentDAO studentDAO, StudentExaminationDAO studentExaminationDAO, ExaminationDAO examinationDAO, MailSenderService mailSenderService, CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.sysUserDAO = sysUserDAO;
 		this.sysRoleDAO = sysRoleDAO;
 		this.statusDAO = statusDAO;
@@ -55,6 +59,7 @@ public class StudentServiceImpl implements StudentService {
 		this.studentDAO = studentDAO;
 		this.studentExaminationDAO = studentExaminationDAO;
 		this.examinationDAO = examinationDAO;
+		this.mailSenderService = mailSenderService;
 		this.commonMethod = commonMethod;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
@@ -142,8 +147,10 @@ public class StudentServiceImpl implements StudentService {
 
 					}
 
+					mailSenderService.sendEmailWithPlainText(studentDTO.getEmail(),STUDENT_REGISTRATION,studentSaveMsg(studentDTO.getEmail(),studentDTO.getPassword()));
 					code = ResponseCodeEnum.SUCCESS.getCode();
 					description = "Student Save Successfully";
+
 
 				}
 
@@ -297,18 +304,18 @@ public class StudentServiceImpl implements StudentService {
 		HashMap<String, Object> map = new HashMap<>();
 		String code = ResponseCodeEnum.FAILED.getCode();
 		try {
-			List<DropDownDTO> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
+			List<?> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
 					.getStatusEntities().stream()
 					.sorted(Comparator.comparing(StatusEntity::getDescription)).map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 			
-			List<DropDownDTO> title = titleDAO.findAllTitleEntities(DefaultStatusEnum.ACTIVE.getCode())
+			List<?> title = titleDAO.findAllTitleEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream().map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
 					.collect(Collectors.toList());
-			List<DropDownDTO> examination = examinationDAO.findAllExaminationEntities(DefaultStatusEnum.ACTIVE.getCode())
+			List<?> examination = examinationDAO.findAllExaminationEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream().map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
 					.collect(Collectors.toList());
-			List<DropDownDTO> city = cityDAO.findAllCityEntities(DefaultStatusEnum.ACTIVE.getCode())
+			List<?> city = cityDAO.findAllCityEntities(DefaultStatusEnum.ACTIVE.getCode())
 					.stream()
 					.sorted(Comparator.comparing(CityEntity::getDescription))
 					.map(t-> new DropDownDTO(t.getCode(), t.getDescription()))
@@ -363,6 +370,11 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 		return responseDTO;
+	}
+
+
+	private String studentSaveMsg(String username, String password){
+		return "You have been registered to the VDAD SERVICES, Your Credential are,\n\nUsername : "+username+"\nPassword : "+password+"\nAfter login, Please change your password.\nThanks You..";
 	}
 
 }

@@ -101,4 +101,10 @@ public class StartExaminationController {
 			System.out.println(e.getMessage());
 		}
 	}
+	@PreAuthorize("hasAnyRole('ROLE_STUEXAM','ROLE_STUEXAMADD')")
+	@RequestMapping(value = "sendReport/{studentExams}", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDTO<?> sendAnswerList(@PathVariable long studentExams) {
+		return startExaminationService.generateAnswerDetailReportDetailsAndSendMail(studentExams);
+	}
 }

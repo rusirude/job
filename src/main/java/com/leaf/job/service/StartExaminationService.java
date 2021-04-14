@@ -22,6 +22,8 @@ public interface StartExaminationService {
     ResponseDTO<FinalResultDTO> getFinalResult(Long studentExam);
 
     ReportDTO generateAnswerDetailReportDetails(long studentExam);
+
+    ResponseDTO<?> generateAnswerDetailReportDetailsAndSendMail(long studentExam);
 ;
     DataTableResponseDTO getStudentExaminationForDataTableForAdd(DataTableRequestDTO dataTableRequestDTO);
 

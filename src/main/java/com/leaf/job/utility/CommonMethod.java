@@ -5,10 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,7 +18,7 @@ public class CommonMethod {
     }
 
     public Date getSystemDate() {
-       Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = TimeZone.getTimeZone(ZoneId.of(CommonConstant.DATE_TIMEZONE_JACKSON));
         Calendar ret = new GregorianCalendar(timeZone);
         ret.setTimeInMillis(calendar.getTimeInMillis() +

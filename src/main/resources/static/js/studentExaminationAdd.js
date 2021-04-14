@@ -149,8 +149,11 @@ var loadStudentExaminationAddTable = ()=>{
 					}
 					if(data.statusCode === 'CLOSED'){
 						return `<button onClick="reportIconClickForStudentExaminationAdd(${data.id})" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Print">
-														<i class="fas fa-print"></i>
-													</button>`;
+										<i class="fas fa-print"></i>
+								</button>
+								<button onClick="mailIconClickForStudentExaminationAdd(${data.id})" type="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Send">
+										<i class="fas fa-envelope"></i>
+								</button>`;
 					}
 				}
 			}
@@ -193,6 +196,26 @@ var reportIconClickForStudentExaminationAdd = (id)=>{
 
 	let url = '/studentExams/generateReport/'+id;
 	window.open(url);
+};
+
+
+var mailIconClickForStudentExaminationAdd = (id)=>{
+
+
+	let successFunction = (data)=>{
+		if(data.code === Constant.CODE_SUCCESS){
+			DialogBox.openMsgBox(data.message,'success');
+		}
+		else{
+			DialogBox.openMsgBox(data.message,'error');
+		}
+	};
+	let failedFunction = (data)=>{
+		DialogBox.openMsgBox("Server Error",'error');
+	};
+	let url = '/studentExams/sendReport/'+id;
+	let method = "POST";
+	callToserver(url,method,null,successFunction,failedFunction);
 };
 
 /*-------------------------------- Dynamic Event  ----------------------*/

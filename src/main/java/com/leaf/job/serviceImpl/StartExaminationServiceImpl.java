@@ -13,11 +13,13 @@ import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.service.StartExaminationService;
 import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.CommonMethod;
+import com.leaf.job.utility.MailSenderService;
+import com.leaf.job.utility.ReportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.activation.DataSource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -36,11 +38,12 @@ public class StartExaminationServiceImpl implements StartExaminationService {
     private SysUserDAO sysUserDAO;
     private ExaminationDAO examinationDAO;
     private CommonMethod commonMethod;
-    private ApplicationContext appContext;
+    private MailSenderService mailSenderService;
+    private ReportUtil reportUtil;
 
 
     @Autowired
-    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, StudentDAO studentDAO, SysUserDAO sysUserDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, ApplicationContext appContext) {
+    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, StudentDAO studentDAO, SysUserDAO sysUserDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, MailSenderService mailSenderService,  ReportUtil reportUtil) {
         this.studentExaminationDAO = studentExaminationDAO;
         this.statusDAO = statusDAO;
         this.questionDAO = questionDAO;
@@ -50,7 +53,8 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         this.sysUserDAO = sysUserDAO;
         this.examinationDAO = examinationDAO;
         this.commonMethod = commonMethod;
-        this.appContext = appContext;
+        this.mailSenderService = mailSenderService;
+        this.reportUtil = reportUtil;
     }
 
 
@@ -296,44 +300,35 @@ public class StartExaminationServiceImpl implements StartExaminationService {
     public ReportDTO generateAnswerDetailReportDetails(long studentExam) {
         ReportDTO reportDTO = null;
         try {
-            reportDTO = new ReportDTO();
-            Map<String, Object> parameters = new HashMap<>();
-            reportDTO.setReportPath(CommonConstant.REPORT_PATH);
-
-            StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
-            parameters.put("examination", studentExaminationEntity.getExaminationEntity().getDescription());
-            parameters.put("category", studentExaminationEntity.getExaminationEntity().getQuestionCategoryEntity().getDescription());
-            parameters.put("finalMark", studentExaminationEntity.getFinalMark());
-            parameters.put("isPass", Optional.ofNullable(studentExaminationEntity.getPass()).orElse(false) ? "Geslaagd" : "Niet geslaagd");
-            parameters.put("name", studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + " " + studentExaminationEntity.getSysUserEntity().getName());
-            parameters.put("email", studentExaminationEntity.getSysUserEntity().getUsername());
-            parameters.put("location", studentExaminationEntity.getExaminationEntity().getLocation());
-            parameters.put("date", studentExaminationEntity.getExaminationEntity().getDateOn());
-            parameters.put("type", studentExaminationEntity.getExaminationEntity().getType());
-            parameters.put("finalSummery", getFinalResult(studentExam).getData());
-
-            reportDTO.setReportParams(parameters);
-
-            List<QuestionResultDTO> results = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExamination(studentExam)
-                    .stream()
-                    .sorted(Comparator.comparing(StudentExaminationQuestionAnswerEntity::getSeq))
-                    .map(studentExaminationQuestionAnswerEntity -> {
-                        QuestionResultDTO questionResultDTO = new QuestionResultDTO();
-                        questionResultDTO.setQuestion("Vragen " + studentExaminationQuestionAnswerEntity.getSeq());
-                        questionResultDTO.setResult(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity()) ? "Niet Beantwoord" : (studentExaminationQuestionAnswerEntity.isCorrect() ? "Correct" : "Foutief"));
-                        return questionResultDTO;
-                    }).collect(Collectors.toList());
-
-            reportDTO.setDtoList(results);
-
-            reportDTO.setReportName("answer.jrxml");
-            reportDTO.setDownloadName(studentExaminationEntity.getSysUserEntity().getUsername() + "_" + studentExaminationEntity.getExaminationEntity().getDescription());
-
+            reportDTO = getAnswerReport(studentExam);
         } catch (Exception e) {
             System.err.println("Getting Question for examination");
         }
         return reportDTO;
     }
+
+    @Override
+    @Transactional
+    public ResponseDTO<?> generateAnswerDetailReportDetailsAndSendMail(long studentExam){
+        ReportDTO reportDTO = null;
+        String code = ResponseCodeEnum.FAILED.getCode();
+        String message = "Mail is not Sent";
+        try {
+            reportDTO = getAnswerReport(studentExam);
+            StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
+            DataSource attachment = reportUtil.createReportAsByteStream(reportDTO);
+            String subject = "Result of "+studentExaminationEntity.getExaminationEntity().getDescription();
+            String content = "Result is attached with this mail";
+            mailSenderService.sendEmailWithPlainTextAndAttachment(studentExaminationEntity.getSysUserEntity().getUsername(),subject,content,attachment,reportDTO.getDownloadName()+".pdf");
+            code = ResponseCodeEnum.SUCCESS.getCode();
+            message = "Mail is Sent";
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return new ResponseDTO<>(code,message);
+    }
+
+
 
 
     @Override
@@ -379,7 +374,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         String code = ResponseCodeEnum.FAILED.getCode();
         try {
             Date sysDate = commonMethod.getSystemDate();
-            List<DropDownDTO> examination = examinationDAO.findAllExaminationEntities(DefaultStatusEnum.ACTIVE.getCode())
+            List<?> examination = examinationDAO.findAllExaminationEntities(DefaultStatusEnum.ACTIVE.getCode())
                     .stream()
                     .filter(examinationEntity -> {
                         return examinationEntity.getExpireOn().compareTo(sysDate) > 0;
@@ -387,7 +382,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                     .map(t -> new DropDownDTO(t.getCode(), t.getDescription()))
                     .collect(Collectors.toList());
 
-            List<DropDownDTO> student = studentDAO.findStudents(DefaultStatusEnum.ACTIVE.getCode())
+            List<?> student = studentDAO.findStudents(DefaultStatusEnum.ACTIVE.getCode())
                     .stream().map(t -> new DropDownDTO(t.getUsername(), t.getTitleEntity().getDescription() + " " + t.getName() + "-" + t.getUsername()))
                     .collect(Collectors.toList());
 
@@ -396,9 +391,9 @@ public class StartExaminationServiceImpl implements StartExaminationService {
 
             code = ResponseCodeEnum.SUCCESS.getCode();
         } catch (Exception e) {
-            System.err.println("StudentExaminationAdd Ref Data Issue");
+            System.err.println(e.getMessage());
         }
-        return new ResponseDTO<HashMap<String, Object>>(code, map);
+        return new ResponseDTO<>(code, map);
     }
 
     @Override
@@ -515,5 +510,42 @@ public class StartExaminationServiceImpl implements StartExaminationService {
 
         commonMethod.getPopulateEntityWhenUpdate(studentExaminationEntity);
         studentExaminationDAO.updateStudentExaminationEntity(studentExaminationEntity);
+    }
+
+    private ReportDTO getAnswerReport(long studentExam){
+        ReportDTO reportDTO = new ReportDTO();
+        Map<String, Object> parameters = new HashMap<>();
+        reportDTO.setReportPath(CommonConstant.REPORT_PATH);
+
+        StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
+        parameters.put("examination", studentExaminationEntity.getExaminationEntity().getDescription());
+        parameters.put("category", studentExaminationEntity.getExaminationEntity().getQuestionCategoryEntity().getDescription());
+        parameters.put("finalMark", studentExaminationEntity.getFinalMark());
+        parameters.put("isPass", Optional.ofNullable(studentExaminationEntity.getPass()).orElse(false) ? "Geslaagd" : "Niet geslaagd");
+        parameters.put("name", studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + " " + studentExaminationEntity.getSysUserEntity().getName());
+        parameters.put("email", studentExaminationEntity.getSysUserEntity().getUsername());
+        parameters.put("location", studentExaminationEntity.getExaminationEntity().getLocation());
+        parameters.put("date", studentExaminationEntity.getExaminationEntity().getDateOn());
+        parameters.put("type", studentExaminationEntity.getExaminationEntity().getType());
+        parameters.put("finalSummery", getFinalResult(studentExam).getData());
+
+        reportDTO.setReportParams(parameters);
+
+        List<QuestionResultDTO> results = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExamination(studentExam)
+                .stream()
+                .sorted(Comparator.comparing(StudentExaminationQuestionAnswerEntity::getSeq))
+                .map(studentExaminationQuestionAnswerEntity -> {
+                    QuestionResultDTO questionResultDTO = new QuestionResultDTO();
+                    questionResultDTO.setQuestion("Vragen " + studentExaminationQuestionAnswerEntity.getSeq());
+                    questionResultDTO.setResult(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity()) ? "Niet Beantwoord" : (studentExaminationQuestionAnswerEntity.isCorrect() ? "Correct" : "Foutief"));
+                    return questionResultDTO;
+                }).collect(Collectors.toList());
+
+        reportDTO.setDtoList(results);
+
+        reportDTO.setReportName("answer.jrxml");
+        reportDTO.setDownloadName(studentExaminationEntity.getSysUserEntity().getUsername() + "_" + studentExaminationEntity.getExaminationEntity().getDescription());
+
+        return reportDTO;
     }
 }

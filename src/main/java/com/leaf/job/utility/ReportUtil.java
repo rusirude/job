@@ -8,8 +8,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
+import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,7 +38,6 @@ public class ReportUtil implements ServletContextAware {
 
         // Get report path
         String path = reportDTO.getReportPath() + reportDTO.getReportName();
-        //String logo = servletContext.getRealPath("/") + "/WEB-INF/classes/images/policecooplogo.jpg";
 
 
         // Get download file name
@@ -51,7 +53,7 @@ public class ReportUtil implements ServletContextAware {
             JRDataSource jRdataSource = new JREmptyDataSource();
 
             if (reportDTO.getDtoList() != null) {
-                jRdataSource = new JRBeanCollectionDataSource(reportDTO.getDtoList(),false);
+                jRdataSource = new JRBeanCollectionDataSource(reportDTO.getDtoList(), false);
             }
 
             // Set parameters
@@ -77,5 +79,48 @@ public class ReportUtil implements ServletContextAware {
         } catch (JRException | IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public DataSource createReportAsByteStream(ReportDTO reportDTO) {
+
+        DataSource dataSource = null;
+        // Get report path
+        String path = reportDTO.getReportPath() + reportDTO.getReportName();
+
+        // Compile report
+        JasperReport jasperReport = null;
+        try {
+            final InputStream stream = this.getClass().getResourceAsStream(path);
+            jasperReport = JasperCompileManager.compileReport(stream);
+
+            // Set DTO list
+            JRDataSource jRdataSource = new JREmptyDataSource();
+
+            if (reportDTO.getDtoList() != null) {
+                jRdataSource = new JRBeanCollectionDataSource(reportDTO.getDtoList(), false);
+            }
+
+            // Set parameters
+            Map<String, Object> parameters = new HashMap<>();
+
+            if (reportDTO.getReportParams() != null) {
+                parameters = reportDTO.getReportParams();
+            }
+
+
+            // Fill report
+            JasperPrint jasperPrint = null;
+
+            jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, jRdataSource);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+            dataSource = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+
+
+        } catch (JRException e) {
+            System.out.println(e.getMessage());
+        }
+        return dataSource;
     }
 }
