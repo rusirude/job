@@ -332,7 +332,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                         dto.setStudentName(entity.getSysUserEntity().getTitleEntity().getDescription() + " " + entity.getSysUserEntity().getName());
                         dto.setCompany(Optional.ofNullable(studentEntity.getCompany()).orElse(""));
                         dto.setPass("");
-                        if(ExamStatusEnum.PENDING.getCode().equals(entity.getStatusEntity().getCode())){
+                        if(!ExamStatusEnum.PENDING.getCode().equals(entity.getStatusEntity().getCode())){
                             dto.setPass(Optional.ofNullable(entity.getPass()).orElse(false) ? "Passed" : "Not Passed");
                         }
 
