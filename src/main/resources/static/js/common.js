@@ -78,28 +78,54 @@ var DialogBox = (function () {
 	}
 })();
 
+var Loader = (function () {
+	let loader = $(".loader");
+	function show(){
+		loader.show();
+
+	}
+	function hide(){
+		loader.hide();
+
+	}
+	return {
+		show: function(){
+			show();
+		},
+		hide: function(){
+			hide();
+		}
+	}
+})();
+
 /*  Inputs Validations    */
 var InputsValidator = (function(){
-	function inlineEmptyValidationSelect(element){
+	function inlineEmptyValidationSelect(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Can't bsse Empty");
+		_element.parent().find("span.error").html(msg||"Can't be Empty");
 		_element.addClass('is-invalid');
 		_element.off("change").on("change",()=>{
 			_element.removeClass('is-invalid');
 		});
 
 	}
-	function inlineEmptyValidation(element){
+	function inlineEmptyValidationSelect2(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Can't be Empty");
+		_element.parent().find("span.error").html(msg||"Can't be Empty");
+		_element.addClass('is-invalid');
+
+	}
+	function inlineEmptyValidation(element,msg){
+		let _element = $(element);
+		_element.parent().find("span.error").html(msg||"Can't be Empty");
 		_element.addClass('is-invalid');
 		_element.off("keypress").on("keypress",()=>{
 			_element.removeClass('is-invalid');
 		});
 	}
-	function inlineEmptyValidationNumber(element){
+	function inlineEmptyValidationNumber(element,msg){
 		let _element = $(element);
-		_element.parent().find("span.error").html("Invalid Input");
+		_element.parent().find("span.error").html(msg||"Invalid Input");
 		_element.addClass('is-invalid');
 		_element.off("keypress").on("keypress",()=>{
 			_element.removeClass('is-invalid');
@@ -112,22 +138,36 @@ var InputsValidator = (function(){
 		_element.off("keypress");
 		_element.off("change");
 	}
+	function removeEmptyValidationSelect2(element){
+		let _element = $(element);
+		_element.removeClass('is-invalid');
+		_element.parent().find("span.error").html("");
+
+	}
 	return{
-		inlineEmptyValidationSelect: function(element){
-			inlineEmptyValidationSelect(element)
+		inlineEmptyValidationSelect: function(element,msg){
+			inlineEmptyValidationSelect(element,msg)
 		},
-		inlineEmptyValidation: function(element){
-			inlineEmptyValidation(element);
+		inlineEmptyValidationSelect2: function(element,msg){
+			inlineEmptyValidationSelect2(element,msg)
 		},
-		inlineEmptyValidationNumber: function(element){
-			inlineEmptyValidationNumber(element);
+		inlineEmptyValidation: function(element,msg){
+			inlineEmptyValidation(element,msg);
+		},
+		inlineEmptyValidationNumber: function(element,msg){
+			inlineEmptyValidationNumber(element,msg);
 		},
 		removeInlineValidation: function(element){
 			removeInlineValidation(element);
+		},
+		removeEmptyValidationSelect2: function(element){
+			removeEmptyValidationSelect2(element);
 		}
 
 	}
 })();
+
+
 
 
 

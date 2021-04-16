@@ -2,7 +2,7 @@ package com.leaf.job.dto;
 
 import com.leaf.job.dto.common.CommonDTO;
 
-public class CountryDTO extends CommonDTO{
+public class CityDTO extends CommonDTO{
 
 	private String code;
 	private String description;

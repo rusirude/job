@@ -5,10 +5,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,7 +20,7 @@ public class CommonMethod {
     }
 
     public Date getSystemDate() {
-       Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = TimeZone.getTimeZone(ZoneId.of(CommonConstant.DATE_TIMEZONE_JACKSON));
         Calendar ret = new GregorianCalendar(timeZone);
         ret.setTimeInMillis(calendar.getTimeInMillis() +
@@ -48,6 +47,13 @@ public class CommonMethod {
         }
 
         return username;
+    }
+
+    public String dateTimeToString(Date date){
+        return new SimpleDateFormat(CommonConstant.SYSTEM_DATE_TIME_FORMAT).format(date);
+    }
+    public Date stringToDateTime(String date) throws ParseException {
+        return new SimpleDateFormat(CommonConstant.SYSTEM_DATE_TIME_FORMAT).parse(date);
     }
 
     public <T extends CommonEntity> void getPopulateEntityWhenInsert(T t) {

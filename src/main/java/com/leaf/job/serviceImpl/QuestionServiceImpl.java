@@ -313,7 +313,8 @@ public class QuestionServiceImpl implements QuestionService {
 		String code = ResponseCodeEnum.FAILED.getCode();
 		try {
 			List<DropDownDTO> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
-					.getStatusEntities().stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.getStatusEntities().stream()
+					.sorted(Comparator.comparing(StatusEntity::getDescription)).map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 
 			List<DropDownDTO> questionCategory = questionCategoryDAO.findAllQuestionCategoryEntities(DefaultStatusEnum.ACTIVE.getCode())

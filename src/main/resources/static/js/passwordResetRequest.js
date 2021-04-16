@@ -16,14 +16,17 @@ var successFunctionForPasswordResetRequest = (data)=> {
     if (data.code === Constant.CODE_SUCCESS) {
         DialogBox.openMsgBox(data.message,'success');
         passwordResetRequestTable.ajax.reload();
+        Loader.hide();
     }
     else {
         DialogBox.openMsgBox(data.message,'error');
+        Loader.hide();
     }
 };
 
 var failedFunctionForPasswordResetRequest = (data)=> {
     DialogBox.openMsgBox(data.message,'error');
+    Loader.hide();
 };
 
 
@@ -31,7 +34,7 @@ var failedFunctionForPasswordResetRequest = (data)=> {
 var confirmForPasswordResetRequest = (id)=> {
     let url = "/passwordResetRequest/resetPassword";
     let method = "POST";
-
+    Loader.show();
     callToserver(url, method, generateFinalObjectForPasswordResetRequest(id), successFunctionForPasswordResetRequest, failedFunctionForPasswordResetRequest);
 
 
@@ -65,9 +68,9 @@ var loadPasswordResetRequestTable = ()=> {
             {data: "name",                name: "name"    },
             {data: "statusDescription",   name: "status"  },
             {
-                data: "id",
+                data: null,
                 render: function (data, type, full) {
-                    return `<button onClick="confirmIconClickForPasswordResetRequest('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Reset Password">
+                    return `<button onClick="confirmIconClickForPasswordResetRequest('${data.id}')" type="button" class="${(data.statusCode==='PRESET')?'btn btn-outline-danger btn-sm':'btn btn-outline-primary btn-sm'}" data-toggle="tooltip" data-placement="bottom" title="Reset Password" ${(data.statusCode==='PRESET')?'disabled':''}>
                                 <i class="fa fa-thumbs-up"></i>
                             </button>`;
                 }

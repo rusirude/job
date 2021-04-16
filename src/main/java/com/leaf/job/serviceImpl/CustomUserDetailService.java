@@ -1,12 +1,10 @@
 package com.leaf.job.serviceImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -46,9 +44,10 @@ public class CustomUserDetailService implements UserDetailsService{
 		try {
 			SysUserEntity sysUserEntity = sysUserDAO.getSysUserEntityByUsername(username);
 
-			if(! DefaultStatusEnum.ACTIVE.getCode().equals(sysUserEntity.getStatusEntity().getCode())){
-				throw new UsernameNotFoundException("User is Not Activated");
-			}
+			if(sysUserEntity ==null)
+				throw new BadCredentialsException("User is Not Found");
+			if(! DefaultStatusEnum.ACTIVE.getCode().equals(sysUserEntity.getStatusEntity().getCode()))
+				throw new BadCredentialsException("User is Not Activated");
 
 			return new User(sysUserEntity.getUsername(),sysUserEntity.getPassword(),getGrantedAuthoritiesForUser(sysUserEntity));
 		}

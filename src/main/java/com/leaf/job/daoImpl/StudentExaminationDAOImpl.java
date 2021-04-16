@@ -129,6 +129,25 @@ public class StudentExaminationDAOImpl implements StudentExaminationDAO {
         }
     }
 
+    @Override
+    public <T> T getDataForGridForStudentReport(DataTableRequestDTO dataTableRequestDTO) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<StudentExaminationEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationEntity.class);
+        Root<StudentExaminationEntity> root = criteriaQuery.from(StudentExaminationEntity.class);
+        List<Predicate> predicates = createSearchPredicate(dataTableRequestDTO.getSearch(), criteriaBuilder, root);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]))
+                )
+
+        );
+
+        criteriaQuery.orderBy(createSortOrder(dataTableRequestDTO.getSortColumnName(), dataTableRequestDTO.getSortOrder(), criteriaBuilder, root));
+
+
+        return (T) entityManager.createQuery(criteriaQuery).getResultList();
+    }
     private List<Predicate> createSearchPredicate(String searchValue, CriteriaBuilder cb, Root<StudentExaminationEntity> root) {
         List<Predicate> predicates = new ArrayList<>();
         if (!searchValue.isEmpty()) {

@@ -1,6 +1,5 @@
 package com.leaf.job.serviceImpl;
 
-import com.leaf.job.dao.CountryDAO;
 import com.leaf.job.dao.MasterDataDAO;
 import com.leaf.job.dao.SysRoleDAO;
 import com.leaf.job.dto.MasterDataDTO;
@@ -10,6 +9,7 @@ import com.leaf.job.entity.MasterDataEntity;
 import com.leaf.job.enums.DefaultStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.service.MasterDataService;
+import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,9 @@ public class MasterDataServiceImpl implements MasterDataService {
         String code = ResponseCodeEnum.FAILED.getCode();
         try {
             List<DropDownDTO> sysRole = sysRoleDAO.findAllSysRoleEntities(DefaultStatusEnum.ACTIVE.getCode())
-                    .stream().map(c -> new DropDownDTO(c.getCode(), c.getDescription()))
+                    .stream()
+                    .filter(sysRoleEntity -> !CommonConstant.SYSTEM.equals(sysRoleEntity.getCode()))
+                    .map(c -> new DropDownDTO(c.getCode(), c.getDescription()))
                     .collect(Collectors.toList());
 
             map.put("sysRole", sysRole);

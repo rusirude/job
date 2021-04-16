@@ -14,6 +14,8 @@ public class StudentExaminationEntity extends CommonEntity{
     private Date startOn;
     private Date endOn;
     private Double finalMark;
+    private Boolean pass;
+    private Double passMark;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,5 +84,23 @@ public class StudentExaminationEntity extends CommonEntity{
     @Column(name = "final_mark")
     public void setFinalMark(Double finalMark) {
         this.finalMark = finalMark;
+    }
+
+    @Column(name = "is_pass")
+    public Boolean getPass() {
+        return pass;
+    }
+
+    public void setPass(Boolean pass) {
+        this.pass = pass;
+    }
+
+    @Column(name = "pass_mark")
+    public Double getPassMark() {
+        return passMark;
+    }
+
+    public void setPassMark(Double passMark) {
+        this.passMark = passMark;
     }
 }

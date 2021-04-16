@@ -149,8 +149,11 @@ var loadStudentExaminationAddTable = ()=>{
 					}
 					if(data.statusCode === 'CLOSED'){
 						return `<button onClick="reportIconClickForStudentExaminationAdd(${data.id})" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Print">
-														<i class="fas fa-print"></i>
-													</button>`;
+										<i class="fas fa-print"></i>
+								</button>
+								<button onClick="mailIconClickForStudentExaminationAdd(${data.id})" type="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Send">
+										<i class="fas fa-envelope"></i>
+								</button>`;
 					}
 				}
 			}
@@ -195,6 +198,35 @@ var reportIconClickForStudentExaminationAdd = (id)=>{
 	window.open(url);
 };
 
+var printExcel = ()=>{
+	let o = JSON.parse(studentExamAddTable.context[0].oAjaxData);
+	let url = '/studentExams/generateExcelReport?sortColumnName='+o.sortColumnName+"&sortOrder="+o.sortOrder+"&search="+o.search;
+	window.open(url);
+};
+
+var mailIconClickForStudentExaminationAdd = (id)=>{
+
+
+	let successFunction = (data)=>{
+		if(data.code === Constant.CODE_SUCCESS){
+			DialogBox.openMsgBox(data.message,'success');
+			Loader.hide();
+		}
+		else{
+			DialogBox.openMsgBox(data.message,'error');
+			Loader.hide();
+		}
+	};
+	let failedFunction = (data)=>{
+		DialogBox.openMsgBox("Server Error",'error');
+		Loader.hide();
+	};
+	let url = '/studentExams/sendReport/'+id;
+	let method = "POST";
+	Loader.show();
+	callToserver(url,method,null,successFunction,failedFunction);
+};
+
 /*-------------------------------- Dynamic Event  ----------------------*/
 
 var evenBinderForStudentExaminationAdd = ()=>{
@@ -202,6 +234,10 @@ var evenBinderForStudentExaminationAdd = ()=>{
 
 	$("#btnSave").off().on("click",function(){
 		saveForStudentExaminationAdd();
+	});
+
+	$("#btnPrint").off().on("click",function(){
+		printExcel();
 	});
 
 

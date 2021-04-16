@@ -32,7 +32,6 @@ CREATE TABLE `sys_role` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
   INDEX `fk_sys_role_status_idx` (`status` ASC),
   CONSTRAINT `fk_sys_role_status`
     FOREIGN KEY (`status`)
@@ -50,7 +49,6 @@ CREATE TABLE `title` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
   INDEX `fk_title_status_idx` (`status` ASC),
   CONSTRAINT `fk_title_status`
     FOREIGN KEY (`status`)
@@ -97,7 +95,6 @@ CREATE TABLE `section` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `sectioncol_UNIQUE` (`code` ASC),
   INDEX `fk_section_status_idx` (`status` ASC),
   CONSTRAINT `fk_section_status`
     FOREIGN KEY (`status`)
@@ -171,7 +168,7 @@ CREATE TABLE `sys_role_authoriry` (
     
 CREATE TABLE `master_data` (
   `code` VARCHAR(150) NOT NULL,
-  `value` VARCHAR(255) NULL,
+  `value` LONGTEXT NULL,
   `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(100) NOT NULL,
@@ -180,7 +177,7 @@ CREATE TABLE `master_data` (
 
 CREATE TABLE `sys_user_authority` (
   `sys_user` VARCHAR(100) NOT NULL,
-  `authority` INT(11) NOT NULL,
+  `authority` INT NOT NULL,
   `is_grant` INT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`sys_user`, `authority`),
   INDEX `fk_sys_user_authority_authority_idx` (`authority` ASC),
@@ -195,7 +192,7 @@ CREATE TABLE `sys_user_authority` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 
-CREATE TABLE `country` (
+CREATE TABLE `city` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(10) NOT NULL,
   `description` VARCHAR(50) NOT NULL,
@@ -205,9 +202,8 @@ CREATE TABLE `country` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
-  INDEX `fk_country_status_idx` (`status` ASC),
-  CONSTRAINT `fk_country_status`
+  INDEX `fk_city_status_idx` (`status` ASC),
+  CONSTRAINT `fk_city_status`
     FOREIGN KEY (`status`)
     REFERENCES `status` (`id`)
     ON DELETE RESTRICT
@@ -273,7 +269,6 @@ CREATE TABLE `question_category` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
   INDEX `fk_question_category_status_idx` (`status` ASC),
   CONSTRAINT `fk_question_category_status`
     FOREIGN KEY (`status`)
@@ -291,7 +286,6 @@ CREATE TABLE `question` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
   INDEX `fk_question_status_idx` (`status` ASC),
   CONSTRAINT `fk_question_status`
     FOREIGN KEY (`status`)
@@ -348,6 +342,10 @@ CREATE TABLE `examination` (
   `question_category` INT NOT NULL,
   `no_question` INT NOT NULL DEFAULT 0,
   `duration` VARCHAR(10),
+  `date_on` DATETIME NULL,
+  `location` VARCHAR(200),
+  `type` VARCHAR(100),
+  `pass_mark` DECIMAL(4,2) DEFAULT 0,
   `status` INT NOT NULL,
   `effective_on` DATETIME NULL,
   `expier_on` DATETIME  NULL,
@@ -356,7 +354,6 @@ CREATE TABLE `examination` (
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC),
   INDEX `fk_examination_question_category_idx` (`status` ASC),
   CONSTRAINT `fk_examination_question_category`
     FOREIGN KEY (`question_category`)
@@ -378,11 +375,20 @@ CREATE TABLE `student` (
   `telephone` VARCHAR(50) NULL,
   `address` VARCHAR(100) NULL,
   `company` VARCHAR(100) NULL,
+  `city` INT NULL,
+  `zip_code` VARCHAR(20) NULL,
+  `vat` VARCHAR(29) NULL,
   `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(100) NOT NULL,
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`username`));
+  PRIMARY KEY (`username`),
+  INDEX `fk_student_city_idx` (`city` ASC),
+  CONSTRAINT `fk_student_city`
+    FOREIGN KEY (`city`)
+    REFERENCES `city` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);
 
 CREATE TABLE `student_examination` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -392,6 +398,8 @@ CREATE TABLE `student_examination` (
   `start_on` DATETIME NULL,
   `end_on` DATETIME NULL,
   `final_mark` DECIMAL(4,2) DEFAULT 0,
+  `is_pass` BOOLEAN DEFAULT FALSE,
+  `pass_mark` DECIMAL(4,2) DEFAULT 0,
   `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(100) NOT NULL,
@@ -451,16 +459,21 @@ CREATE TABLE `student_examination_question_answer` (
 INSERT INTO `status_category` (`code`, `description`) VALUES ('DEFAULT', 'Default');
 INSERT INTO `status_category` (`code`,`description`) VALUES ('DELETE','Delete');
 INSERT INTO `status_category` (`code`,`description`) VALUES ('PASREREQ','Password Reset Request');
+INSERT INTO `status_category` (`code`,`description`) VALUES ('EXAM','Examination');
 
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('ACTIVE','Active',1);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('INACTIVE','Inactive',1);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('DELETE','Delete',2);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('REQUEST','Requested',3);
 INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('PRESET','Password Reset',3);
+INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('PENDING','Pending',4);
+INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('START','Started',4);
+INSERT INTO `status` (`code`,`description`,`status_category`) VALUES ('CLOSED','Closed',4);
 
-INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('USER_MGT_S','User Management',1,'SYSTEM','SYSTEM');
-INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('REF_MGT_S','Reference Data Management',1,'SYSTEM','SYSTEM');
-INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYS_CFG_S','System Configuration',1,'SYSTEM','SYSTEM');
+INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('USER_MGT_S','System Management',1,'SYSTEM','SYSTEM');
+INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('REF_MGT_S','Reference Data',1,'SYSTEM','SYSTEM');
+INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYS_CFG_S','Master Data',1,'SYSTEM','SYSTEM');
+INSERT INTO  `section`(`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('EXAM_MGT_S','Exam Management',1,'SYSTEM','SYSTEM');
 
 INSERT INTO `title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_NONE','None',1,'SYSTEM','SYSTEM');
 INSERT INTO `title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_MR','Mr.',1,'SYSTEM','SYSTEM');
@@ -470,24 +483,36 @@ INSERT INTO `title` (`code`,`description`,`status`,`created_by`,`updated_by`) VA
 INSERT INTO `title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_PROF','Prof.',1,'SYSTEM','SYSTEM');
 INSERT INTO `title` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('CODE_DR','Dr.',1,'SYSTEM','SYSTEM');
 
+INSERT INTO `master_data`(`code`,`value`,`created_by`,`updated_by`) VALUES
+('DEFAULT_PASSWORD',null,'SYSTEM','SYSTEM'),
+('COMPANY_NAME',null,'SYSTEM','SYSTEM'),
+('COMPANY_LOGO',null,'SYSTEM','SYSTEM'),
+('STUDENT_ROLE',null,'SYSTEM','SYSTEM');
 
+INSERT INTO `authority`(`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`)  VALUES
+('USER','System User','ROLE_USER','/sysUser/',1,1,'SYSTEM','SYSTEM'),
+('ROLE','System Role','ROLE_ROLE','/sysRole/',1,1,'SYSTEM','SYSTEM'),
+('SECTION','Section','ROLE_SECTION','/section/',1,1,'SYSTEM','SYSTEM'),
+('ROLEAUTHOR','System Role\'s Authority','ROLE_ROLEAUTHORITY','/sysRoleAuthority/',1,1,'SYSTEM','SYSTEM'),
+('AUTHORITY','Authority','ROLE_AUTHORITY','/authority/',1,1,'SYSTEM','SYSTEM'),
+('TITLE','Salutation','ROLE_TITLE','/title/',2,1,'SYSTEM','SYSTEM'),
+('USERROLE','System User\'s Role','ROLE_USERROLE','/sysUserSysRole/',1,1,'SYSTEM','SYSTEM'),
+('MASTERDATA','Master Data','ROLE_MASTERDATA','/masterData/',1,1,'SYSTEM','SYSTEM'),
+('USERAUTHOR','Sys User\'s Authority','ROLE_USERAUTHORITY','/sysUserAuthority/',1,1,'SYSTEM','SYSTEM'),
+('CITY','City','ROLE_CITY','/city/',1,1,'SYSTEM','SYSTEM'),
+('RPASS','Reset Password','ROLE_PASSREREQ','/passwordResetRequest/',1,1,'SYSTEM','SYSTEM'),
+('QUECAT','Question Category','ROLE_QUECATEGORY','/questionCategory/',4,1,'SYSTEM','SYSTEM'),
+('EXAM','Exam Management','ROLE_EXAMMGT','/examination/',4,1,'SYSTEM','SYSTEM'),
+('QUSMGT','Question','ROLE_QUS','/question/',4,1,'SYSTEM', 'SYSTEM'),
+('STUD','Student','ROLE_STUD','/student/',4,1,'SYSTEM','SYSTEM'),
+('STUEXAM','Examination','ROLE_STUEXAM','/studentExams/',4,1,'SYSTEM','SYSTEM'),
+('STUEXAMADD','Student Exams','ROLE_STUEXAMADD','/studentExamination/',4,1,'SYSTEM','SYSTEM');
 
 
 INSERT INTO `sys_role` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYSTEM','System',1,'SYSTEM','SYSTEM');
 
 INSERT INTO `sys_user` (`username`,`password`,`title`,`name`,`status`,`created_by`,`updated_by`) VALUES ('SYSTEM','$2a$10$/9rQ/RW6jv1DS0uXS4FoxeHvzZPiWpgnB6XdIxjymSYE9UFoGKEnq',1,'System',1,'SYSTEM','SYSTEM');
 
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USER','User Management','ROLE_USER','/user/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ROLE','User Role Management','ROLE_ROLE','/sysRole/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('SECTION','Section Management','ROLE_SECTION','/section/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('ROLEAUTHOR','User Role Authority Management','ROLE_ROLEAUTHORITY','/sysRoleAuthority/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('AUTHORITY','Authorry Management','ROLE_AUTHORITY','/authority/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('TITLE','Title','ROLE_TITLE','/title/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERROLE','Assign System Role to Sys User','ROLE_USERROLE','/sysUserSysRole/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('MASTERDATA','Master Data Management','ROLE_MASTERDATA','/masterData/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('USERAUTHOR','Sys User Authority','ROLE_USERAUTHORITY','/sysUserAuthority/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('COUNTRY','Country','ROLE_COUNTRY','/country/',1,1,'SYSTEM','SYSTEM');
-INSERT INTO `authority` (`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`) VALUES ('PPOLICY','Password Policy','ROLE_PPOLICY','/passwordPolicy/',1,1,'SYSTEM','SYSTEM');
 
 
 INSERT INTO `sys_user_sys_role` (`sys_user`, `sys_role`) VALUES ('SYSTEM', '1');
@@ -497,15 +522,10 @@ INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '2');
 INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '3');
 INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '4');
 INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '5');
-INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '6');
 INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '7');
 INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '8');
 INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '9');
-
-
-
-<!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/-->
-$("#status").parent().find(".mdl-menu__container").hide();	
+INSERT INTO `sys_role_authoriry` (`sys_role`, `authority`) VALUES ('1', '11');
 
     
     

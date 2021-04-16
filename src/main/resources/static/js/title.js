@@ -56,7 +56,6 @@ var saveForTitle = ()=>{
 	if(validatorForTitle()){
 		let url = "/title/save";
 		let method = "POST";
-
 		callToserver(url,method,generateFinalObjectForTitle(),successFunctionForTitle,failedFunctionForTitle);
 	}
 
@@ -66,7 +65,6 @@ var updateForTitle = ()=>{
 	if(validatorForTitle()){
 		let url = "/title/update";
 		let method = "POST";
-
 		callToserver(url,method,generateFinalObjectForTitle(),successFunctionForTitle,failedFunctionForTitle);
 	}
 };
@@ -75,7 +73,6 @@ var deleteForTitle = ()=>{
 	if(validatorForTitle()){
 		let url = "/title/delete";
 		let method = "POST";
-
 		callToserver(url,method,generateFinalObjectForTitle(),successFunctionForTitle,failedFunctionForTitle);
 	}
 };
@@ -127,6 +124,7 @@ var loadReferenceDataForTitle = (callback)=>{
 				if(callback){
 					callback();
 				}
+
 			}
 			else{
 				DialogBox.openMsgBox("System Failer Occur....! :-(",'error');

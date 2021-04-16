@@ -1,9 +1,6 @@
 package com.leaf.job.serviceImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -220,7 +217,9 @@ public class SysUserServiceImpl implements SysUserService {
 		String code = ResponseCodeEnum.FAILED.getCode();
 		try {
 			List<DropDownDTO> status = statusCategoryDAO.findStatusCategoryByCode(StatusCategoryEnum.DEFAULT.getCode())
-					.getStatusEntities().stream().map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
+					.getStatusEntities().stream()
+					.sorted(Comparator.comparing(StatusEntity::getDescription))
+					.map(s -> new DropDownDTO(s.getCode(), s.getDescription()))
 					.collect(Collectors.toList());
 			
 			List<DropDownDTO> title = titleDAO.findAllTitleEntities(DefaultStatusEnum.ACTIVE.getCode())

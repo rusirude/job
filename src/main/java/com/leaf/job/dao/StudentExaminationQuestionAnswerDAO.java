@@ -41,6 +41,13 @@ public interface StudentExaminationQuestionAnswerDAO {
      */
     List<StudentExaminationQuestionAnswerEntity> findStudentExaminationQuestionAnswerEntityByStudentExamination(long studentExam);
 
+    /**
+     * Find Entity from DB By Id
+     * @param studentExam
+     * @return {@link StudentExaminationQuestionAnswerEntity}
+     */
+    List<StudentExaminationQuestionAnswerEntity> findStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(long studentExam);
+
 
     /**
      * Save StudentExaminationQuestionAnswer Entity

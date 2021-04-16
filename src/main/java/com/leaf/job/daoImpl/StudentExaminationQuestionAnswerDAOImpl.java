@@ -96,6 +96,25 @@ public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminati
      * {@inheritDoc}
      */
     @Override
+    public List<StudentExaminationQuestionAnswerEntity> findStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(long studentExam) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<StudentExaminationQuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationQuestionAnswerEntity.class);
+        Root<StudentExaminationQuestionAnswerEntity> root = criteriaQuery.from(StudentExaminationQuestionAnswerEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(StudentExaminationQuestionAnswerEntity_.studentExaminationEntity).get(StudentExaminationEntity_.id), studentExam),
+                        criteriaBuilder.isNull(root.get(StudentExaminationQuestionAnswerEntity_.questionAnswerEntity))
+                )
+        );
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void saveStudentExaminationQuestionAnswerEntity(StudentExaminationQuestionAnswerEntity studentExaminationQuestionAnswerEntity) {
         entityManager.persist(studentExaminationQuestionAnswerEntity);
     }
