@@ -78,6 +78,26 @@ var DialogBox = (function () {
 	}
 })();
 
+var Loader = (function () {
+	let loader = $(".loader");
+	function show(){
+		loader.show();
+
+	}
+	function hide(){
+		loader.hide();
+
+	}
+	return {
+		show: function(){
+			show();
+		},
+		hide: function(){
+			hide();
+		}
+	}
+})();
+
 /*  Inputs Validations    */
 var InputsValidator = (function(){
 	function inlineEmptyValidationSelect(element,msg){
@@ -146,6 +166,8 @@ var InputsValidator = (function(){
 
 	}
 })();
+
+
 
 
 

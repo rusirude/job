@@ -24,14 +24,17 @@ var successFunctionForStudent = (data)=>{
 		DialogBox.openMsgBox(data.message,'success');
 		studentTable.ajax.reload();
 		clearDataForStudent();
+		Loader.hide();
 	}
 	else{
 		DialogBox.openMsgBox(data.message,'error');
+		Loader.hide();
 	}
 };
 
 var failedFunctionForStudent = (data)=>{
 	DialogBox.openMsgBox("Server Error",'error');
+	Loader.hide();
 };
 
 var validatorForStudent = ()=>{
@@ -98,7 +101,7 @@ var saveForStudent = ()=>{
 	if(validatorForStudent()){
 		let url = "/student/save";
 		let method = "POST";		
-		
+		Loader.show();
 		callToserver(url,method,generateFinalObjectForStudent(),successFunctionForStudent,failedFunctionForStudent);
 	}
 	

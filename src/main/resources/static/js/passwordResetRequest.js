@@ -16,14 +16,17 @@ var successFunctionForPasswordResetRequest = (data)=> {
     if (data.code === Constant.CODE_SUCCESS) {
         DialogBox.openMsgBox(data.message,'success');
         passwordResetRequestTable.ajax.reload();
+        Loader.hide();
     }
     else {
         DialogBox.openMsgBox(data.message,'error');
+        Loader.hide();
     }
 };
 
 var failedFunctionForPasswordResetRequest = (data)=> {
     DialogBox.openMsgBox(data.message,'error');
+    Loader.hide();
 };
 
 
@@ -31,7 +34,7 @@ var failedFunctionForPasswordResetRequest = (data)=> {
 var confirmForPasswordResetRequest = (id)=> {
     let url = "/passwordResetRequest/resetPassword";
     let method = "POST";
-
+    Loader.show();
     callToserver(url, method, generateFinalObjectForPasswordResetRequest(id), successFunctionForPasswordResetRequest, failedFunctionForPasswordResetRequest);
 
 

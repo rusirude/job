@@ -205,16 +205,20 @@ var mailIconClickForStudentExaminationAdd = (id)=>{
 	let successFunction = (data)=>{
 		if(data.code === Constant.CODE_SUCCESS){
 			DialogBox.openMsgBox(data.message,'success');
+			Loader.hide();
 		}
 		else{
 			DialogBox.openMsgBox(data.message,'error');
+			Loader.hide();
 		}
 	};
 	let failedFunction = (data)=>{
 		DialogBox.openMsgBox("Server Error",'error');
+		Loader.hide();
 	};
 	let url = '/studentExams/sendReport/'+id;
 	let method = "POST";
+	Loader.show();
 	callToserver(url,method,null,successFunction,failedFunction);
 };
 
