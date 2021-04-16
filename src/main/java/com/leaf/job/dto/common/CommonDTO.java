@@ -8,10 +8,10 @@ import com.leaf.job.utility.CommonConstant;
 public class CommonDTO {
 	
 	private String createdBy;
-	@JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
+	@JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT)
 	private Date createdOn;
 	private String updatedBy;
-	@JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
+	@JsonFormat(pattern = CommonConstant.SYSTEM_DATE_FORMAT)
 	private Date updatedOn;
 	public String getCreatedBy() {
 		return createdBy;

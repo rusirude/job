@@ -210,9 +210,9 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                 examQuestionDTO.setDuration(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getDuration());
                 examQuestionDTO.setTotal(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getNoQuestion());
                 examQuestionDTO.setDone(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getNoQuestion() - notAnswer);
-                examQuestionDTO.setStartTime(studentQuestionAnswerEntity.getStudentExaminationEntity().getStartOn());
-                examQuestionDTO.setEndTime(studentQuestionAnswerEntity.getStudentExaminationEntity().getEndOn());
-                examQuestionDTO.setCurrentTime(systemDate);
+                examQuestionDTO.setStartTime(commonMethod.dateTimeToString(studentQuestionAnswerEntity.getStudentExaminationEntity().getStartOn()));
+                examQuestionDTO.setEndTime(commonMethod.dateTimeToString(studentQuestionAnswerEntity.getStudentExaminationEntity().getEndOn()));
+                examQuestionDTO.setCurrentTime(commonMethod.dateTimeToString(systemDate));
                 code = ResponseCodeEnum.SUCCESS.getCode();
             } else {
                 studentExaminationEntity.setStatusEntity(closedExamStatusEntity);
@@ -279,7 +279,6 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                         else
                             finalResultDTO.setWrong(finalResultDTO.getWrong() + 1);
                     });
-            finalResultDTO.setName(studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + studentExaminationEntity.getSysUserEntity().getName());
             if (finalResultDTO.getTotal() > 0){
                 double result = BigDecimal.valueOf(((double) finalResultDTO.getCorrect() / (double) finalResultDTO.getTotal()) * 100)
                         .setScale(0, RoundingMode.HALF_UP).doubleValue();
@@ -288,6 +287,12 @@ public class StartExaminationServiceImpl implements StartExaminationService {
             else
                 finalResultDTO.setFinalMark(0.00);
 
+            finalResultDTO.setName(studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + studentExaminationEntity.getSysUserEntity().getName());
+            finalResultDTO.setLocation(studentExaminationEntity.getExaminationEntity().getLocation());
+            finalResultDTO.setDateOn(commonMethod.dateTimeToString(studentExaminationEntity.getExaminationEntity().getDateOn()));
+            finalResultDTO.setType(studentExaminationEntity.getExaminationEntity().getType());
+            finalResultDTO.setPass(Optional.ofNullable(studentExaminationEntity.getPass()).orElse(false) ? "Geslaagd" : "Niet geslaagd");
+            finalResultDTO.setPassed(Optional.ofNullable(studentExaminationEntity.getPass()).orElse(false));
             code = ResponseCodeEnum.SUCCESS.getCode();
         } catch (Exception e) {
             System.err.println("Getting Question for examination");
@@ -536,8 +541,10 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                 .sorted(Comparator.comparing(StudentExaminationQuestionAnswerEntity::getSeq))
                 .map(studentExaminationQuestionAnswerEntity -> {
                     QuestionResultDTO questionResultDTO = new QuestionResultDTO();
-                    questionResultDTO.setQuestion("Vragen " + studentExaminationQuestionAnswerEntity.getSeq());
-                    questionResultDTO.setResult(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity()) ? "Niet Beantwoord" : (studentExaminationQuestionAnswerEntity.isCorrect() ? "Correct" : "Foutief"));
+                    questionResultDTO.setQuestion(studentExaminationQuestionAnswerEntity.getQuestionEntity().getDescription());
+                    questionResultDTO.setAnswer(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity())?"Niet Beantwoord":studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity().getDescription());
+                    questionResultDTO.setResult(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity()) ? "Niet Beantwoord" : (studentExaminationQuestionAnswerEntity.isCorrect() ? "JUIST" : "FOUT"));
+                    questionResultDTO.setCorrect(studentExaminationQuestionAnswerEntity.isCorrect());
                     return questionResultDTO;
                 }).collect(Collectors.toList());
 

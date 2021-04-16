@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="answer" columnCount="2" pageWidth="595" pageHeight="842" columnWidth="277" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="657a4a26-b703-44f7-978b-de40500e9bfb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="answer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="657a4a26-b703-44f7-978b-de40500e9bfb">
+	<style name="resultColor">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{answer} == "JUIST"]]></conditionExpression>
+			<style backcolor="#00FF00"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{answer} == "FOUT"]]></conditionExpression>
+			<style backcolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="examination" class="java.lang.String"/>
 	<parameter name="category" class="java.lang.String"/>
 	<parameter name="finalMark" class="java.lang.Double"/>
@@ -20,6 +30,8 @@
 	<field name="result" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="answer" class="java.lang.String"/>
+	<field name="correct" class="java.lang.Boolean"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -156,13 +168,17 @@
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="20" width="100" height="20" uuid="5a02ee3f-bf7f-4481-b3d8-dddc255e9982"/>
+				<reportElement x="0" y="20" width="234" height="20" uuid="5a02ee3f-bf7f-4481-b3d8-dddc255e9982"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Question]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="20" width="100" height="20" uuid="ec492cd4-20f8-4374-93a9-89858adc467e"/>
+				<reportElement x="234" y="20" width="221" height="20" uuid="ec492cd4-20f8-4374-93a9-89858adc467e"/>
 				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Answer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="20" width="100" height="20" uuid="f8fc895d-3358-446e-bff0-3159064ae3f8"/>
 				<text><![CDATA[Result]]></text>
 			</staticText>
 		</band>
@@ -170,14 +186,19 @@
 	<detail>
 		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="18" uuid="116179a9-f80a-4ffd-b875-f32b47072e18"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="234" height="18" uuid="116179a9-f80a-4ffd-b875-f32b47072e18"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{question}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="100" height="18" uuid="a32299a8-5417-4c14-92e7-59e0846f99cb"/>
+				<reportElement style="resultColor" stretchType="RelativeToTallestObject" x="455" y="0" width="100" height="18" uuid="a32299a8-5417-4c14-92e7-59e0846f99cb"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{result}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="234" y="0" width="221" height="18" uuid="e620d9c1-8e06-48ac-8ed6-a3e6cdfe4c03"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{answer}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

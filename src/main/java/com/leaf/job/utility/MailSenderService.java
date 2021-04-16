@@ -5,7 +5,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
@@ -35,7 +34,7 @@ public class MailSenderService {
 
     }
 
-    public void sendEmailWithPlainTextAndAttachment(String address, String subject, String content, DataSource dataSource ,String reportName) throws MessagingException {
+    public void sendEmailWithPlainTextAndAttachment(String address, String subject, String content, DataSource dataSource, String reportName) throws MessagingException {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -46,7 +45,7 @@ public class MailSenderService {
 
         helper.setText(content, false);
 
-        helper.addAttachment(reportName,dataSource);
+        helper.addAttachment(reportName, dataSource);
 
         javaMailSender.send(message);
 

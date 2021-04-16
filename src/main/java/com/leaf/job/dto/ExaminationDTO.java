@@ -15,16 +15,16 @@ public class ExaminationDTO extends CommonDTO {
     private String statusCode;
     private String statusDescription;
     private Integer noQuestion;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
-    private Date dateOn;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT)
+    private String dateOn;
     private String location;
     private String type;
     private Double passMark;
     private String duration;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
-    private Date effectiveOn;
-    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT, timezone = CommonConstant.DATE_TIMEZONE_JACKSON)
-    private Date expireOn;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT)
+    private String effectiveOn;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT)
+    private String expireOn;
 
     public String getCode() {
         return code;
@@ -82,11 +82,11 @@ public class ExaminationDTO extends CommonDTO {
         this.noQuestion = noQuestion;
     }
 
-    public Date getDateOn() {
+    public String getDateOn() {
         return dateOn;
     }
 
-    public void setDateOn(Date dateOn) {
+    public void setDateOn(String dateOn) {
         this.dateOn = dateOn;
     }
 
@@ -122,19 +122,19 @@ public class ExaminationDTO extends CommonDTO {
         this.duration = duration;
     }
 
-    public Date getEffectiveOn() {
+    public String getEffectiveOn() {
         return effectiveOn;
     }
 
-    public void setEffectiveOn(Date effectiveOn) {
+    public void setEffectiveOn(String effectiveOn) {
         this.effectiveOn = effectiveOn;
     }
 
-    public Date getExpireOn() {
+    public String getExpireOn() {
         return expireOn;
     }
 
-    public void setExpireOn(Date expireOn) {
+    public void setExpireOn(String expireOn) {
         this.expireOn = expireOn;
     }
 }

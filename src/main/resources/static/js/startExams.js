@@ -85,10 +85,11 @@ var setQuestionView = (data,key)=>{
 var finishExam = ()=>{
     $("#stopAlert").modal('hide');
     $("#submitAlert").modal('hide');
+    $(".modal-backdrop.fade.show").remove();
     app.next('/studentExams/end/'+$("#studentExam").val());
 };
 
-var findQuestionForExam = (questionKey,callback)=>{
+var findQuestionForExam = (questionKey,initial,callback)=>{
     let successFunction = (data)=>{
         if(data.code === Constant.CODE_SUCCESS) {
             if(!data.data.closed){
@@ -97,7 +98,9 @@ var findQuestionForExam = (questionKey,callback)=>{
                 done = data.data.done||0;
                 startTime = data.data.startTime;
                 endTime = data.data.endTime;
-                //currentTime = data.data.currentTime;
+                if(initial){
+                    currentTime = data.data.currentTime;
+                }
             }
             else{
                 $("#stopAlert").modal({'backdrop':true},'show');
@@ -168,6 +171,12 @@ var changeButton = (seq)=>{
         saveNext.hide();
         next.hide();
     }
+    else if(total === 1){
+        saveNext.hide();
+        next.hide();
+        previous.hide();
+        savePrevious.hide();
+    }
     else{
         previous.show();
         savePrevious.show();
@@ -176,54 +185,61 @@ var changeButton = (seq)=>{
     }
 };
 
-var clickNextBtn = () =>{
+var clickNextBtnC = () =>{
     let  seq = parseInt($("#current").val()||'1');
     $("#current").val(++seq);
-    findQuestionForExam(seq,setNoQuestion);
+    findQuestionForExam(seq,false,setNoQuestion);
     changeButton(seq);
 };
-var clickNextAndSaveBtn = () =>{
+var clickNextBtn = () =>{
     let _f = ()=>{
         done = (!aan)?++done:done;
         let  seq = parseInt($("#current").val()||'1');
         $("#current").val(++seq);
-        findQuestionForExam(seq,setNoQuestion);
+        findQuestionForExam(seq,false,setNoQuestion);
         changeButton(seq);
     };
     if($("input[name='answer']:checked").val()){
         saveQuestionAnswer(_f);
     }
     else{
-        DialogBox.openMsgBox("Need to Select Answer",'error');
+        //DialogBox.openMsgBox("Need to Select Answer",'error');
+        clickNextBtnC();
     }
 
 
 };
-var clickPreviousAndSaveBtn = () =>{
+
+var clickPreviousBtnC = () =>{
+    let  seq = parseInt($("#current").val()||'1');
+    $("#current").val(--seq);
+    findQuestionForExam(seq,false,setNoQuestion);
+    changeButton(seq);
+};
+
+var clickPreviousBtn = () =>{
     let _f = ()=>{
         done = (!aan)?++done:done;
         let  seq = parseInt($("#current").val()||'1');
         $("#current").val(--seq);
-        findQuestionForExam(seq,setNoQuestion);
+        findQuestionForExam(seq,false,setNoQuestion);
         changeButton(seq);
     };
     if($("input[name='answer']:checked").val()){
         saveQuestionAnswer(_f);
     }
     else{
-        DialogBox.openMsgBox("Need to Select Answer",'error');
+        //DialogBox.openMsgBox("Need to Select Answer",'error');
+        clickPreviousBtnC();
     }
 };
 
-var clickPreviousBtn = () =>{
-    let  seq = parseInt($("#current").val()||'1');
-    $("#current").val(--seq);
-    findQuestionForExam(seq,setNoQuestion);
-    changeButton(seq);
-};
+
 var finalSubmit = () =>{
     if($("input[name='answer']:checked").val()){
         let _f = ()=>{
+            done = (!aan)?++done:done;
+            setNoQuestion();
             $("#submitAlert").modal({'backdrop':true},'show');
         };
         saveQuestionAnswer(_f);
@@ -240,7 +256,6 @@ var finalSubmit = () =>{
 $(document).ready(()=>{
     let seq =  parseInt($("#current").val()||'1')||1;
     let _f = ()=>{
-        currentTime = new Date();
         setTimer();
         setNoQuestion();
         changeButton(seq);
@@ -248,7 +263,7 @@ $(document).ready(()=>{
             incrementTime();
         },1000)
     };
-    findQuestionForExam(seq,_f);
+    findQuestionForExam(seq,true,_f);
 
 
 });

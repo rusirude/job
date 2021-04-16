@@ -1,5 +1,8 @@
 package com.leaf.job.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.leaf.job.utility.CommonConstant;
+
 public class FinalResultDTO {
     private Double finalMark;
     private int correct;
@@ -7,6 +10,12 @@ public class FinalResultDTO {
     private int notAnswered;
     private int total;
     private String name;
+    private String location;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_2_FORMAT)
+    private String dateOn;
+    private String type;
+    private String pass;
+    private Boolean passed;
 
     public Double getFinalMark() {
         return finalMark;
@@ -54,5 +63,45 @@ public class FinalResultDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDateOn() {
+        return dateOn;
+    }
+
+    public void setDateOn(String dateOn) {
+        this.dateOn = dateOn;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public Boolean getPassed() {
+        return passed;
+    }
+
+    public void setPassed(Boolean passed) {
+        this.passed = passed;
     }
 }

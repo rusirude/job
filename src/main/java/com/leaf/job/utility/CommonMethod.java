@@ -5,6 +5,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +47,13 @@ public class CommonMethod {
         }
 
         return username;
+    }
+
+    public String dateTimeToString(Date date){
+        return new SimpleDateFormat(CommonConstant.SYSTEM_DATE_TIME_FORMAT).format(date);
+    }
+    public Date stringToDateTime(String date) throws ParseException {
+        return new SimpleDateFormat(CommonConstant.SYSTEM_DATE_TIME_FORMAT).parse(date);
     }
 
     public <T extends CommonEntity> void getPopulateEntityWhenInsert(T t) {
