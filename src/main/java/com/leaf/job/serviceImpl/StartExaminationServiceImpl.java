@@ -313,6 +313,48 @@ public class StartExaminationServiceImpl implements StartExaminationService {
     }
 
     @Override
+    public ReportDTO generateAnswerDetailReportDetails(String sortColumn, String sortOrder, String search) {
+        ReportDTO reportDTO = null;
+        try {
+            reportDTO = new ReportDTO();
+            reportDTO.setReportPath(CommonConstant.REPORT_PATH);
+            DataTableRequestDTO dataTableRequestDTO = new DataTableRequestDTO();
+            dataTableRequestDTO.setSortColumnName(sortColumn);
+            dataTableRequestDTO.setSortOrder(sortOrder);
+            dataTableRequestDTO.setSearch(search);
+
+            List<StudentExaminationDTO> studentExam = studentExaminationDAO.<List<StudentExaminationEntity>>getDataForGridForStudentReport(dataTableRequestDTO)
+                    .stream().map(entity -> {
+                        StudentExaminationDTO dto = new StudentExaminationDTO();
+                        StudentEntity studentEntity = studentDAO.getStudentEntityByUsername(entity.getSysUserEntity().getUsername());
+                        dto.setId(entity.getId());
+                        dto.setStudent(entity.getSysUserEntity().getUsername());
+                        dto.setStudentName(entity.getSysUserEntity().getTitleEntity().getDescription() + " " + entity.getSysUserEntity().getName());
+                        dto.setCompany(Optional.ofNullable(studentEntity.getCompany()).orElse(""));
+                        dto.setPass("");
+                        if(ExamStatusEnum.PENDING.getCode().equals(entity.getStatusEntity().getCode())){
+                            dto.setPass(Optional.ofNullable(entity.getPass()).orElse(false) ? "Passed" : "Not Passed");
+                        }
+
+                        dto.setExaminationCode(entity.getExaminationEntity().getCode());
+                        dto.setExaminationDescription(entity.getExaminationEntity().getDescription());
+                        dto.setDuration(entity.getExaminationEntity().getDuration());
+                        dto.setNoQuestion(entity.getExaminationEntity().getNoQuestion());
+                        dto.setStatusCode(entity.getStatusEntity().getCode());
+                        dto.setStatusDescription(entity.getStatusEntity().getDescription());
+                        return dto;
+                    }).collect(Collectors.toList());
+
+            reportDTO.setReportName("studentExamination.jrxml");
+            reportDTO.setDownloadName("StudentExamination");
+            reportDTO.setDtoList(studentExam);
+        } catch (Exception e) {
+            System.err.println("Getting Question for examination");
+        }
+        return reportDTO;
+    }
+
+    @Override
     @Transactional
     public ResponseDTO<?> generateAnswerDetailReportDetailsAndSendMail(long studentExam){
         ReportDTO reportDTO = null;

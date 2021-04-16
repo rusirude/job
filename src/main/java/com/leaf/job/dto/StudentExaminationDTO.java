@@ -4,12 +4,14 @@ public class StudentExaminationDTO {
     private Long id;
     private String student;
     private String studentName;
+    private String company;
     private String examinationCode;
     private String examinationDescription;
     private Integer noQuestion;
     private String duration;
     private String statusCode;
     private String statusDescription;
+    private String pass;
 
     public Long getId() {
         return id;
@@ -29,6 +31,14 @@ public class StudentExaminationDTO {
 
     public String getStudentName() {
         return studentName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public void setStudentName(String studentName) {
@@ -81,5 +91,13 @@ public class StudentExaminationDTO {
 
     public void setStatusDescription(String statusDescription) {
         this.statusDescription = statusDescription;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 }

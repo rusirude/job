@@ -198,6 +198,11 @@ var reportIconClickForStudentExaminationAdd = (id)=>{
 	window.open(url);
 };
 
+var printExcel = ()=>{
+	let o = JSON.parse(studentExamAddTable.context[0].oAjaxData);
+	let url = '/studentExams/generateExcelReport?sortColumnName='+o.sortColumnName+"&sortOrder="+o.sortOrder+"&search="+o.search;
+	window.open(url);
+};
 
 var mailIconClickForStudentExaminationAdd = (id)=>{
 
@@ -229,6 +234,10 @@ var evenBinderForStudentExaminationAdd = ()=>{
 
 	$("#btnSave").off().on("click",function(){
 		saveForStudentExaminationAdd();
+	});
+
+	$("#btnPrint").off().on("click",function(){
+		printExcel();
 	});
 
 

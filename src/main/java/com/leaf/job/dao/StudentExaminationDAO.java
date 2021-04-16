@@ -58,6 +58,13 @@ public interface StudentExaminationDAO {
      */
     <T> T getDataForGridForStudent(DataTableRequestDTO dataTableRequestDTO, String type);
 
+    /**
+     * Getting Data For  Report
+     * @param dataTableRequestDTO
+     * @return
+     */
+    <T> T getDataForGridForStudentReport(DataTableRequestDTO dataTableRequestDTO);
+
 
 
 
