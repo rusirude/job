@@ -21,6 +21,7 @@ var setNoQuestion = ()=>{
 
 var setTimer = ()=>{
 
+    let _cou = $("#countUp");
     let t = $("#timer");
     let s = moment(new Date(startTime));
     let e = moment(new Date(endTime));
@@ -32,6 +33,23 @@ var setTimer = ()=>{
     t.css("width",`${percentage}%`);
     t.html(percentage + ' %');
 
+    let totalSeconds = c.diff(s)/1000;
+
+    let _se = pad(totalSeconds % 60);
+    let _min = pad(parseInt(totalSeconds / 60));
+    let _ho = pad(parseInt(totalSeconds / 60/60));
+
+    function pad(val) {
+        let valString = val + "";
+        if (valString.length < 2) {
+            return "0" + valString;
+        } else {
+            return valString;
+        }
+    }
+
+    _cou.html(`${_ho}:${_min}:${_se}`);
+
     if(percentage >= 100){
         clearInterval(interval);
         $("#stopAlert").modal({'backdrop':true},'show');
@@ -40,7 +58,6 @@ var setTimer = ()=>{
 };
 
 var incrementTime = ()=>{
-
     let c = moment(new Date(currentTime));
     currentTime = c.add(1, 'seconds').toDate();;
     setTimer()
@@ -99,6 +116,7 @@ var findQuestionForExam = (questionKey,initial,callback)=>{
                 startTime = data.data.startTime;
                 endTime = data.data.endTime;
                 if(initial){
+                    totalSeconds =
                     currentTime = data.data.currentTime;
                 }
             }
@@ -235,6 +253,7 @@ var clickPreviousBtn = () =>{
 };
 
 
+
 var finalSubmit = () =>{
     if($("input[name='answer']:checked").val()){
         let _f = ()=>{
@@ -254,6 +273,10 @@ var finalSubmit = () =>{
 /*-------------------------------- Document Ready ----------------------*/
 
 $(document).ready(()=>{
+    if(interval){
+        clearInterval(interval);
+        interval = null;
+    }
     let seq =  parseInt($("#current").val()||'1')||1;
     let _f = ()=>{
         setTimer();
