@@ -49,6 +49,10 @@ public class CommonMethod {
         return username;
     }
 
+    public String dateTimeToString(Date date,String format){
+        return new SimpleDateFormat(format).format(date);
+    }
+
     public String dateTimeToString(Date date){
         return new SimpleDateFormat(CommonConstant.SYSTEM_DATE_TIME_FORMAT).format(date);
     }

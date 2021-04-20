@@ -212,7 +212,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                 examQuestionDTO.setDone(studentQuestionAnswerEntity.getStudentExaminationEntity().getExaminationEntity().getNoQuestion() - notAnswer);
                 examQuestionDTO.setStartTime(commonMethod.dateTimeToString(studentQuestionAnswerEntity.getStudentExaminationEntity().getStartOn()));
                 examQuestionDTO.setEndTime(commonMethod.dateTimeToString(studentQuestionAnswerEntity.getStudentExaminationEntity().getEndOn()));
-                examQuestionDTO.setCurrentTime(commonMethod.dateTimeToString(systemDate));
+                examQuestionDTO.setCurrentTime(commonMethod.dateTimeToString(systemDate,CommonConstant.SYSTEM_DATE_TIME_3_FORMAT));
                 code = ResponseCodeEnum.SUCCESS.getCode();
             } else {
                 studentExaminationEntity.setStatusEntity(closedExamStatusEntity);
