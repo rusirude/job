@@ -431,6 +431,7 @@ CREATE TABLE `student_examination_question_answer` (
   `question` INT NOT NULL,
   `question_answer` INT NULL,
   `correct` BOOLEAN DEFAULT FALSE,
+  `correct_question_answer` INT NULL,
   `created_by` VARCHAR(100) NOT NULL,
   `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` VARCHAR(100) NOT NULL,
@@ -451,6 +452,12 @@ CREATE TABLE `student_examination_question_answer` (
   INDEX `fk_student_examination_question_answer_question_answer_idx` (`question_answer` ASC),
   CONSTRAINT `fk_student_examination_question_answer_question_answer`
     FOREIGN KEY (`question_answer`)
+    REFERENCES `question_answer` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  INDEX `fk_student_examination_question_answer_question_answer_c_idx` (`question_answer` ASC),
+  CONSTRAINT `fk_student_examination_question_answer_question_answer_c`
+    FOREIGN KEY (`correct_question_answer`)
     REFERENCES `question_answer` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);

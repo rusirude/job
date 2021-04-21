@@ -106,11 +106,29 @@ public class QuestionAnswerDAOImpl implements QuestionAnswerDAO {
 		return qestionAnswerEntities;
 	}
 
+	@Override
+	public QuestionAnswerEntity findCorrectQuestionAnswerEntity(long question, String statusCode) {
+		QuestionAnswerEntity qestionAnswerEntity = null;
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<QuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionAnswerEntity.class);
+		Root<QuestionAnswerEntity> root = criteriaQuery.from(QuestionAnswerEntity.class);
+		criteriaQuery.select(root);
 
+		criteriaQuery.where(
+				criteriaBuilder.and(
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.questionEntity).get(QuestionEntity_.id), question),
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.statusEntity).get(StatusEntity_.code), statusCode),
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.correct), true)
 
-	
-	
-	
-	
+				)
+		);
+		try {
+			qestionAnswerEntity = entityManager.createQuery(criteriaQuery).getSingleResult();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+		return qestionAnswerEntity;
+	}
+
 
 }

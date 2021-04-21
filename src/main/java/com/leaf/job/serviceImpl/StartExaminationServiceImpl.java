@@ -544,6 +544,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                     else
                         studentExaminationQuestionAnswerEntity.setCorrect(false);
 
+                    studentExaminationQuestionAnswerEntity.setCorrectQuestionAnswerEntity(Optional.ofNullable(questionAnswerDAO.findCorrectQuestionAnswerEntity(studentExaminationQuestionAnswerEntity.getQuestionEntity().getId(),DefaultStatusEnum.ACTIVE.getCode())).orElse(null));
                     commonMethod.getPopulateEntityWhenUpdate(studentExaminationQuestionAnswerEntity);
                     studentExaminationQuestionAnswerDAO.updateStudentExaminationQuestionAnswerEntity(studentExaminationQuestionAnswerEntity);
                 });
