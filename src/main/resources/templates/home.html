@@ -68,8 +68,10 @@
 	<aside class="main-sidebar sidebar-dark-primary elevation-4">
 		<!-- Brand Logo -->
 		<a href="#" class="brand-link">
-			<img th:if="${logo != null || logo != ''}" th:src="${logo}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"/>
-			<span class="brand-text font-weight-light">e-Examen</span>
+			<div class="row" style="padding-left: 25%;padding-right: 25%;">
+				<img th:if="${logo != null and logo != 'null'}" th:src="${logo}" alt="Logo" class="img elevation-3" style="opacity: .8;width: 100px;height: 100px"/>
+			</div>
+			<span style="margin-left: 25%;margin-right: 25%;" class="brand-text font-weight-light"><b>e-Examen</b></span>
 		</a>
 
 		<!-- Sidebar -->

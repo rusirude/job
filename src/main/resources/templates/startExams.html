@@ -15,8 +15,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="timerVal" class="col-3">
-                                    <h5 id="countUp">05:20</h5>
+                                <div id="timerVal" class="col-1" style="padding-right: 0px">
+                                    <h5 id="countUp">00:00</h5>
+                                </div>
+                                <div class="col-2">
+                                    <h5>Resterende tijd</h5>
                                 </div>
                             </div>
                         </div>
@@ -31,8 +34,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-1">
                                     <h5 id="noDoneQnt">0/0</h5>
+                                </div>
+                                <div class="col-2">
+                                    <h5>Vragen ingevuld</h5>
                                 </div>
                             </div>
                         </div>
@@ -65,10 +71,10 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-body">
-                <p>Examination Time is exceeded</p>
+                <p>De tijdslimiet van uw examen is afgelopen. Het examen is hierbij gedaan en zal afgesloten worden.</p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button onclick="finishExam()" type="button" class="btn btn-primary">Finish</button>
+                <button onclick="finishExam()" type="button" class="btn btn-primary">Beëindig examen</button>
             </div>
         </div>
         <!-- /.modal-content -->

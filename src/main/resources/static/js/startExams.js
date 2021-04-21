@@ -33,11 +33,17 @@ var setTimer = ()=>{
     t.css("width",`${percentage}%`);
     t.html(percentage + ' %');
 
-    let totalSeconds = c.diff(s)/1000;
+    let totalTime = e.diff(c)/1000;
 
-    let _se = pad(totalSeconds % 60);
-    let _min = pad(parseInt(totalSeconds / 60));
-    let _ho = pad(parseInt(totalSeconds / 60/60));
+    let _se = pad(totalTime % 60);
+
+    totalTime = (totalTime- (totalTime % 60))/60; //total min
+
+    let _min = pad(parseInt(totalTime % 60));
+
+    totalTime = (totalTime- (totalTime % 60))/60;
+
+    let _ho = pad(parseInt(totalTime));
 
     function pad(val) {
         let valString = val + "";
