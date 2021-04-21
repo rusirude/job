@@ -365,8 +365,13 @@ public class StartExaminationServiceImpl implements StartExaminationService {
             reportDTO = getAnswerReport(studentExam);
             StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
             DataSource attachment = reportUtil.createReportAsByteStream(reportDTO);
-            String subject = "Result of "+studentExaminationEntity.getExaminationEntity().getDescription();
-            String content = "Result is attached with this mail";
+            String subject = "Resultaat van uw "+studentExaminationEntity.getExaminationEntity().getDescription();
+            String content = "Geachte "+studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription()+""+studentExaminationEntity.getSysUserEntity().getName()+"\n\n" +
+                    "Wij danken u voor uw deelname aan het "+studentExaminationEntity.getExaminationEntity().getDescription()+".\n" +
+                    "Gelieve in bijlage het overzicht en resultaat van uw examen te vinden.\n\n" +
+                    "Moesten er nog vragen of opmerkingen zijn, aarzel dan zeker niet om ons te contacteren.\n\n" +
+                    "Met vriendelijke groeten,\n\n" +
+                    "Ocert bv.";
             mailSenderService.sendEmailWithPlainTextAndAttachment(studentExaminationEntity.getSysUserEntity().getUsername(),subject,content,attachment,reportDTO.getDownloadName()+".pdf");
             code = ResponseCodeEnum.SUCCESS.getCode();
             message = "Mail is Sent";
