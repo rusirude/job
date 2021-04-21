@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="answer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="657a4a26-b703-44f7-978b-de40500e9bfb">
-	<style name="resultColor">
+	<style name="passStyle" forecolor="#FF0000">
 		<conditionalStyle>
-			<conditionExpression><![CDATA[$F{answer} == "JUIST"]]></conditionExpression>
-			<style backcolor="#00FF00"/>
-		</conditionalStyle>
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$F{answer} == "FOUT"]]></conditionExpression>
-			<style backcolor="#FF0000"/>
+			<conditionExpression><![CDATA[new Boolean($P{isPass} == "Geslaagd")]]></conditionExpression>
+			<style forecolor="#00FF00"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="examination" class="java.lang.String"/>
@@ -50,7 +46,7 @@
 				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="404" y="113" width="130" height="30" uuid="34b02ba4-ffbb-4695-b5de-335d8f448970"/>
+				<reportElement style="passStyle" x="404" y="113" width="130" height="30" uuid="34b02ba4-ffbb-4695-b5de-335d8f448970"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
@@ -176,7 +172,7 @@
 				<textFieldExpression><![CDATA[$F{question}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="resultColor" stretchType="RelativeToTallestObject" x="455" y="0" width="100" height="18" uuid="a32299a8-5417-4c14-92e7-59e0846f99cb"/>
+				<reportElement stretchType="RelativeToTallestObject" x="455" y="0" width="100" height="18" uuid="a32299a8-5417-4c14-92e7-59e0846f99cb"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{result}]]></textFieldExpression>
 			</textField>
