@@ -1,5 +1,8 @@
 package com.leaf.job.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.leaf.job.utility.CommonConstant;
+
 public class StudentExaminationDTO {
     private Long id;
     private String student;
@@ -12,6 +15,8 @@ public class StudentExaminationDTO {
     private String statusCode;
     private String statusDescription;
     private String pass;
+    @JsonFormat(pattern = CommonConstant.SYSTEM_DATE_TIME_FORMAT)
+    private String dateOn;
 
     public Long getId() {
         return id;
@@ -99,5 +104,13 @@ public class StudentExaminationDTO {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getDateOn() {
+        return dateOn;
+    }
+
+    public void setDateOn(String dateOn) {
+        this.dateOn = dateOn;
     }
 }

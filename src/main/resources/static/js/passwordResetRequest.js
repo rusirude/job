@@ -62,11 +62,13 @@ var loadPasswordResetRequestTable = ()=> {
         autoWidth: false,
         processing: true,
         serverSide: true,
+        order:[[4,'desc']],
         columns: [
             {data: "username",            name: "username"},
             {data: "titleDescription",    name: "title"   },
             {data: "name",                name: "name"    },
             {data: "statusDescription",   name: "status"  },
+            {data: "createdOn",           name: "createdOn"  },
             {
                 data: null,
                 render: function (data, type, full) {

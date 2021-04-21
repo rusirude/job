@@ -122,7 +122,7 @@ public class PasswordResetRequestDAOImpl implements PasswordResetRequestDAO {
     private List<Order> createSortOrder(String sortColumnName, String sortOrder, CriteriaBuilder cb, Root<PasswordResetRequestEntity> root) {
         List<Order> orders = new ArrayList<>();
 
-        Expression<?> ex = root.get(SysUserEntity_.updatedOn);
+        Expression<?> ex = root.get(PasswordResetRequestEntity_.createdOn);
 
 
         if ("username".equals(sortColumnName)) {

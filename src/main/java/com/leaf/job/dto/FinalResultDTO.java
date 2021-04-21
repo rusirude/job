@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.leaf.job.utility.CommonConstant;
 
 public class FinalResultDTO {
-    private Double finalMark;
+    private Integer finalMark;
     private int correct;
     private int wrong;
     private int notAnswered;
@@ -17,11 +17,11 @@ public class FinalResultDTO {
     private String pass;
     private Boolean passed;
 
-    public Double getFinalMark() {
+    public Integer getFinalMark() {
         return finalMark;
     }
 
-    public void setFinalMark(Double finalMark) {
+    public void setFinalMark(Integer finalMark) {
         this.finalMark = finalMark;
     }
 

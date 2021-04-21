@@ -280,12 +280,12 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                             finalResultDTO.setWrong(finalResultDTO.getWrong() + 1);
                     });
             if (finalResultDTO.getTotal() > 0){
-                double result = BigDecimal.valueOf(((double) finalResultDTO.getCorrect() / (double) finalResultDTO.getTotal()) * 100)
-                        .setScale(0, RoundingMode.HALF_UP).doubleValue();
+                int result = BigDecimal.valueOf(((double) finalResultDTO.getCorrect() / (double) finalResultDTO.getTotal()) * 100)
+                        .setScale(0, RoundingMode.HALF_UP).toBigInteger().intValue();
                 finalResultDTO.setFinalMark(result);
             }
             else
-                finalResultDTO.setFinalMark(0.00);
+                finalResultDTO.setFinalMark(0);
 
             finalResultDTO.setName(studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + studentExaminationEntity.getSysUserEntity().getName());
             finalResultDTO.setLocation(studentExaminationEntity.getExaminationEntity().getLocation());
@@ -335,6 +335,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                         if(!ExamStatusEnum.PENDING.getCode().equals(entity.getStatusEntity().getCode())){
                             dto.setPass(Optional.ofNullable(entity.getPass()).orElse(false) ? "Passed" : "Not Passed");
                         }
+                        dto.setDateOn(commonMethod.dateTimeToString(entity.getExaminationEntity().getDateOn()));
 
                         dto.setExaminationCode(entity.getExaminationEntity().getCode());
                         dto.setExaminationDescription(entity.getExaminationEntity().getDescription());
@@ -552,8 +553,8 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         calculateAnswer(studentExaminationEntity);
 
         FinalResultDTO finalResultDTO = getFinalResult(studentExam).getData();
-        studentExaminationEntity.setFinalMark(finalResultDTO.getFinalMark());
-        studentExaminationEntity.setPass(studentExaminationEntity.getPassMark().compareTo(finalResultDTO.getFinalMark()) <= 0);
+        studentExaminationEntity.setFinalMark(Double.valueOf(finalResultDTO.getFinalMark()));
+        studentExaminationEntity.setPass(studentExaminationEntity.getPassMark().compareTo(Double.valueOf(finalResultDTO.getFinalMark())) <= 0);
 
         commonMethod.getPopulateEntityWhenUpdate(studentExaminationEntity);
         studentExaminationDAO.updateStudentExaminationEntity(studentExaminationEntity);
@@ -567,7 +568,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
         parameters.put("examination", studentExaminationEntity.getExaminationEntity().getDescription());
         parameters.put("category", studentExaminationEntity.getExaminationEntity().getQuestionCategoryEntity().getDescription());
-        parameters.put("finalMark", studentExaminationEntity.getFinalMark());
+        parameters.put("finalMark", studentExaminationEntity.getFinalMark().intValue());
         parameters.put("isPass", Optional.ofNullable(studentExaminationEntity.getPass()).orElse(false) ? "Geslaagd" : "Niet geslaagd");
         parameters.put("name", studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + " " + studentExaminationEntity.getSysUserEntity().getName());
         parameters.put("email", studentExaminationEntity.getSysUserEntity().getUsername());

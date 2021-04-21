@@ -13,7 +13,7 @@
 	</style>
 	<parameter name="examination" class="java.lang.String"/>
 	<parameter name="category" class="java.lang.String"/>
-	<parameter name="finalMark" class="java.lang.Double"/>
+	<parameter name="finalMark" class="java.lang.Integer"/>
 	<parameter name="isPass" class="java.lang.String"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="email" class="java.lang.String"/>
