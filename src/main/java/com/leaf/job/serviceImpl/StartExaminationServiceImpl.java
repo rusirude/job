@@ -8,6 +8,7 @@ import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.*;
 import com.leaf.job.enums.DefaultStatusEnum;
+import com.leaf.job.enums.EmailEnum;
 import com.leaf.job.enums.ExamStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.service.StartExaminationService;
@@ -39,11 +40,12 @@ public class StartExaminationServiceImpl implements StartExaminationService {
     private ExaminationDAO examinationDAO;
     private CommonMethod commonMethod;
     private MailSenderService mailSenderService;
+    private EmailBodyDAO emailBodyDAO;
     private ReportUtil reportUtil;
 
 
     @Autowired
-    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, StudentDAO studentDAO, SysUserDAO sysUserDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, MailSenderService mailSenderService,  ReportUtil reportUtil) {
+    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, StudentDAO studentDAO, SysUserDAO sysUserDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, MailSenderService mailSenderService, EmailBodyDAO emailBodyDAO, ReportUtil reportUtil) {
         this.studentExaminationDAO = studentExaminationDAO;
         this.statusDAO = statusDAO;
         this.questionDAO = questionDAO;
@@ -54,6 +56,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         this.examinationDAO = examinationDAO;
         this.commonMethod = commonMethod;
         this.mailSenderService = mailSenderService;
+        this.emailBodyDAO = emailBodyDAO;
         this.reportUtil = reportUtil;
     }
 
@@ -385,16 +388,20 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         String code = ResponseCodeEnum.FAILED.getCode();
         String message = "Mail is not Sent";
         try {
+            EmailBodyEntity emailBodyEntity = emailBodyDAO.findEmailBodyEntityByCode(EmailEnum.EFR.getCode());
+            if(!Optional.ofNullable(emailBodyEntity.getEnable()).orElse(false)){
+                message = "Please Enable Exam Result Email";
+                return new ResponseDTO<>(code,message);
+            }
             reportDTO = getAnswerReport(studentExam);
             StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
             DataSource attachment = reportUtil.createReportAsByteStream(reportDTO);
-            String subject = "Resultaat van uw "+studentExaminationEntity.getExaminationEntity().getDescription();
-            String content = "Geachte "+studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription()+""+studentExaminationEntity.getSysUserEntity().getName()+"\n\n" +
-                    "Wij danken u voor uw deelname aan het "+studentExaminationEntity.getExaminationEntity().getDescription()+".\n" +
-                    "Gelieve in bijlage het overzicht en resultaat van uw examen te vinden.\n\n" +
-                    "Moesten er nog vragen of opmerkingen zijn, aarzel dan zeker niet om ons te contacteren.\n\n" +
-                    "Met vriendelijke groeten,\n\n" +
-                    "Ocert bv.";
+            String subject = emailBodyEntity.getSubject()
+                    .replace("@ExamName",studentExaminationEntity.getExaminationEntity().getDescription())
+                    .replace("@StudentName",studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription()+""+studentExaminationEntity.getSysUserEntity().getName());
+            String content = emailBodyEntity.getContent()
+                    .replace("@ExamName",studentExaminationEntity.getExaminationEntity().getDescription())
+                    .replace("@StudentName",studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription()+""+studentExaminationEntity.getSysUserEntity().getName());
             mailSenderService.sendEmailWithPlainTextAndAttachment(studentExaminationEntity.getSysUserEntity().getUsername(),subject,content,attachment,reportDTO.getDownloadName()+".pdf");
             code = ResponseCodeEnum.SUCCESS.getCode();
             message = "Mail is Sent";

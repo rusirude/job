@@ -175,6 +175,17 @@ CREATE TABLE `master_data` (
   `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`code`));
 
+CREATE TABLE `email_body` (
+  `code` VARCHAR(20) NOT NULL,
+  `subject` VARCHAR(100) NULL,
+  `content` LONGTEXT NULL,
+  `enable` BOOLEAN NULL,
+  `created_by` VARCHAR(100) NOT NULL,
+  `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` VARCHAR(100) NOT NULL,
+  `updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`code`));
+
 CREATE TABLE `sys_user_authority` (
   `sys_user` VARCHAR(100) NOT NULL,
   `authority` INT NOT NULL,
@@ -496,6 +507,13 @@ INSERT INTO `master_data`(`code`,`value`,`created_by`,`updated_by`) VALUES
 ('COMPANY_LOGO',null,'SYSTEM','SYSTEM'),
 ('STUDENT_ROLE',null,'SYSTEM','SYSTEM');
 
+
+
+INSERT INTO `email_body`(`code`,`subject`,`content`,`enable`,`created_by`,`updated_by`) VALUES
+('EFR',null,null,1,'SYSTEM','SYSTEM'),
+('EFSR',null,null,1,'SYSTEM','SYSTEM'),
+('EFPR',null,null,1,'SYSTEM','SYSTEM');
+
 INSERT INTO `authority`(`code`,`description`,`auth_code`,`url`,`section`,`status`,`created_by`,`updated_by`)  VALUES
 ('USER','System User','ROLE_USER','/sysUser/',1,1,'SYSTEM','SYSTEM'),
 ('ROLE','System Role','ROLE_ROLE','/sysRole/',1,1,'SYSTEM','SYSTEM'),
@@ -513,7 +531,8 @@ INSERT INTO `authority`(`code`,`description`,`auth_code`,`url`,`section`,`status
 ('QUSMGT','Question','ROLE_QUS','/question/',4,1,'SYSTEM', 'SYSTEM'),
 ('STUD','Student','ROLE_STUD','/student/',4,1,'SYSTEM','SYSTEM'),
 ('STUEXAM','Examination','ROLE_STUEXAM','/studentExams/',4,1,'SYSTEM','SYSTEM'),
-('STUEXAMADD','Student Exams','ROLE_STUEXAMADD','/studentExamination/',4,1,'SYSTEM','SYSTEM');
+('STUEXAMADD','Student Exams','ROLE_STUEXAMADD','/studentExamination/',4,1,'SYSTEM','SYSTEM'),
+('EMAIL','Email Editor','ROLE_EMAIL','/email/',1,1,'SYSTEM','SYSTEM');
 
 
 INSERT INTO `sys_role` (`code`,`description`,`status`,`created_by`,`updated_by`) VALUES ('SYSTEM','System',1,'SYSTEM','SYSTEM');

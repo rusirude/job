@@ -87,7 +87,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 	 */
 	@Override
 	public List<QuestionEntity> findAllQuestionEntities() {
-		List<QuestionEntity> countryEntities = null;
+		List<QuestionEntity> questionEntities = null;
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<QuestionEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionEntity.class);
         Root<QuestionEntity> root = criteriaQuery.from(QuestionEntity.class);
@@ -97,12 +97,12 @@ public class QuestionDAOImpl implements QuestionDAO {
         );
 
         try {
-        	countryEntities = entityManager.createQuery(criteriaQuery).getResultList();
+        	questionEntities = entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             System.err.println(e);
         }
 
-        return countryEntities;
+        return questionEntities;
 	}
 
 
