@@ -37,7 +37,7 @@ var loadStudentExamsTable = ()=>{
 
 var clickStartExamBtn = (exam,examDescription)=>{
     app.next(`/studentExams/start/${exam}`);
-    $("#mainHeaderName").html($("#mainHeaderName").html()+" "+examDescription);
+    $("#mainHeaderName").html($("#mainHeaderName").html()+" : "+examDescription);
 };
 /*-------------------------------- Document Ready ----------------------*/
 
