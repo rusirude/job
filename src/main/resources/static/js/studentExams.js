@@ -24,9 +24,9 @@ var loadStudentExamsTable = ()=>{
             { data: "noQuestion"                     ,name:"noQuestion"          },
             { data: "statusDescription"              ,name:"status"              },
             {
-                data: "id",
+                data: null,
                 render: function (data, type, full) {
-                    return `<button onclick="clickStartExamBtn('${data}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Start">
+                    return `<button onclick="clickStartExamBtn('${data.id}','${data.examinationDescription}')" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Start">
 														<i class="fa fa-pencil-alt"></i>
 													</button>`;
                 }
@@ -35,8 +35,9 @@ var loadStudentExamsTable = ()=>{
     } );
 };
 
-var clickStartExamBtn = (examCode)=>{
-    app.next(`/studentExams/start/${examCode}`);
+var clickStartExamBtn = (exam,examDescription)=>{
+    app.next(`/studentExams/start/${exam}`);
+    $("#mainHeaderName").html($("#mainHeaderName").html()+" "+examDescription);
 };
 /*-------------------------------- Document Ready ----------------------*/
 
