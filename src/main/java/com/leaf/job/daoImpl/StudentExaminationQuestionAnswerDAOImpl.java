@@ -11,6 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -97,6 +100,7 @@ public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminati
      */
     @Override
     public List<StudentExaminationQuestionAnswerEntity> findStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(long studentExam) {
+
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<StudentExaminationQuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(StudentExaminationQuestionAnswerEntity.class);
         Root<StudentExaminationQuestionAnswerEntity> root = criteriaQuery.from(StudentExaminationQuestionAnswerEntity.class);
@@ -107,8 +111,13 @@ public class StudentExaminationQuestionAnswerDAOImpl implements StudentExaminati
                         criteriaBuilder.isNull(root.get(StudentExaminationQuestionAnswerEntity_.questionAnswerEntity))
                 )
         );
+        try{
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        }
+        catch (Exception e){
+            return Collections.emptyList();
+        }
 
-        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     /**

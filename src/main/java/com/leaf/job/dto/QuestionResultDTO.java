@@ -3,6 +3,7 @@ package com.leaf.job.dto;
 public class QuestionResultDTO {
     private String question;
     private String answer;
+    private String correctAnswer;
     private String result;
     private Boolean correct;
 
@@ -20,6 +21,14 @@ public class QuestionResultDTO {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public String getResult() {

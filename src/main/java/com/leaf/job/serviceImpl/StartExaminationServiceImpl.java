@@ -264,6 +264,29 @@ public class StartExaminationServiceImpl implements StartExaminationService {
 
     @Override
     @Transactional
+    public ResponseDTO<List<RemainingQuestion>> getRemainingQuestions(Long studentExam){
+        String code = ResponseCodeEnum.FAILED.getCode();
+        List<RemainingQuestion> notAnswered=null;
+        try {
+            notAnswered = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(studentExam)
+                    .stream()
+                    .map(entity -> {
+                        RemainingQuestion remainingQuestion = new RemainingQuestion();
+                        remainingQuestion.setSeq(entity.getSeq());
+                        remainingQuestion.setQuestion(entity.getQuestionEntity().getDescription());
+                        return  remainingQuestion;
+                    }).collect(Collectors.toList());
+            code = ResponseCodeEnum.SUCCESS.getCode();
+        } catch (Exception e) {
+            System.err.println("Getting Remaining for examination");
+        }
+
+        return new ResponseDTO<>(code,notAnswered);
+    }
+
+
+    @Override
+    @Transactional
     public ResponseDTO<FinalResultDTO> getFinalResult(Long studentExam) {
         String code = ResponseCodeEnum.FAILED.getCode();
         final FinalResultDTO finalResultDTO = new FinalResultDTO();
@@ -593,6 +616,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                     questionResultDTO.setQuestion(studentExaminationQuestionAnswerEntity.getQuestionEntity().getDescription());
                     questionResultDTO.setAnswer(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity())?"Niet Beantwoord":studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity().getDescription());
                     questionResultDTO.setResult(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity()) ? "Niet Beantwoord" : (studentExaminationQuestionAnswerEntity.isCorrect() ? "JUIST" : "FOUT"));
+                    questionResultDTO.setCorrectAnswer(!studentExaminationQuestionAnswerEntity.isCorrect()?studentExaminationQuestionAnswerEntity.getCorrectQuestionAnswerEntity().getDescription():"---");
                     questionResultDTO.setCorrect(studentExaminationQuestionAnswerEntity.isCorrect());
                     return questionResultDTO;
                 }).collect(Collectors.toList());

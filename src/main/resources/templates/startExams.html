@@ -68,10 +68,10 @@
 </div>
 
 <div class="modal fade" id="stopAlert">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-body">
-                <p>De tijdslimiet van uw examen is afgelopen. Het examen is hierbij gedaan en zal afgesloten worden.</p>
+                <p style="text-align: center">De tijdslimiet van uw examen is afgelopen. Het examen is hierbij gedaan en zal afgesloten worden.</p>
             </div>
             <div class="modal-footer justify-content-between">
                 <button onclick="finishExam()" type="button" class="btn btn-primary">Beëindig examen</button>
@@ -86,7 +86,8 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <p>U staat op het punt uw examen in te dienen, waardoor u uw examen beëindigd. Bent u zeker ?</p>
+                <p style="text-align: center">U staat op het punt uw examen in te dienen, waardoor u uw examen beëindigd. Bent u zeker ?</p>
+                <p style="text-align: center" id="remainingQes"></p>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Nee, ik wil mijn examen verderzetten</button>

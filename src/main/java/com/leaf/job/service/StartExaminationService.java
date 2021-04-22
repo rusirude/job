@@ -6,6 +6,7 @@ import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface StartExaminationService {
 
@@ -18,6 +19,8 @@ public interface StartExaminationService {
     ResponseDTO<?> saveAnswer(AnswerDTO answerDTO);
 
     void saveFinalAnswerCalculation(Long studentExam);
+
+    ResponseDTO<List<RemainingQuestion>> getRemainingQuestions(Long studentExam);
 
     ResponseDTO<FinalResultDTO> getFinalResult(Long studentExam);
 

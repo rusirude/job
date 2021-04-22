@@ -258,20 +258,45 @@ var clickPreviousBtn = () =>{
     }
 };
 
-
-
-var finalSubmit = () =>{
+var finalSubmit = ()=>{
     if($("input[name='answer']:checked").val()){
         let _f = ()=>{
             done = (!aan)?++done:done;
             setNoQuestion();
-            $("#submitAlert").modal({'backdrop':true},'show');
+            finalSubmitModal(()=>{$("#submitAlert").modal({'backdrop':true},'show')});
         };
         saveQuestionAnswer(_f);
     }
     else{
-        $("#submitAlert").modal({'backdrop':true},'show');
+        finalSubmitModal(()=>{$("#submitAlert").modal({'backdrop':true},'show')});
     }
+};
+
+var finalSubmitModal = (callback) =>{
+    let section = $("#remainingQes");
+    section.html("");
+    let successFunction = (data)=>{
+        if(data.code === Constant.CODE_SUCCESS && data.data.length) {
+            let ques = 'U heeft vragen ';
+            for(let _o of data.data){
+                ques += `Vraag ${_o.seq},`
+            }
+            ques += ' nog niet ingevuld.';
+            section.html(ques);
+            callback();
+        }
+        else{
+            callback();
+        }
+    };
+    let failedFunction = (data)=>{
+        DialogBox.openMsgBox("Server Error",'error');
+    };
+
+    let url = `/studentExams/remainingQuestions/${$("#studentExam").val()}`;
+    let method = "GET";
+    callToserver(url,method,null,successFunction,failedFunction);
+
 
 };
 

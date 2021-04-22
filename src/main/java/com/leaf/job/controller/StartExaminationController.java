@@ -79,6 +79,13 @@ public class StartExaminationController {
     }
 
     @PreAuthorize("hasRole('ROLE_STUEXAM')")
+    @RequestMapping(path = "/remainingQuestions/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseDTO<?> getRemainingQuestions(@PathVariable Long id) {
+        return startExaminationService.getRemainingQuestions(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUEXAM')")
     @RequestMapping(path = "/end/{id}", method = RequestMethod.GET)
     public ModelAndView viewStudentEndExam(@PathVariable Long id) {
         startExaminationService.saveFinalAnswerCalculation(id);

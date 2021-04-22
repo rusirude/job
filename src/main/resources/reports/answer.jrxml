@@ -4,7 +4,17 @@
 	<style name="passStyle" forecolor="#FF0000">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[new Boolean($P{isPass} == "Geslaagd")]]></conditionExpression>
-			<style forecolor="#00FF00"/>
+			<style forecolor="#008000"/>
+		</conditionalStyle>
+	</style>
+	<style name="resuleStyle" forecolor="#FF0000">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{result} == "JUIST")]]></conditionExpression>
+			<style forecolor="#008000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{result} == "Niet Beantwoord")]]></conditionExpression>
+			<style forecolor="#000000"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="examination" class="java.lang.String"/>
@@ -28,6 +38,7 @@
 	</field>
 	<field name="answer" class="java.lang.String"/>
 	<field name="correct" class="java.lang.Boolean"/>
+	<field name="correctAnswer" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -58,7 +69,7 @@
 				<textFieldExpression><![CDATA[$P{examination}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="404" y="73" width="130" height="40" uuid="89ae66dd-1ff4-4821-9720-1303ccb12eeb"/>
+				<reportElement style="passStyle" x="404" y="73" width="130" height="40" uuid="89ae66dd-1ff4-4821-9720-1303ccb12eeb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="26"/>
 				</textElement>
@@ -147,39 +158,93 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="26" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="3" width="234" height="20" uuid="5a02ee3f-bf7f-4481-b3d8-dddc255e9982"/>
+				<reportElement x="0" y="3" width="196" height="20" uuid="5a02ee3f-bf7f-4481-b3d8-dddc255e9982"/>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Vraag]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="234" y="3" width="221" height="20" uuid="ec492cd4-20f8-4374-93a9-89858adc467e"/>
+				<reportElement x="196" y="3" width="134" height="20" uuid="ec492cd4-20f8-4374-93a9-89858adc467e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Uw antwoord]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="3" width="100" height="20" uuid="f8fc895d-3358-446e-bff0-3159064ae3f8"/>
+				<reportElement x="330" y="3" width="90" height="20" uuid="f8fc895d-3358-446e-bff0-3159064ae3f8"/>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Resultaat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="3" width="134" height="20" uuid="b19018b1-fbd5-4c48-a323-a8df5d8f4b01">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Juist antwoord]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="18" splitType="Stretch">
-			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="234" height="18" uuid="116179a9-f80a-4ffd-b875-f32b47072e18"/>
+		<band height="19" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="196" height="18" uuid="116179a9-f80a-4ffd-b875-f32b47072e18"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{question}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="455" y="0" width="100" height="18" uuid="a32299a8-5417-4c14-92e7-59e0846f99cb"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="resuleStyle" stretchType="RelativeToTallestObject" x="330" y="0" width="90" height="18" uuid="a32299a8-5417-4c14-92e7-59e0846f99cb"/>
+				<box leftPadding="5">
+					<pen lineColor="#000000"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{result}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="234" y="0" width="221" height="18" uuid="e620d9c1-8e06-48ac-8ed6-a3e6cdfe4c03"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="196" y="0" width="134" height="18" uuid="e620d9c1-8e06-48ac-8ed6-a3e6cdfe4c03"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{answer}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="420" y="0" width="134" height="18" uuid="d9580ffe-289c-43e0-9943-38caf71b4bca"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{correctAnswer}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
