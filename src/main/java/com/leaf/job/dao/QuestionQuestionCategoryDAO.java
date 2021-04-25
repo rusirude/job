@@ -38,6 +38,17 @@ public interface QuestionQuestionCategoryDAO {
 	List<QuestionQuestionCategoryEntity> getQuestionQuestionCategoryEntity(long questionId);
 
 	/**
+	 * Select - *
+	 * From - QuestionQuestionCategoryEntity
+	 * Where - Question Category STATUS = ACTIVE and QuestionCategory =  category
+	 category
+	 * Select all QuestionQuestionCategoryEntity for Question Category and Question  Status is ACTIVE
+	 * @param category
+	 * @return {@link List<QuestionQuestionCategoryEntity>}
+	 */
+	List<QuestionQuestionCategoryEntity> getQuestionQuestionCategoryEntityByCategory(long category);
+
+	/**
 	 * select - count(*)
 	 * From - Question
 	 * where - STATUS = statusCode and Category

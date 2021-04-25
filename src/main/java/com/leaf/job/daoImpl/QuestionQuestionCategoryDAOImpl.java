@@ -62,6 +62,20 @@ public class QuestionQuestionCategoryDAOImpl implements QuestionQuestionCategory
 	}
 
 	@Override
+	public List<QuestionQuestionCategoryEntity> getQuestionQuestionCategoryEntityByCategory(long category){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<QuestionQuestionCategoryEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionQuestionCategoryEntity.class);
+		Root<QuestionQuestionCategoryEntity> root = criteriaQuery.from(QuestionQuestionCategoryEntity.class);
+		criteriaQuery.select(root);
+		criteriaQuery.where(
+				criteriaBuilder.and(
+						criteriaBuilder.equal(root.get(QuestionQuestionCategoryEntity_.questionEntity).get(QuestionEntity_.statusEntity).get(StatusEntity_.code),DefaultStatusEnum.ACTIVE.getCode()),
+						criteriaBuilder.equal(root.get(QuestionQuestionCategoryEntity_.questionCategoryEntity).get(QuestionCategoryEntity_.id),category)
+				));
+		return entityManager.createQuery(criteriaQuery).getResultList();
+	}
+
+	@Override
 	public Long getQuestionEntityCountByQuestionCategoryAndStatus(String categoryCode, String statusCode) {
 		Long count = 0L;
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

@@ -135,7 +135,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		String sql = "SELECT " +
 						"q.* " +
 					  "FROM " +
-						"question_question_category qqc inner join " +
+						"question_question_category qqc INNER JOIN " +
 					    "question q " +
 				        "on qqc.question = q.id " +
 				      "WHERE " +

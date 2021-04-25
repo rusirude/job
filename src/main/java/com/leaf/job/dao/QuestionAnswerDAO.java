@@ -50,5 +50,9 @@ public interface QuestionAnswerDAO {
 
 	QuestionAnswerEntity findCorrectQuestionAnswerEntity(long question,String statusCode);
 
+	Long findMaxQuestionAnswerForQuestion(String status);
+
+	Long findMaxQuestionAnswerForQuestionForQuestionCategory(long category, String status);
+
 
 }
