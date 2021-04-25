@@ -48,4 +48,11 @@ public interface QuestionAnswerDAO {
 	List<QuestionAnswerEntity> findAllQuestionAnswerEntitiesByQuestionAndNotInAnswers(long question, List<Long> answers);
 
 
+	QuestionAnswerEntity findCorrectQuestionAnswerEntity(long question,String statusCode);
+
+	Long findMaxQuestionAnswerForQuestion(String status);
+
+	Long findMaxQuestionAnswerForQuestionForQuestionCategory(long category, String status);
+
+
 }

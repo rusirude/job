@@ -12,6 +12,7 @@ public class StudentExaminationQuestionAnswerEntity extends CommonEntity {
     private QuestionEntity questionEntity;
     private QuestionAnswerEntity questionAnswerEntity;
     private boolean correct;
+    private QuestionAnswerEntity correctQuestionAnswerEntity;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,5 +70,15 @@ public class StudentExaminationQuestionAnswerEntity extends CommonEntity {
 
     public void setCorrect(boolean correct) {
         this.correct = correct;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name =  "correct_question_answer" , nullable = false)
+    public QuestionAnswerEntity getCorrectQuestionAnswerEntity() {
+        return correctQuestionAnswerEntity;
+    }
+
+    public void setCorrectQuestionAnswerEntity(QuestionAnswerEntity correctQuestionAnswerEntity) {
+        this.correctQuestionAnswerEntity = correctQuestionAnswerEntity;
     }
 }

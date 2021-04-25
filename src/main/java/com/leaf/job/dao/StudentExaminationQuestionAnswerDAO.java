@@ -60,4 +60,5 @@ public interface StudentExaminationQuestionAnswerDAO {
      * @param studentExaminationQuestionAnswerEntity
      */
     void updateStudentExaminationQuestionAnswerEntity(StudentExaminationQuestionAnswerEntity studentExaminationQuestionAnswerEntity);
+
 }

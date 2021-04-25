@@ -1,22 +1,13 @@
 package com.leaf.job.serviceImpl;
 
-import com.leaf.job.dao.MasterDataDAO;
-import com.leaf.job.dao.PasswordResetRequestDAO;
-import com.leaf.job.dao.StatusDAO;
-import com.leaf.job.dao.SysUserDAO;
+import com.leaf.job.dao.*;
 import com.leaf.job.dto.PasswordResetRequestDTO;
 import com.leaf.job.dto.SysUserDTO;
 import com.leaf.job.dto.common.DataTableRequestDTO;
 import com.leaf.job.dto.common.DataTableResponseDTO;
 import com.leaf.job.dto.common.ResponseDTO;
-import com.leaf.job.entity.MasterDataEntity;
-import com.leaf.job.entity.PasswordResetRequestEntity;
-import com.leaf.job.entity.StatusEntity;
-import com.leaf.job.entity.SysUserEntity;
-import com.leaf.job.enums.DeleteStatusEnum;
-import com.leaf.job.enums.MasterDataEnum;
-import com.leaf.job.enums.PasswordResetRequestStatusEnum;
-import com.leaf.job.enums.ResponseCodeEnum;
+import com.leaf.job.entity.*;
+import com.leaf.job.enums.*;
 import com.leaf.job.service.PasswordResetRequestService;
 import com.leaf.job.utility.CommonConstant;
 import com.leaf.job.utility.CommonMethod;
@@ -35,12 +26,11 @@ import java.util.stream.Collectors;
 @Service
 public class PasswordResetRequestServiceImpl implements PasswordResetRequestService {
 
-    private final static String RESET_LOG_IN_PASSWORD = "Reset Log in Password";
-
     private SysUserDAO sysUserDAO;
     private StatusDAO statusDAO;
     private MasterDataDAO masterDataDAO;
     private PasswordResetRequestDAO passwordResetRequestDAO;
+    private EmailBodyDAO emailBodyDAO;
     private MailSenderService mailSenderService;
 
     private CommonMethod commonMethod;
@@ -48,13 +38,14 @@ public class PasswordResetRequestServiceImpl implements PasswordResetRequestServ
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public PasswordResetRequestServiceImpl(SysUserDAO sysUserDAO, StatusDAO statusDAO, MasterDataDAO masterDataDAO, PasswordResetRequestDAO passwordResetRequestDAO, MailSenderService mailSenderService,CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public PasswordResetRequestServiceImpl(SysUserDAO sysUserDAO, StatusDAO statusDAO, MasterDataDAO masterDataDAO, PasswordResetRequestDAO passwordResetRequestDAO, MailSenderService mailSenderService,CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder,EmailBodyDAO emailBodyDAO) {
         this.sysUserDAO = sysUserDAO;
         this.statusDAO = statusDAO;
         this.masterDataDAO = masterDataDAO;
         this.passwordResetRequestDAO = passwordResetRequestDAO;
         this.mailSenderService = mailSenderService;
         this.commonMethod = commonMethod;
+        this.emailBodyDAO = emailBodyDAO;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -107,6 +98,7 @@ public class PasswordResetRequestServiceImpl implements PasswordResetRequestServ
 
         try {
 
+            EmailBodyEntity emailBodyEntity = emailBodyDAO.findEmailBodyEntityByCode(EmailEnum.EFPR.getCode());
             PasswordResetRequestEntity passwordResetRequestEntity = passwordResetRequestDAO.findPasswordResetRequest(requestId);
             if (PasswordResetRequestStatusEnum.PRESET.getCode().equalsIgnoreCase(passwordResetRequestEntity.getStatusEntity().getCode()))
                 description = "Password Reset Already";
@@ -118,7 +110,11 @@ public class PasswordResetRequestServiceImpl implements PasswordResetRequestServ
                     SysUserEntity sysUserEntity = passwordResetRequestEntity.getSysUserEntity();
 
                     MasterDataEntity defaultPasswordMasterDataEntity = Optional.ofNullable(masterDataDAO.loadMasterDataEntity(MasterDataEnum.DEFAULT_PASSWORD.getCode())).orElse(new MasterDataEntity());
-                    String password = ((Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))?passwordGenerate():Optional.ofNullable(defaultPasswordMasterDataEntity.getValue()).orElse(""));
+                    String password = ((Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))?
+                            (Optional.ofNullable(emailBodyEntity.getEnable()).orElse(false)?
+                                    passwordGenerate()
+                                    :Optional.ofNullable(defaultPasswordMasterDataEntity.getValue()).orElse(""))
+                            :Optional.ofNullable(defaultPasswordMasterDataEntity.getValue()).orElse(""));
                     sysUserEntity.setResetRequest(false);
                     sysUserEntity.setPassword(bCryptPasswordEncoder.encode(password));
                     commonMethod.getPopulateEntityWhenUpdate(sysUserEntity);
@@ -131,8 +127,15 @@ public class PasswordResetRequestServiceImpl implements PasswordResetRequestServ
                     commonMethod.getPopulateEntityWhenUpdate(passwordResetRequestEntity);
                     passwordResetRequestDAO.updatePasswordResetRequestEntity(passwordResetRequestEntity);
 
-                    if(Optional.ofNullable(sysUserEntity.getStudent()).orElse(false))
-                        mailSenderService.sendEmailWithPlainText(sysUserEntity.getUsername(), RESET_LOG_IN_PASSWORD,passwordResetMessage(sysUserEntity.getUsername(),password));
+                    if(Optional.ofNullable(sysUserEntity.getStudent()).orElse(false) && Optional.ofNullable(emailBodyEntity.getEnable()).orElse(false)){
+                        String subject = emailBodyEntity.getSubject()
+                                .replace("@Username",sysUserEntity.getUsername())
+                                .replace("@Password",password);
+                        String content = emailBodyEntity.getContent()
+                                .replace("@Username",sysUserEntity.getUsername())
+                                .replace("@Password",password);
+                        mailSenderService.sendEmailWithPlainText(sysUserEntity.getUsername(), subject,content);
+                    }
 
                     code = ResponseCodeEnum.SUCCESS.getCode();
 
@@ -193,9 +196,6 @@ public class PasswordResetRequestServiceImpl implements PasswordResetRequestServ
         return responseDTO;
     }
 
-    private String passwordResetMessage(String username, String password){
-        return "Your Log in Password is changed\nUsername : "+username+"\nPassword : "+password+"\nAfter login, Please change your password.\nThanks You..";
-    }
 
     private String passwordGenerate(){
         String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

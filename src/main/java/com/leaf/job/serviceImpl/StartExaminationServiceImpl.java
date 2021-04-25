@@ -8,6 +8,7 @@ import com.leaf.job.dto.common.DropDownDTO;
 import com.leaf.job.dto.common.ResponseDTO;
 import com.leaf.job.entity.*;
 import com.leaf.job.enums.DefaultStatusEnum;
+import com.leaf.job.enums.EmailEnum;
 import com.leaf.job.enums.ExamStatusEnum;
 import com.leaf.job.enums.ResponseCodeEnum;
 import com.leaf.job.service.StartExaminationService;
@@ -39,11 +40,12 @@ public class StartExaminationServiceImpl implements StartExaminationService {
     private ExaminationDAO examinationDAO;
     private CommonMethod commonMethod;
     private MailSenderService mailSenderService;
+    private EmailBodyDAO emailBodyDAO;
     private ReportUtil reportUtil;
 
 
     @Autowired
-    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, StudentDAO studentDAO, SysUserDAO sysUserDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, MailSenderService mailSenderService,  ReportUtil reportUtil) {
+    public StartExaminationServiceImpl(StudentExaminationDAO studentExaminationDAO, StatusDAO statusDAO, QuestionDAO questionDAO, QuestionAnswerDAO questionAnswerDAO, StudentExaminationQuestionAnswerDAO studentExaminationQuestionAnswerDAO, StudentDAO studentDAO, SysUserDAO sysUserDAO, ExaminationDAO examinationDAO, CommonMethod commonMethod, MailSenderService mailSenderService, EmailBodyDAO emailBodyDAO, ReportUtil reportUtil) {
         this.studentExaminationDAO = studentExaminationDAO;
         this.statusDAO = statusDAO;
         this.questionDAO = questionDAO;
@@ -54,6 +56,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         this.examinationDAO = examinationDAO;
         this.commonMethod = commonMethod;
         this.mailSenderService = mailSenderService;
+        this.emailBodyDAO = emailBodyDAO;
         this.reportUtil = reportUtil;
     }
 
@@ -264,6 +267,29 @@ public class StartExaminationServiceImpl implements StartExaminationService {
 
     @Override
     @Transactional
+    public ResponseDTO<List<RemainingQuestion>> getRemainingQuestions(Long studentExam){
+        String code = ResponseCodeEnum.FAILED.getCode();
+        List<RemainingQuestion> notAnswered=null;
+        try {
+            notAnswered = studentExaminationQuestionAnswerDAO.findStudentExaminationQuestionAnswerEntityByStudentExaminationAndAnswerIsNull(studentExam)
+                    .stream()
+                    .map(entity -> {
+                        RemainingQuestion remainingQuestion = new RemainingQuestion();
+                        remainingQuestion.setSeq(entity.getSeq());
+                        remainingQuestion.setQuestion(entity.getQuestionEntity().getDescription());
+                        return  remainingQuestion;
+                    }).collect(Collectors.toList());
+            code = ResponseCodeEnum.SUCCESS.getCode();
+        } catch (Exception e) {
+            System.err.println("Getting Remaining for examination");
+        }
+
+        return new ResponseDTO<>(code,notAnswered);
+    }
+
+
+    @Override
+    @Transactional
     public ResponseDTO<FinalResultDTO> getFinalResult(Long studentExam) {
         String code = ResponseCodeEnum.FAILED.getCode();
         final FinalResultDTO finalResultDTO = new FinalResultDTO();
@@ -280,12 +306,12 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                             finalResultDTO.setWrong(finalResultDTO.getWrong() + 1);
                     });
             if (finalResultDTO.getTotal() > 0){
-                double result = BigDecimal.valueOf(((double) finalResultDTO.getCorrect() / (double) finalResultDTO.getTotal()) * 100)
-                        .setScale(0, RoundingMode.HALF_UP).doubleValue();
+                int result = BigDecimal.valueOf(((double) finalResultDTO.getCorrect() / (double) finalResultDTO.getTotal()) * 100)
+                        .setScale(0, RoundingMode.HALF_UP).toBigInteger().intValue();
                 finalResultDTO.setFinalMark(result);
             }
             else
-                finalResultDTO.setFinalMark(0.00);
+                finalResultDTO.setFinalMark(0);
 
             finalResultDTO.setName(studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + studentExaminationEntity.getSysUserEntity().getName());
             finalResultDTO.setLocation(studentExaminationEntity.getExaminationEntity().getLocation());
@@ -335,6 +361,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                         if(!ExamStatusEnum.PENDING.getCode().equals(entity.getStatusEntity().getCode())){
                             dto.setPass(Optional.ofNullable(entity.getPass()).orElse(false) ? "Passed" : "Not Passed");
                         }
+                        dto.setDateOn(commonMethod.dateTimeToString(entity.getExaminationEntity().getDateOn()));
 
                         dto.setExaminationCode(entity.getExaminationEntity().getCode());
                         dto.setExaminationDescription(entity.getExaminationEntity().getDescription());
@@ -361,11 +388,20 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         String code = ResponseCodeEnum.FAILED.getCode();
         String message = "Mail is not Sent";
         try {
+            EmailBodyEntity emailBodyEntity = emailBodyDAO.findEmailBodyEntityByCode(EmailEnum.EFR.getCode());
+            if(!Optional.ofNullable(emailBodyEntity.getEnable()).orElse(false)){
+                message = "Please Enable Exam Result Email";
+                return new ResponseDTO<>(code,message);
+            }
             reportDTO = getAnswerReport(studentExam);
             StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
             DataSource attachment = reportUtil.createReportAsByteStream(reportDTO);
-            String subject = "Result of "+studentExaminationEntity.getExaminationEntity().getDescription();
-            String content = "Result is attached with this mail";
+            String subject = emailBodyEntity.getSubject()
+                    .replace("@ExamName",studentExaminationEntity.getExaminationEntity().getDescription())
+                    .replace("@StudentName",studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription()+""+studentExaminationEntity.getSysUserEntity().getName());
+            String content = emailBodyEntity.getContent()
+                    .replace("@ExamName",studentExaminationEntity.getExaminationEntity().getDescription())
+                    .replace("@StudentName",studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription()+""+studentExaminationEntity.getSysUserEntity().getName());
             mailSenderService.sendEmailWithPlainTextAndAttachment(studentExaminationEntity.getSysUserEntity().getUsername(),subject,content,attachment,reportDTO.getDownloadName()+".pdf");
             code = ResponseCodeEnum.SUCCESS.getCode();
             message = "Mail is Sent";
@@ -538,6 +574,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                     else
                         studentExaminationQuestionAnswerEntity.setCorrect(false);
 
+                    studentExaminationQuestionAnswerEntity.setCorrectQuestionAnswerEntity(Optional.ofNullable(questionAnswerDAO.findCorrectQuestionAnswerEntity(studentExaminationQuestionAnswerEntity.getQuestionEntity().getId(),DefaultStatusEnum.ACTIVE.getCode())).orElse(null));
                     commonMethod.getPopulateEntityWhenUpdate(studentExaminationQuestionAnswerEntity);
                     studentExaminationQuestionAnswerDAO.updateStudentExaminationQuestionAnswerEntity(studentExaminationQuestionAnswerEntity);
                 });
@@ -552,8 +589,8 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         calculateAnswer(studentExaminationEntity);
 
         FinalResultDTO finalResultDTO = getFinalResult(studentExam).getData();
-        studentExaminationEntity.setFinalMark(finalResultDTO.getFinalMark());
-        studentExaminationEntity.setPass(studentExaminationEntity.getPassMark().compareTo(finalResultDTO.getFinalMark()) <= 0);
+        studentExaminationEntity.setFinalMark(Double.valueOf(finalResultDTO.getFinalMark()));
+        studentExaminationEntity.setPass(studentExaminationEntity.getPassMark().compareTo(Double.valueOf(finalResultDTO.getFinalMark())) <= 0);
 
         commonMethod.getPopulateEntityWhenUpdate(studentExaminationEntity);
         studentExaminationDAO.updateStudentExaminationEntity(studentExaminationEntity);
@@ -567,7 +604,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
         StudentExaminationEntity studentExaminationEntity = studentExaminationDAO.findStudentExaminationEntity(studentExam);
         parameters.put("examination", studentExaminationEntity.getExaminationEntity().getDescription());
         parameters.put("category", studentExaminationEntity.getExaminationEntity().getQuestionCategoryEntity().getDescription());
-        parameters.put("finalMark", studentExaminationEntity.getFinalMark());
+        parameters.put("finalMark", studentExaminationEntity.getFinalMark().intValue());
         parameters.put("isPass", Optional.ofNullable(studentExaminationEntity.getPass()).orElse(false) ? "Geslaagd" : "Niet geslaagd");
         parameters.put("name", studentExaminationEntity.getSysUserEntity().getTitleEntity().getDescription() + " " + studentExaminationEntity.getSysUserEntity().getName());
         parameters.put("email", studentExaminationEntity.getSysUserEntity().getUsername());
@@ -586,6 +623,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                     questionResultDTO.setQuestion(studentExaminationQuestionAnswerEntity.getQuestionEntity().getDescription());
                     questionResultDTO.setAnswer(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity())?"Niet Beantwoord":studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity().getDescription());
                     questionResultDTO.setResult(Objects.isNull(studentExaminationQuestionAnswerEntity.getQuestionAnswerEntity()) ? "Niet Beantwoord" : (studentExaminationQuestionAnswerEntity.isCorrect() ? "JUIST" : "FOUT"));
+                    questionResultDTO.setCorrectAnswer(!studentExaminationQuestionAnswerEntity.isCorrect()?studentExaminationQuestionAnswerEntity.getCorrectQuestionAnswerEntity().getDescription():"---");
                     questionResultDTO.setCorrect(studentExaminationQuestionAnswerEntity.isCorrect());
                     return questionResultDTO;
                 }).collect(Collectors.toList());

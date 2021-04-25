@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	private final static String STUDENT_REGISTRATION = "Student Registration";
 
 	private SysUserDAO sysUserDAO;
 	private SysRoleDAO sysRoleDAO;
@@ -38,6 +37,7 @@ public class StudentServiceImpl implements StudentService {
 	private SysUserSysRoleDAO sysUserSysRoleDAO;
 	private StudentDAO studentDAO;
 	private StudentExaminationDAO studentExaminationDAO;
+	private EmailBodyDAO emailBodyDAO;
 	private ExaminationDAO examinationDAO;
 	private MailSenderService mailSenderService;
 
@@ -46,9 +46,10 @@ public class StudentServiceImpl implements StudentService {
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	public StudentServiceImpl(SysUserDAO sysUserDAO, SysRoleDAO sysRoleDAO, StatusDAO statusDAO, TitleDAO titleDAO, CityDAO cityDAO, StatusCategoryDAO statusCategoryDAO, MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, StudentDAO studentDAO, StudentExaminationDAO studentExaminationDAO, ExaminationDAO examinationDAO, MailSenderService mailSenderService, CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public StudentServiceImpl(SysUserDAO sysUserDAO, SysRoleDAO sysRoleDAO, EmailBodyDAO emailBodyDAO, StatusDAO statusDAO, TitleDAO titleDAO, CityDAO cityDAO, StatusCategoryDAO statusCategoryDAO, MasterDataDAO masterDataDAO, SysUserAuthorityDAO sysUserAuthorityDAO, SysUserSysRoleDAO sysUserSysRoleDAO, StudentDAO studentDAO, StudentExaminationDAO studentExaminationDAO, ExaminationDAO examinationDAO, MailSenderService mailSenderService, CommonMethod commonMethod, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.sysUserDAO = sysUserDAO;
 		this.sysRoleDAO = sysRoleDAO;
+		this.emailBodyDAO = emailBodyDAO;
 		this.statusDAO = statusDAO;
 		this.titleDAO = titleDAO;
 		this.cityDAO = cityDAO;
@@ -79,6 +80,7 @@ public class StudentServiceImpl implements StudentService {
 			studentEntity = Optional.ofNullable(studentDAO.getStudentEntityByUsername(studentDTO.getEmail())).orElse(new StudentEntity());
 			MasterDataEntity defaultPasswordMasterDataEntity = Optional.ofNullable(masterDataDAO.loadMasterDataEntity(MasterDataEnum.DEFAULT_PASSWORD.getCode())).orElse(new MasterDataEntity());
 			MasterDataEntity studentRoleMasterDataEntity = Optional.ofNullable(masterDataDAO.loadMasterDataEntity(MasterDataEnum.STUDENT_ROLE.getCode())).orElse(new MasterDataEntity());
+			EmailBodyEntity emailBodyEntity = emailBodyDAO.findEmailBodyEntityByCode(EmailEnum.EFSR.getCode());
 
 			if(Optional.ofNullable(studentRoleMasterDataEntity.getValue()).orElse("").isEmpty()){
 				description = "Configure Student Role in master Data";
@@ -147,7 +149,15 @@ public class StudentServiceImpl implements StudentService {
 
 					}
 
-					mailSenderService.sendEmailWithPlainText(studentDTO.getEmail(),STUDENT_REGISTRATION,studentSaveMsg(studentDTO.getEmail(),studentDTO.getPassword()));
+					if(Optional.ofNullable(emailBodyEntity.getEnable()).orElse(false)){
+						String subject = emailBodyEntity.getSubject()
+								.replace("@Username",studentDTO.getEmail())
+								.replace("@Password",studentDTO.getPassword());
+						String content = emailBodyEntity.getContent()
+								.replace("@Username",studentDTO.getEmail())
+								.replace("@Password",studentDTO.getPassword());
+						mailSenderService.sendEmailWithPlainText(studentDTO.getEmail(),subject, content);
+					}
 					code = ResponseCodeEnum.SUCCESS.getCode();
 					description = "Student Save Successfully";
 
@@ -373,8 +383,6 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 
-	private String studentSaveMsg(String username, String password){
-		return "You have been registered to the VDAD SERVICES, Your Credential are,\n\nUsername : "+username+"\nPassword : "+password+"\nAfter login, Please change your password.\nThanks You..";
-	}
+
 
 }

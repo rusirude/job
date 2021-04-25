@@ -1,10 +1,7 @@
 package com.leaf.job.daoImpl;
 
 import com.leaf.job.dao.QuestionAnswerDAO;
-import com.leaf.job.entity.QuestionAnswerEntity;
-import com.leaf.job.entity.QuestionAnswerEntity_;
-import com.leaf.job.entity.QuestionEntity_;
-import com.leaf.job.entity.StatusEntity_;
+import com.leaf.job.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -106,11 +103,54 @@ public class QuestionAnswerDAOImpl implements QuestionAnswerDAO {
 		return qestionAnswerEntities;
 	}
 
+	@Override
+	public QuestionAnswerEntity findCorrectQuestionAnswerEntity(long question, String statusCode) {
+		QuestionAnswerEntity qestionAnswerEntity = null;
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<QuestionAnswerEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionAnswerEntity.class);
+		Root<QuestionAnswerEntity> root = criteriaQuery.from(QuestionAnswerEntity.class);
+		criteriaQuery.select(root);
 
+		criteriaQuery.where(
+				criteriaBuilder.and(
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.questionEntity).get(QuestionEntity_.id), question),
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.statusEntity).get(StatusEntity_.code), statusCode),
+						criteriaBuilder.equal(root.get(QuestionAnswerEntity_.correct), true)
 
-	
-	
-	
-	
+				)
+		);
+		try {
+			qestionAnswerEntity = entityManager.createQuery(criteriaQuery).getSingleResult();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+		return qestionAnswerEntity;
+	}
+
+	@Override
+	public Long findMaxQuestionAnswerForQuestion(String status) {
+		String sql = "SELECT " +
+						"COUNT(*) AS ID " +
+					  "FROM " +
+						"question_answer qa INNER JOIN " +
+						"status s ON qa.status=s.id " +
+				      "WHERE " +
+						"s.code = :status " +
+				      "GROUP BY " +
+				        "qa.question " +
+				      "ORDER BY " +
+				        "ID DESC " +
+				      "LIMIT 1";
+
+		return ((Number)entityManager.createNativeQuery(sql)
+				.setParameter("status",status)
+				.getSingleResult()).longValue();
+	}
+
+	@Override
+	public Long findMaxQuestionAnswerForQuestionForQuestionCategory(long category, String status) {
+		return null;
+	}
+
 
 }
