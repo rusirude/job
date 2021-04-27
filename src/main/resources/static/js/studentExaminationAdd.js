@@ -133,6 +133,7 @@ var loadStudentExaminationAddTable = ()=>{
 		columns: [
 			{ data: "studentName"                    ,name:"student"                },
 			{ data: "examinationDescription"         ,name:"examination"         },
+			{ data: "dateOn"                         ,name:"dateOn"              },
 			{ data: "statusDescription"              ,name:"status"              },
 			{
 				data: null,

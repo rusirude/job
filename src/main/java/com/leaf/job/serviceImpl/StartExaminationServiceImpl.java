@@ -429,6 +429,7 @@ public class StartExaminationServiceImpl implements StartExaminationService {
                         dto.setStudentName(entity.getSysUserEntity().getTitleEntity().getDescription() + " " + entity.getSysUserEntity().getName());
                         dto.setExaminationCode(entity.getExaminationEntity().getCode());
                         dto.setExaminationDescription(entity.getExaminationEntity().getDescription());
+                        dto.setDateOn(commonMethod.dateTimeToString(entity.getExaminationEntity().getDateOn()));
                         dto.setDuration(entity.getExaminationEntity().getDuration());
                         dto.setNoQuestion(entity.getExaminationEntity().getNoQuestion());
                         dto.setStatusCode(entity.getStatusEntity().getCode());

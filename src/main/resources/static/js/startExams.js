@@ -277,7 +277,7 @@ var finalSubmitModal = (callback) =>{
     section.html("");
     let successFunction = (data)=>{
         if(data.code === Constant.CODE_SUCCESS && data.data.length) {
-            let ques = 'U heeft vragen ';
+            let ques = 'U heeft vragen: ';
             for(let _o of data.data){
                 ques += `Vraag ${_o.seq},`
             }
